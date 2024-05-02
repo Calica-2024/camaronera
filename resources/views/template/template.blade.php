@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Calica | Control</title>
+        <title>Calica | Control {{ $modulo ? ' - ' . $modulo : ''  }}</title>
         <!-- Tell the browser to be responsive to screen width -->
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- Font Awesome -->
@@ -27,7 +27,7 @@
         <!-- Google Font: Source Sans Pro -->
         <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
     </head>
-    <body class="hold-transition sidebar-mini layout-fixed">
+    <body class="hold-transition sidebar-mini layout-fixed sidebar-collapse">
         <div class="wrapper">
             <!-- Navbar -->
             <nav class="main-header navbar navbar-expand navbar-white navbar-light">
@@ -43,8 +43,8 @@
                     <!-- Messages Dropdown Menu -->
                     
                     <li class="nav-item">
-                        <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#" role="button">
-                            <i class="fas fa-th-large"></i>
+                        <a class="nav-link" href="#" role="button">
+                            <i class="fas fa-cogs"></i>
                         </a>
                     </li>
                 </ul>
@@ -65,10 +65,10 @@
                     <!-- Sidebar user panel (optional) -->
                     <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                         <div class="image">
-                            <img src="{{ asset("dist/img/user2-160x160.jpg") }}" class="img-circle elevation-2" alt="User Image">
+                            <img src="{{ asset("dist/img/user_profile.png") }}" class="img-circle elevation-2" alt="User Image">
                         </div>
                         <div class="info">
-                            <a href="#" class="d-block">Alexander Pierce</a>
+                            <a href="#" class="d-block">{{ auth()->user()->name }}</a>
                         </div>
                     </div>
 
@@ -78,26 +78,26 @@
                         <!-- Add icons to the links using the .nav-icon class
                             with font-awesome or any other icon font library -->
                             <li class="nav-item">
-                                <a href="{{ url('/dashboard') }}" class="nav-link {{ $modulo == 'dashboard' ? 'active' : '' }}">
+                                <a href="{{ url('/dashboard') }}" class="nav-link {{ $modulo == 'Dashboard' ? 'active' : '' }}">
                                     <i class="nav-icon fas fa-tachometer-alt"></i>
                                     <p>
                                         Dashboard
                                     </p>
                                 </a>
                             </li>
-                            <li class="nav-item {{ $grupo == 'grupo' ? 'has-treeview menu-open' : '' }}">
-                                <a href="#" class="nav-link {{ $grupo == 'grupo' ? 'active' : '' }}">
-                                    <i class="nav-icon fas fa-tachometer-alt"></i>
+                            <li class="nav-item {{ $grupo == 'camaroneras' ? 'has-treeview menu-open' : '' }}">
+                                <a href="#" class="nav-link {{ $grupo == 'camaroneras' ? 'active' : '' }}">
+                                    <i class="nav-icon fas fa-table"></i>
                                     <p>
-                                        Grupo
+                                        Camaroneras
                                         <i class="right fas fa-angle-left"></i>
                                     </p>
                                 </a>
                                 <ul class="nav nav-treeview">
                                     <li class="nav-item">
-                                        <a href="" class="nav-link {{ $modulo == 'modulo' ? 'active' : '' }}">
+                                        <a href="{{ url('camaroneras') }}" class="nav-link {{ $modulo == 'Camaroneras' ? 'active' : '' }}">
                                             <i class="far fa-circle nav-icon"></i>
-                                            <p>Modulo</p>
+                                            <p>Camaroneras</p>
                                         </a>
                                     </li>
                                 </ul>

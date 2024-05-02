@@ -8,7 +8,7 @@ class DashboardController extends Controller
 {
     
     protected $grupo = "dashboard";
-    protected $modulo = "dashboard";
+    protected $modulo = "Dashboard";
     
     /**
      * Display a listing of the resource.

@@ -11,12 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('camaroneras', function (Blueprint $table) {
+        Schema::create('piscinas', function (Blueprint $table) {
             $table->id();
             $table->string('nombre');
-            $table->string('direccion')->nullable();
+            $table->integer('numero');
+            $table->unsignedBigInteger('id_camaronera');
             $table->boolean('estado')->default(false);
             $table->timestamps();
+
+            $table->foreign('id_camaronera')
+                ->references('id')
+                ->on('camaroneras');
         });
     }
 
@@ -25,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('camaroneras');
+        Schema::dropIfExists('piscinas');
     }
 };

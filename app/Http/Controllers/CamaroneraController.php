@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Camaronera;
+use App\Models\User;
+use App\Models\UserCamaronera;
+use App\Models\Piscina;
 
 class CamaroneraController extends Controller
 {
@@ -18,7 +21,8 @@ class CamaroneraController extends Controller
         $grupo = $this->grupo;
         $modulo = $this->modulo;
         $vista = "Camaroneras";
-        return view('camaroneras.index', compact('grupo', 'modulo', 'vista'));
+        $camaroneras = Camaronera::get();
+        return view('camaroneras.index', compact('grupo', 'modulo', 'vista', 'camaroneras'));
     }
 
     /**
@@ -58,7 +62,11 @@ class CamaroneraController extends Controller
         if(!$camaronera){
             return redirect('camaroneras')->with('errors', 'La Camaronera No Existe');
         }
-        return view('camaroneras.show', compact('grupo', 'modulo', 'vista', 'camaronera'));
+        $usuarios = UserCamaronera::where('id_camaronera', $camaronera->id)->get();
+        $idUsers = $usuarios->pluck('id_user');
+        $users = User::whereNotIn('id', $idUsers)->get();
+        $piscinas = Piscina::where('id_camaronera', $camaronera->id)->get();
+        return view('camaroneras.show', compact('grupo', 'modulo', 'vista', 'camaronera', 'users', 'usuarios', 'piscinas'));
     }
 
     /**
@@ -99,6 +107,12 @@ class CamaroneraController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $camaronera = Camaronera::find($id);
+        try {
+            $camaronera->delete();
+            return redirect('camaroneras')->with('success', 'Camaronera eliminada exitosamente.');
+        } catch (\Illuminate\Database\QueryException $e) {
+            return redirect('camaroneras')->withErrors('No se puede eliminar, mantiene registros relacionados.');
+        }
     }
 }

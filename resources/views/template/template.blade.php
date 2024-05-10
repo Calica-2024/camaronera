@@ -102,6 +102,23 @@
                                     </li>
                                 </ul>
                             </li>
+                            <li class="nav-item {{ $grupo == 'balanceados' ? 'has-treeview menu-open' : '' }}">
+                                <a href="#" class="nav-link {{ $grupo == 'balanceados' ? 'active' : '' }}">
+                                    <i class="nav-icon fas fa-table"></i>
+                                    <p>
+                                        Balanceados
+                                        <i class="right fas fa-angle-left"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="{{ url('balanceados') }}" class="nav-link {{ $modulo == 'Balanceados' ? 'active' : '' }}">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Balanceados</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
                         </ul>
                     </nav>
                 <!-- /.sidebar-menu -->
@@ -151,5 +168,6 @@
         <script src="{{ asset("dist/js/pages/dashboard.js") }}">></script>
         <!-- AdminLTE for demo purposes -->
         <script src="{{ asset("dist/js/demo.js") }}">></script>
+        @include('template.modals')
     </body>
 </html>

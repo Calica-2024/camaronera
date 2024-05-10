@@ -3,6 +3,8 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CamaroneraController;
+use App\Http\Controllers\UsuarioCamaroneraController;
+use App\Http\Controllers\PiscinaController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,9 +18,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
 /*
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -26,11 +25,17 @@ Route::get('/dashboard', function () {
 */
 
 Route::middleware('auth')->group(function () {
+    Route::get('/', function () {
+        return view('welcome');
+    });
     Route::get('/dashboard', [DashboardController::class, 'index']);
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');    
     Route::resource('/camaroneras', CamaroneraController::class);
+    Route::get('/asignarUser/{camaronera}/{user}', [UsuarioCamaroneraController::class, 'asignarCamaronera']);
+    Route::get('/deleteUserCam/{user}', [UsuarioCamaroneraController::class, 'destroy']);
+    Route::resource('/piscinas', PiscinaController::class);
 });
 
 require __DIR__.'/auth.php';

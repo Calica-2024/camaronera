@@ -30,30 +30,14 @@
                             <h3 class="card-title">Información De La Camaronera</h3>
                         </div>
                         <form class="forms-sample" action="{{ url('camaroneras') }}" method="POST">
-                            @method('pPUT')
-                            @csrf
                             <div class="card-body">
                                 <div class="form-group">
                                     <label for="nombre">Nombre De La Camaronera</label>
-                                    <input type="text" name="nombre" class="form-control @error('nombre') is-invalid @enderror" id="nombre" value="{{ $camaronera->nombre }}" maxlength="25" disabled autofocus>
-                                    @if ($errors->has('nombre'))
-                                        <div class="invalid-feedback" style="display: inline !important">
-                                            @foreach ($errors->get('nombre') as $error)
-                                                {{ $error }}<br>
-                                            @endforeach
-                                        </div>
-                                    @endif
+                                    <input type="text" name="nombre" class="form-control" id="nombre" value="{{ $camaronera->nombre }}" maxlength="25" disabled autofocus>
                                 </div>
                                 <div class="form-group">
                                     <label for="direccion">Dirección</label>
-                                    <input type="text" name="direccion" class="form-control @error('direccion') is-invalid @enderror" id="direccion" value="{{ $camaronera->direccion }}" maxlength="100" disabled>
-                                    @if ($errors->has('direccion'))
-                                        <div class="invalid-feedback" style="display: inline !important">
-                                            @foreach ($errors->get('direccion') as $error)
-                                                {{ $error }}<br>
-                                            @endforeach
-                                        </div>
-                                    @endif
+                                    <input type="text" name="direccion" class="form-control" id="direccion" value="{{ $camaronera->direccion }}" maxlength="100" disabled>
                                 </div>
                                 <div class="form-group mb-0">
                                     <div class="custom-control custom-checkbox">
@@ -66,6 +50,220 @@
                                 <a href="{{ url('camaroneras/'.$camaronera->id.'/edit') }}" class="btn btn-primary"><i class="fas fa-edit"></i> Editar</a>
                             </div>
                         </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 col-md-12">
+                <div class="card mt-2">
+                    <div class="card-header">
+                        <h3 class="card-title">Usuarios</h3>
+                        <div class="card-tools">
+                            <a href="" class="btn btn-primary"  data-toggle="modal" data-target="#exampleModal"><i class="fas fa-user-plus"></i> Asignar</a>
+                            <!-- Modal -->
+                            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Asignar Usuarios</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <table class="table table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="width: 10px">#</th>
+                                                        <th>Usuario</th>
+                                                        <th>Asignar</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach ($users as $item)
+                                                        <tr>
+                                                            <td>{{ $loop->index+1 }}</td>
+                                                            <td>{{ $item->name }}</td>
+                                                            <td><a href="{{ url('asignarUser',[$camaronera, $item]) }}">Asignnar</a></td>
+                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th style="width: 10px">#</th>
+                                    <th>Usuario</th>
+                                    <th class="text-center">Eliminar</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($usuarios as $usuario)
+                                    <tr>
+                                        <td>{{ $loop->index+1 }}</td>
+                                        <td>{{ $usuario->usuario->name }}</td>
+                                        <td class="text-center"><a href="{{ url('deleteUserCam',$usuario) }}"><i class="fas fa-user-times"></i> Eliminar</a></td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-12">
+                <div class="card mt-2">
+                    <div class="card-header">
+                        <h3 class="card-title">Piscinas</h3>
+                        <div class="card-tools">
+                            <a href="" class="btn btn-primary" data-toggle="modal" data-target="#piscinas"><i class="fas fa-water"></i> Añadir Piscina</a>
+                            <!-- Modal -->
+                            <div class="modal fade" id="piscinas" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Añadir Piscina</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <form class="forms-sample" action="{{ url('piscinas') }}" method="POST">
+                                            @method('POST')
+                                            @csrf
+                                            <input type="hidden" name="id_camaronera" value="{{ $camaronera->id }}">
+                                            <div class="modal-body">
+                                                <div class="card-body">
+                                                    <div class="form-group">
+                                                        <label for="numero">Número de Piscina</label>
+                                                        <input type="text" name="numero" class="form-control @error('numero') is-invalid @enderror" id="numero" placeholder="Número De Piscina" maxlength="3" autofocus>
+                                                        @if ($errors->has('numero'))
+                                                            <div class="invalid-feedback" style="display: inline !important">
+                                                                @foreach ($errors->get('numero') as $error)
+                                                                    {{ $error }}<br>
+                                                                @endforeach
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="nombre">Nombre/Codigo de Piscina</label>
+                                                        <input type="text" name="nombre" class="form-control @error('nombre') is-invalid @enderror" id="nombre" placeholder="Nombre/Codigo De La Piscina" maxlength="15">
+                                                        @if ($errors->has('nombre'))
+                                                            <div class="invalid-feedback" style="display: inline !important">
+                                                                @foreach ($errors->get('nombre') as $error)
+                                                                    {{ $error }}<br>
+                                                                @endforeach
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                                <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Crear Piscina</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th style="width: 10px">Num.</th>
+                                    <th>Nombre</th>
+                                    <th class="text-center">Editar</th>
+                                    <th class="text-center">Eliminar</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($piscinas as $piscina)
+                                    <tr>
+                                        <td>{{ $piscina->numero }}</td>
+                                        <td>{{ $piscina->nombre }}</td>
+                                        <td class="text-center">
+                                            <a href="#" data-toggle="modal" data-target="#piscinasEdit">
+                                                <i class="fas fa-trash-alt"></i> Editar
+                                            </a>
+                                        </td>
+                                        <td class="text-center">
+                                            <form id="deleteForm{{ $piscina->id }}" action="{{ url('/piscinas/'.$piscina->id) }}" method="POST">
+                                                @csrf
+                                                @method('DELETE')
+                                                <a href="#" onclick="document.getElementById('deleteForm{{ $piscina->id }}').submit(); return false;" class="text-danger">
+                                                    <i class="fas fa-trash-alt"></i> Eliminar
+                                                </a>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="piscinasEdit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Editar Piscina</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <form class="forms-sample" action="{{ url('piscinas',$piscina) }}" method="POST">
+                                                    @method('PUT')
+                                                    @csrf
+                                                    <input type="hidden" name="id_camaronera" value="{{ $camaronera->id }}">
+                                                    <div class="modal-body">
+                                                        <div class="card-body">
+                                                            <div class="form-group">
+                                                                <label for="numero">Número de Piscina</label>
+                                                                <input type="text" name="numero" class="form-control @error('numero') is-invalid @enderror" id="numero" placeholder="Número De Piscina" maxlength="3" value="{{ $piscina->numero }}" autofocus>
+                                                                @if ($errors->has('numero'))
+                                                                    <div class="invalid-feedback" style="display: inline !important">
+                                                                        @foreach ($errors->get('numero') as $error)
+                                                                            {{ $error }}<br>
+                                                                        @endforeach
+                                                                    </div>
+                                                                @endif
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="nombre">Nombre/Codigo de Piscina</label>
+                                                                <input type="text" name="nombre" class="form-control @error('nombre') is-invalid @enderror" id="nombre" placeholder="Nombre/Codigo De La Piscina" value="{{ $piscina->nombre }}" maxlength="15">
+                                                                @if ($errors->has('nombre'))
+                                                                    <div class="invalid-feedback" style="display: inline !important">
+                                                                        @foreach ($errors->get('nombre') as $error)
+                                                                            {{ $error }}<br>
+                                                                        @endforeach
+                                                                    </div>
+                                                                @endif
+                                                            </div>
+                                                            <div class="form-group mb-0">
+                                                                <div class="custom-control custom-checkbox">
+                                                                    <input type="checkbox" name="estado" class="custom-control-input" id="exampleCheck1" {{ $piscina->estado == 1 ? 'checked' : '' }}>
+                                                                    <label class="custom-control-label" for="exampleCheck1">Activo</label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                                        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Actualizar Piscina</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>

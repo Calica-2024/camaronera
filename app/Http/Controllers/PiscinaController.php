@@ -34,6 +34,7 @@ class PiscinaController extends Controller
         $data = $request->validate([
             'numero' => 'required|numeric',
             'nombre' => 'required|min:3|max:15',
+            'area_ha' => 'required|numeric',
             'id_camaronera' => 'required',
         ]);
         // Convertir el nombre a mayúsculas antes de asignarlo a los datos
@@ -75,6 +76,7 @@ class PiscinaController extends Controller
         $data = $request->validate([
             'numero' => 'required|numeric',
             'nombre' => 'required|min:3|max:15',
+            'area_ha' => 'required|numeric',
         ]);
         $data['nombre'] = strtoupper($data['nombre']);
         $data['estado'] = 1;

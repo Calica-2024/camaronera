@@ -1,11 +1,12 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CamaroneraController;
 use App\Http\Controllers\UsuarioCamaroneraController;
 use App\Http\Controllers\PiscinaController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\BalanceadoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,6 +37,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/asignarUser/{camaronera}/{user}', [UsuarioCamaroneraController::class, 'asignarCamaronera']);
     Route::get('/deleteUserCam/{user}', [UsuarioCamaroneraController::class, 'destroy']);
     Route::resource('/piscinas', PiscinaController::class);
+    Route::resource('/balanceados', BalanceadoController::class);
 });
 
 require __DIR__.'/auth.php';

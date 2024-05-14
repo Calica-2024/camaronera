@@ -165,6 +165,17 @@
                                                             </div>
                                                         @endif
                                                     </div>
+                                                    <div class="form-group">
+                                                        <label for="area_ha">Area (HA)</label>
+                                                        <input type="text" name="area_ha" class="form-control @error('area_ha') is-invalid @enderror" id="area_ha" placeholder="Area (HA)" maxlength="10" autofocus>
+                                                        @if ($errors->has('area_ha'))
+                                                            <div class="invalid-feedback" style="display: inline !important">
+                                                                @foreach ($errors->get('area_ha') as $error)
+                                                                    {{ $error }}<br>
+                                                                @endforeach
+                                                            </div>
+                                                        @endif
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
@@ -183,6 +194,7 @@
                                 <tr>
                                     <th style="width: 10px">Num.</th>
                                     <th>Nombre</th>
+                                    <th>Area (HA)</th>
                                     <th class="text-center">Editar</th>
                                     <th class="text-center">Eliminar</th>
                                 </tr>
@@ -192,9 +204,10 @@
                                     <tr>
                                         <td>{{ $piscina->numero }}</td>
                                         <td>{{ $piscina->nombre }}</td>
+                                        <td>{{ $piscina->area_ha }}</td>
                                         <td class="text-center">
                                             <a href="#" data-toggle="modal" data-target="#piscinasEdit">
-                                                <i class="fas fa-trash-alt"></i> Editar
+                                                <i class="fas fa-edit"></i> Editar
                                             </a>
                                         </td>
                                         <td class="text-center">
@@ -240,6 +253,17 @@
                                                                 @if ($errors->has('nombre'))
                                                                     <div class="invalid-feedback" style="display: inline !important">
                                                                         @foreach ($errors->get('nombre') as $error)
+                                                                            {{ $error }}<br>
+                                                                        @endforeach
+                                                                    </div>
+                                                                @endif
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="area_ha">Area (HA)</label>
+                                                                <input type="text" name="area_ha" class="form-control @error('area_ha') is-invalid @enderror" id="area_ha" placeholder="Area (HA)" maxlength="10" value="{{ $piscina->area_ha }}">
+                                                                @if ($errors->has('area_ha'))
+                                                                    <div class="invalid-feedback" style="display: inline !important">
+                                                                        @foreach ($errors->get('area_ha') as $error)
                                                                             {{ $error }}<br>
                                                                         @endforeach
                                                                     </div>

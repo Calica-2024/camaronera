@@ -11,18 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('piscinas', function (Blueprint $table) {
+        Schema::create('balanceados', function (Blueprint $table) {
             $table->id();
             $table->string('nombre');
-            $table->integer('numero');
-            $table->unsignedBigInteger('id_camaronera');
-            $table->decimal('area', 10, 2);
+            $table->string('tipo');
+            $table->string('marca');
+            $table->string('etapa');
+            $table->string('nomenclatura');
+            $table->string('unidad_medida');
+            $table->decimal('presentacion', 10, 2);
+            $table->decimal('precio', 10, 2);
             $table->boolean('estado')->default(false);
             $table->timestamps();
-
-            $table->foreign('id_camaronera')
-                ->references('id')
-                ->on('camaroneras');
         });
     }
 
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('piscinas');
+        Schema::dropIfExists('balanceados');
     }
 };

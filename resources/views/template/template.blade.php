@@ -26,6 +26,10 @@
         <link rel="stylesheet" href="{{ asset("plugins/summernote/summernote-bs4.css") }}">
         <!-- Google Font: Source Sans Pro -->
         <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+        <script src="{{ asset("plugins/jquery/jquery.min.js") }}"></script>
+        <!-- jQuery UI 1.11.4 -->
+        <script src="{{ asset("plugins/jquery-ui/jquery-ui.min.js") }}"></script>
+        @include('template.modals')
     </head>
     <body class="hold-transition sidebar-mini layout-fixed sidebar-collapse">
         <div class="wrapper">
@@ -119,6 +123,23 @@
                                     </li>
                                 </ul>
                             </li>
+                            <li class="nav-item {{ $grupo == 'producciones' ? 'has-treeview menu-open' : '' }}">
+                                <a href="#" class="nav-link {{ $grupo == 'producciones' ? 'active' : '' }}">
+                                    <i class="nav-icon fas fa-table"></i>
+                                    <p>
+                                        Producciones
+                                        <i class="right fas fa-angle-left"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="{{ url('producciones') }}" class="nav-link {{ $modulo == 'Producciones' ? 'active' : '' }}">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Producciones</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
                         </ul>
                     </nav>
                 <!-- /.sidebar-menu -->
@@ -135,9 +156,6 @@
         <!-- ./wrapper -->
 
         <!-- jQuery -->
-        <script src="{{ asset("plugins/jquery/jquery.min.js") }}">></script>
-        <!-- jQuery UI 1.11.4 -->
-        <script src="{{ asset("plugins/jquery-ui/jquery-ui.min.js") }}">></script>
         <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
         <script>
             $.widget.bridge('uibutton', $.ui.button)
@@ -161,13 +179,12 @@
         <!-- Summernote -->
         <script src="{{ asset("plugins/summernote/summernote-bs4.min.js") }}">></script>
         <!-- overlayScrollbars -->
-        <script src="{{ asset("plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js") }}">></script>
+        <script src="{{ asset("plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js") }}"></script>
         <!-- AdminLTE App -->
-        <script src="{{ asset("dist/js/adminlte.js") }}">></script>
+        <script src="{{ asset("dist/js/adminlte.js") }}"></script>
         <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-        <script src="{{ asset("dist/js/pages/dashboard.js") }}">></script>
+        {{-- <script src="{{ asset("dist/js/pages/dashboard.js") }}"></script> --}}
         <!-- AdminLTE for demo purposes -->
-        <script src="{{ asset("dist/js/demo.js") }}">></script>
-        @include('template.modals')
+        <script src="{{ asset("dist/js/demo.js") }}"></script>
     </body>
 </html>

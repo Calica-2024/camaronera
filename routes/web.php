@@ -7,6 +7,7 @@ use App\Http\Controllers\CamaroneraController;
 use App\Http\Controllers\UsuarioCamaroneraController;
 use App\Http\Controllers\PiscinaController;
 use App\Http\Controllers\BalanceadoController;
+use App\Http\Controllers\ProduccionesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,6 +39,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/deleteUserCam/{user}', [UsuarioCamaroneraController::class, 'destroy']);
     Route::resource('/piscinas', PiscinaController::class);
     Route::resource('/balanceados', BalanceadoController::class);
+    Route::resource('/producciones', ProduccionesController::class);
+    Route::get('/producciones/camaronera/{camaronera}', [ProduccionesController::class, 'camaronera']);
+    Route::get('/producciones/piscina/{piscina}', [ProduccionesController::class, 'piscina']);
+    Route::get('/producciones/create/{piscina}', [ProduccionesController::class, 'create']);
 });
 
 require __DIR__.'/auth.php';

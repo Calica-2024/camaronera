@@ -108,7 +108,7 @@
                             </li>
                             <li class="nav-item {{ $grupo == 'balanceados' ? 'has-treeview menu-open' : '' }}">
                                 <a href="#" class="nav-link {{ $grupo == 'balanceados' ? 'active' : '' }}">
-                                    <i class="nav-icon fas fa-table"></i>
+                                    <i class="fas fa-cookie"></i>
                                     <p>
                                         Balanceados
                                         <i class="right fas fa-angle-left"></i>
@@ -125,7 +125,7 @@
                             </li>
                             <li class="nav-item {{ $grupo == 'producciones' ? 'has-treeview menu-open' : '' }}">
                                 <a href="#" class="nav-link {{ $grupo == 'producciones' ? 'active' : '' }}">
-                                    <i class="nav-icon fas fa-table"></i>
+                                    <i class="fas fa-industry"></i>
                                     <p>
                                         Producciones
                                         <i class="right fas fa-angle-left"></i>

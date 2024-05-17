@@ -13,4 +13,9 @@ class Piscina extends Model
     protected $fillable = ['nombre','numero','id_camaronera','area_ha','estado'];
     
     public $timestamps = true;
+
+    public function camaronera()
+    {
+        return $this->belongsTo(Camaronera::class, 'id_camaronera');
+    }
 }

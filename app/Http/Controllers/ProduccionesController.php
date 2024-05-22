@@ -76,9 +76,72 @@ class ProduccionesController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, $id)
     {
-        //
+        $piscina = Piscina::find($id);
+        if(!$piscina){
+            return redirect('producciones')->withErrors('El Registro No Existe');
+        }
+        $data = $request->validate([
+            'fecha' => 'required|date',
+            'densidad' => [
+                'required',
+                'regex:/^\d+(\.\d{1,2})?$/',
+                'min:0.01'
+            ],
+            'dias_ciclo' => [
+                'required',
+                'regex:/^\d+(\.\d{1,2})?$/',
+                'min:0.01'
+            ],
+            'peso_transferencia' => [
+                'required',
+                'regex:/^\d+(\.\d{1,2})?$/',
+                'min:0.01'
+            ],
+            'costo_larva' => [
+                'required',
+                'regex:/^\d+(\.\d{1,2})?$/',
+                'min:0.01'
+            ],
+            'multiplo_redondeo' => [
+                'required',
+                'regex:/^\d+(\.\d{1,2})?$/',
+                'min:0.01'
+            ],
+            'supervivencia_30' => [
+                'required',
+                'regex:/^\d+(\.\d{1,2})?$/',
+                'min:0.01'
+            ],
+            'supervivencia_fin' => [
+                'required',
+                'regex:/^\d+(\.\d{1,2})?$/',
+                'min:0.01'
+            ],
+            'capacidad_carga' => [
+                'required',
+                'regex:/^\d+(\.\d{1,2})?$/',
+                'min:0.01'
+            ],
+            'costo_fijo' => [
+                'required',
+                'regex:/^\d+(\.\d{1,2})?$/',
+                'min:0.01'
+            ],
+        ]);
+        $data['id_piscina'] = $piscina->id;
+        $produccion_activa = Produccion::where('id_piscina', $piscina->id)
+            ->where('estado', 1)
+            ->first();
+
+        if ($produccion_activa) {
+            $data['estado'] = 0;
+        } else {
+            $data['estado'] = 1;
+        }
+        $producción = Produccion::create($data);
+        return redirect('producciones/piscina/'.$piscina->id)->with('success', 'Producción Creada Exitosamente');
     }
 
     /**
@@ -86,7 +149,14 @@ class ProduccionesController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $grupo = $this->grupo;
+        $modulo = $this->modulo;
+        $produccion = Produccion::find($id);
+        if(!$produccion){
+            return redirect('producciones')->withErrors('El Registro No Existe');
+        }
+        $vista = "Consultar Producción " . $produccion->fecha . " - " . $produccion->dias_ciclo . " días";
+        return view('produccion.show', compact('grupo', 'modulo', 'vista', 'produccion'));
     }
 
     /**
@@ -94,7 +164,14 @@ class ProduccionesController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $grupo = $this->grupo;
+        $modulo = $this->modulo;
+        $produccion = Produccion::find($id);
+        if(!$produccion){
+            return redirect('producciones')->withErrors('El Registro No Existe');
+        }
+        $vista = "Actualizar Producción " . $produccion->fecha;
+        return view('produccion.edit', compact('grupo', 'modulo', 'vista', 'produccion'));
     }
 
     /**
@@ -102,7 +179,70 @@ class ProduccionesController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $produccion = Produccion::find($id);
+        if(!$produccion){
+            return redirect('producciones')->withErrors('El Registro No Existe');
+        }
+        $data = $request->validate([
+            'fecha' => 'required|date',
+            'densidad' => [
+                'required',
+                'regex:/^\d+(\.\d{1,2})?$/',
+                'min:0.01'
+            ],
+            'dias_ciclo' => [
+                'required',
+                'regex:/^\d+(\.\d{1,2})?$/',
+                'min:0.01'
+            ],
+            'peso_transferencia' => [
+                'required',
+                'regex:/^\d+(\.\d{1,2})?$/',
+                'min:0.01'
+            ],
+            'costo_larva' => [
+                'required',
+                'regex:/^\d+(\.\d{1,2})?$/',
+                'min:0.01'
+            ],
+            'multiplo_redondeo' => [
+                'required',
+                'regex:/^\d+(\.\d{1,2})?$/',
+                'min:0.01'
+            ],
+            'supervivencia_30' => [
+                'required',
+                'regex:/^\d+(\.\d{1,2})?$/',
+                'min:0.01'
+            ],
+            'supervivencia_fin' => [
+                'required',
+                'regex:/^\d+(\.\d{1,2})?$/',
+                'min:0.01'
+            ],
+            'capacidad_carga' => [
+                'required',
+                'regex:/^\d+(\.\d{1,2})?$/',
+                'min:0.01'
+            ],
+            'costo_fijo' => [
+                'required',
+                'regex:/^\d+(\.\d{1,2})?$/',
+                'min:0.01'
+            ],
+        ]);
+        $produccion_activa = Produccion::where('id_piscina', $produccion->id_piscina)
+            ->where('estado', 1)
+            ->whereNot('id', $produccion->id)
+            ->first();
+
+        if ($produccion_activa) {
+            echo $data['estado'] = 0;
+        } else {
+            echo $data['estado'] = 1;
+        }
+        $produccion->update($data);
+        return redirect('producciones/'.$produccion->id)->with('success', 'Producción Actualizada Exitosamente');
     }
 
     /**
@@ -110,6 +250,16 @@ class ProduccionesController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $produccion = Produccion::find($id);
+        if(!$produccion){
+            return back()->withErrors('La Producción No Existe');
+        }
+
+        try {
+            $produccion->delete();
+            return redirect('producciones/piscina/'.$produccion->id_piscina)->with('success', 'Producción eliminada exitosamente.');
+        } catch (\Illuminate\Database\QueryException $e) {
+            return redirect('producciones/piscina/'.$produccion->id_piscina)->withErrors('No se puede eliminar, mantiene registros relacionados.');
+        }
     }
 }

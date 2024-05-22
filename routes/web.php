@@ -8,6 +8,7 @@ use App\Http\Controllers\UsuarioCamaroneraController;
 use App\Http\Controllers\PiscinaController;
 use App\Http\Controllers\BalanceadoController;
 use App\Http\Controllers\ProduccionesController;
+use App\Http\Controllers\CultivoDiasController;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,6 +44,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/producciones/camaronera/{camaronera}', [ProduccionesController::class, 'camaronera']);
     Route::get('/producciones/piscina/{piscina}', [ProduccionesController::class, 'piscina']);
     Route::get('/producciones/create/{piscina}', [ProduccionesController::class, 'create']);
+    Route::post('/producciones/store/{piscina}', [ProduccionesController::class, 'store']);
+    Route::resource('/cultivo', CultivoDiasController::class);
+    Route::get('/cultivo/create/{produccion}', [CultivoDiasController::class, 'create']);
 });
 
 require __DIR__.'/auth.php';

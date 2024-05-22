@@ -37,23 +37,59 @@
                     <thead>
                         <tr>
                             <th style="width: 10px">#</th>
-                            <th>Piscina</th>
+                            <th>Fecha Inicio</th>
+                            <th class="text-center">Días Ciclo</th>
+                            <th class="text-center">Densidad Siembra</th>
                             <th class="text-center">Estado</th>
-                            <th class="text-center">Producción</th>
                             <th class="text-center">Producciones</th>
+                            <th style="width: 10px"><i class="fas fa-cogs"></i></th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($producciones as $item)
                             <tr>
                                 <td>{{ $loop->index+1 }}</td>
-                                <td><a href="{{ url('/producciones/piscina',$item) }}">{{ $item->nombre }} <i class="fas fa-person-booth"></i></a></td>
-                                <td class="text-center">{{ $item->estado == 1 ? 'Activo' : 'Inactivo' }}</td>
-                                @php
-                                    $produccionActiva = $producciones->where('id_piscina', $item->id)->where('estado', 1)->first();
-                                @endphp
-                                <td class="text-center">{{ $produccionActiva ? 'SI' : 'NO' }}</td>
+                                <td><a href="{{ url('producciones',$item) }}">{{ $item->fecha }} <i class="fas fa-person-booth"></i></a></td>
+                                <td class="text-center">{{ $item->dias_ciclo }}</td>
+                                <td class="text-center">{{ $item->densidad }}</td>
+                                <td class="text-center">{{ $item->estado == 1 ? 'Activo' : 'Finalizada' }}</td>
                                 <td class="text-center">{{ count($producciones->where('id_piscina', $item->id)) }}</td>
+                                <td>
+                                    <a class="" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
+                                        <i class="fas fa-cogs"></i>
+                                    </a>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" href="{{ url('/producciones/'.$item->id.'/edit') }}">Editar</a>
+                                        <a class="dropdown-item" href="{{ url('/producciones/'.$item->id) }}">Consultar</a>
+                                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#delModal{{ $item['id'] }}">Eliminar</a>
+                                    </div>
+                                </td>
+                                <div class="modal fade" id="delModal{{ $item['id'] }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Eliminar producción</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <h2 class="text-wrap">La producción: <strong>{{ $item->fecha . ' - ' . $item->fecha . ' días' }}</strong>, se eliminará</h2>
+                                                <h2 class="text-danger">¿Desea Continuar?</h2>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                                <form action="{{ url('/producciones/'.$item->id) }}" method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-danger boton-procesar">
+                                                        Eliminar
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </tr>
                         @endforeach
                     </tbody>

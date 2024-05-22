@@ -48,7 +48,7 @@
                                     </div>
                                     <div class="col-md-4 form-group">
                                         <label for="dias_ciclo">Días De Ciclo</label>
-                                        <input type="text" name="dias_ciclo" class="form-control @error('dias_ciclo') is-invalid @enderror" id="dias_ciclo" placeholder="Días De Ciclo" maxlength="15" value="{{ old('dias_ciclo') }}">
+                                        <input type="text" name="dias_ciclo" class="form-control @error('dias_ciclo') is-invalid @enderror" id="dias_ciclo" placeholder="Días De Ciclo" value="{{ old('dias_ciclo') }}">
                                         @if ($errors->has('dias_ciclo'))
                                             <div class="invalid-feedback" style="display: inline !important">
                                                 @foreach ($errors->get('dias_ciclo') as $error)
@@ -63,17 +63,6 @@
                                         @if ($errors->has('densidad'))
                                             <div class="invalid-feedback" style="display: inline !important">
                                                 @foreach ($errors->get('densidad') as $error)
-                                                    {{ $error }}<br>
-                                                @endforeach
-                                            </div>
-                                        @endif
-                                    </div>
-                                    <div class="col-md-4 form-group">
-                                        <label for="dias_ciclo">Días De Ciclo</label>
-                                        <input type="text" name="dias_ciclo" class="form-control @error('dias_ciclo') is-invalid @enderror" id="dias_ciclo" placeholder="Días De Ciclo" maxlength="15" value="{{ old('dias_ciclo') }}">
-                                        @if ($errors->has('dias_ciclo'))
-                                            <div class="invalid-feedback" style="display: inline !important">
-                                                @foreach ($errors->get('dias_ciclo') as $error)
                                                     {{ $error }}<br>
                                                 @endforeach
                                             </div>

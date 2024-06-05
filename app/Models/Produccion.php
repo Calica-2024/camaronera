@@ -23,8 +23,14 @@ class Produccion extends Model
         'supervivencia_fin',
         'capacidad_carga',
         'costo_fijo',
+        'tabla_alimentacion',
         'estado',
     ];
     
     public $timestamps = true;
+    
+    public function piscina()
+    {
+        return $this->belongsTo(Piscina::class, 'id_piscina');
+    }
 }

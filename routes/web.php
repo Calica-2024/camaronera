@@ -9,6 +9,7 @@ use App\Http\Controllers\PiscinaController;
 use App\Http\Controllers\BalanceadoController;
 use App\Http\Controllers\ProduccionesController;
 use App\Http\Controllers\CultivoDiasController;
+use App\Http\Controllers\TablaAlimentacionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -47,6 +48,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/producciones/store/{piscina}', [ProduccionesController::class, 'store']);
     Route::resource('/cultivo', CultivoDiasController::class);
     Route::get('/cultivo/create/{produccion}', [CultivoDiasController::class, 'create']);
+    Route::resource('/tabla_alimentacion', TablaAlimentacionController::class);
+    Route::put('/updProyItem/{item}', [ProduccionesController::class, 'updProyItem']);
 });
 
 require __DIR__.'/auth.php';

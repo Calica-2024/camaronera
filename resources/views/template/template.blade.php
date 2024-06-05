@@ -186,5 +186,26 @@
         {{-- <script src="{{ asset("dist/js/pages/dashboard.js") }}"></script> --}}
         <!-- AdminLTE for demo purposes -->
         <script src="{{ asset("dist/js/demo.js") }}"></script>
+
+        <script>
+            function decimales(input) {
+                // Elimina todos los caracteres que no sean números o puntos
+                input.value = input.value.replace(/[^0-9.]/g, '');
+    
+                // Separa el valor en la parte entera y la parte decimal
+                const partes = input.value.split('.');
+                
+                // Si hay más de un punto, elimina los puntos adicionales
+                if (partes.length > 2) {
+                    input.value = partes[0] + '.' + partes.slice(1).join('');
+                }
+    
+                // Limita la parte decimal a 2 dígitos
+                if (partes[1] && partes[1].length > 2) {
+                    partes[1] = partes[1].substring(0, 2);
+                    input.value = partes[0] + '.' + partes[1];
+                }
+            }
+        </script>
     </body>
 </html>

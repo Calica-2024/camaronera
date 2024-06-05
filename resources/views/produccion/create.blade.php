@@ -135,6 +135,24 @@
                                         @endif
                                     </div>
                                     <div class="col-md-4 form-group">
+                                        <label for="tabla_alimentacion">Tabla de Alimentación</label>
+                                        <select name="tabla_alimentacion" class="form-control @error('tabla_alimentacion') is-invalid @enderror" id="tabla_alimentacion">
+                                            <option value="">Seleccione una opción</option>
+                                            <option value="ta1">TA1</option>
+                                            <option value="ta2">TA2</option>
+                                            <option value="ta3">TA3</option>
+                                            <option value="ta4">TA4</option>
+                                            <option value="ta5">TA5</option>
+                                        </select>
+                                        @if ($errors->has('tabla_alimentacion'))
+                                            <div class="invalid-feedback" style="display: inline !important">
+                                                @foreach ($errors->get('tabla_alimentacion') as $error)
+                                                    {{ $error }}<br>
+                                                @endforeach
+                                            </div>
+                                        @endif
+                                    </div>
+                                    <div class="col-md-4 form-group">
                                         <label for="costo_fijo">Costo fijo ($/Ha/día)</label>
                                         <input type="text" name="costo_fijo" class="form-control @error('costo_fijo') is-invalid @enderror" id="costo_fijo" placeholder="Costo fijo ($/Ha/día)" maxlength="15" value="{{ old('costo_fijo') }}">
                                         @if ($errors->has('costo_fijo'))

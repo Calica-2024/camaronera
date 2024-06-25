@@ -31,9 +31,14 @@
                         </p>
                     </div>
                     <div class="col-sm-6">
+                        @php 
+                            use Carbon\Carbon;
+                            $ultimoRegistro = $produccionItems->last(); 
+                            $fechaProxima = $ultimoRegistro ? Carbon::parse($ultimoRegistro->fecha)->addDay()->toDateString() : $produccion->fecha;
+                        @endphp
                         <p class="float-sm-right">
                             <a class="btn btn-primary" href="#"  data-toggle="modal" data-target="#piscinas">
-                            Añadir Registro Diario
+                            Añadir Registro #{{ $ultimoRegistro ? $ultimoRegistro->num_dia + 1 : 1 }}
                             </a>
                         </p>
                         <!-- Modal -->
@@ -41,29 +46,83 @@
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">Añadir Registro Diario</h5>
+                                        <h5 class="modal-title" id="exampleModalLabel">Añadir Registro Día #{{ $ultimoRegistro ? $ultimoRegistro->num_dia + 1 : 1 }} Fecha: {{ $fechaProxima }}</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
-                                    <form class="forms-sample" action="{{ url('') }}" method="POST">
+                                    <form class="forms-sample" action="{{ url('/proyectoReal', $produccion) }}" method="POST">
                                         @method('POST')
                                         @csrf
-                                        <input type="hidden" name="id_camaronera" value="{{ $produccion->id }}">
+                                        <input type="hidden" name="num_dia" value="{{ $ultimoRegistro ? $ultimoRegistro->num_dia + 1 : 1 }}">
+                                        <input type="hidden" name="fecha" value="{{ $fechaProxima }}">
                                         <div class="modal-body">
-                                            <div class="card-body">
-                                                <div class="row">
-                                                    <div class="col-md-4 form-group">
-                                                        <label for="fecha">Fecha</label>
-                                                        <input type="date" name="fecha" class="form-control @error('fecha') is-invalid @enderror" id="fecha" autofocus value="{{ old('fecha') }}">
-                                                        @if ($errors->has('fecha'))
-                                                            <div class="invalid-feedback" style="display: inline !important">
-                                                                @foreach ($errors->get('fecha') as $error)
-                                                                    {{ $error }}<br>
-                                                                @endforeach
-                                                            </div>
-                                                        @endif
-                                                    </div>
+                                            <div class="row">
+                                                <div class="col-md-4 col-sm-6 form-group">
+                                                    <label for="peso_real" style="font-size: 13px">Peso Real</label>
+                                                    <input type="text" name="peso_real" class="form-control @error('peso_real') is-invalid @enderror" id="peso_real" autofocus value="{{old('peso_real') }}" oninput="decimales(this)">
+                                                    @if ($errors->has('peso_real'))
+                                                        <div class="invalid-feedback" style="display: inline !important">
+                                                            @foreach ($errors->get('peso_real') as $error)
+                                                                {{ $error }}<br>
+                                                            @endforeach
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                                <div class="col-md-4 col-sm-6 form-group">
+                                                    <label for="alimento" style="font-size: 13px">Alimento Real</label>
+                                                    <input type="text" name="alimento" class="form-control @error('alimento') is-invalid @enderror" id="alimento" autofocus value="{{old('alimento') }}" oninput="decimales(this)">
+                                                    @if ($errors->has('alimento'))
+                                                        <div class="invalid-feedback" style="display: inline !important">
+                                                            @foreach ($errors->get('alimento') as $error)
+                                                                {{ $error }}<br>
+                                                            @endforeach
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                                <div class="col-md-4 col-sm-6 form-group">
+                                                    <label for="alimento_calculo" style="font-size: 13px">Alim. Calculo</label>
+                                                    <input type="text" name="alimento_calculo" class="form-control @error('alimento_calculo') is-invalid @enderror" id="alimento_calculo" autofocus value="{{old('alimento_calculo') }}" oninput="decimales(this)">
+                                                    @if ($errors->has('alimento_calculo'))
+                                                        <div class="invalid-feedback" style="display: inline !important">
+                                                            @foreach ($errors->get('alimento_calculo') as $error)
+                                                                {{ $error }}<br>
+                                                            @endforeach
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                                <div class="col-md-4 col-sm-6 form-group">
+                                                    <label for="densidad_muestreo" style="font-size: 13px">Dens. Muestreo</label>
+                                                    <input type="text" name="densidad_muestreo" class="form-control @error('densidad_muestreo') is-invalid @enderror" id="densidad_muestreo" autofocus value="{{old('densidad_muestreo') }}" oninput="decimales(this)">
+                                                    @if ($errors->has('densidad_muestreo'))
+                                                        <div class="invalid-feedback" style="display: inline !important">
+                                                            @foreach ($errors->get('densidad_muestreo') as $error)
+                                                                {{ $error }}<br>
+                                                            @endforeach
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                                <div class="col-md-4 col-sm-6 form-group">
+                                                    <label for="densidad_actual" style="font-size: 13px">Dens. Actual</label>
+                                                    <input type="text" name="densidad_actual" class="form-control @error('densidad_actual') is-invalid @enderror" id="densidad_actual" autofocus value="{{old('densidad_actual') }}" oninput="decimales(this)">
+                                                    @if ($errors->has('densidad_actual'))
+                                                        <div class="invalid-feedback" style="display: inline !important">
+                                                            @foreach ($errors->get('densidad_actual') as $error)
+                                                                {{ $error }}<br>
+                                                            @endforeach
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                                <div class="col-md-4 col-sm-6 form-group">
+                                                    <label for="densidad_raleada" style="font-size: 13px">Dens. Raleada</label>
+                                                    <input type="text" name="densidad_raleada" class="form-control @error('densidad_raleada') is-invalid @enderror" id="densidad_raleada" autofocus value="{{old('densidad_raleada') }}" oninput="decimales(this)">
+                                                    @if ($errors->has('densidad_raleada'))
+                                                        <div class="invalid-feedback" style="display: inline !important">
+                                                            @foreach ($errors->get('densidad_raleada') as $error)
+                                                                {{ $error }}<br>
+                                                            @endforeach
+                                                        </div>
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
@@ -209,9 +268,11 @@
             </div>
         </div>
     </section>
+    {{--  
     <section class="content">
         @include('componentes.graficosprod')
     </section>
+    --}}
     <section class="content">
         @include('componentes.tablaprod')
     </section>

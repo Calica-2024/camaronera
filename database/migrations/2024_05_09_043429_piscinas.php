@@ -17,6 +17,7 @@ return new class extends Migration
             $table->integer('numero');
             $table->unsignedBigInteger('id_camaronera');
             $table->decimal('area_ha', 10, 2);
+            $table->integer('tipo');
             $table->boolean('estado')->default(false);
             $table->timestamps();
 

@@ -10,7 +10,7 @@ class Piscina extends Model
     use HasFactory;
     
     protected $table = 'piscinas';
-    protected $fillable = ['nombre','numero','id_camaronera','area_ha','estado'];
+    protected $fillable = ['nombre','numero','id_camaronera','area_ha','tipo','estado'];
     
     public $timestamps = true;
 

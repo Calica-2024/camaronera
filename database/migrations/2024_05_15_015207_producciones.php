@@ -17,7 +17,7 @@ return new class extends Migration
             $table->date('fecha');
             $table->decimal('densidad', 10, 2);
             $table->integer('dias_ciclo');
-            $table->integer('tabla_alimentacion');
+            $table->string('tabla_alimentacion');
             $table->decimal('peso_transferencia', 10, 2);
             $table->decimal('costo_larva', 10, 2);
             $table->decimal('multiplo_redondeo', 10, 2);

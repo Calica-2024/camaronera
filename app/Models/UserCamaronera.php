@@ -18,4 +18,9 @@ class UserCamaronera extends Model
     {
         return $this->belongsTo(User::class, 'id_user');
     }
+
+    public function camaronera()
+    {
+        return $this->belongsTo(Camaronera::class, 'id_camaronera');
+    }
 }

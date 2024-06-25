@@ -19,6 +19,8 @@ return new class extends Migration
             $table->decimal('ta3', 10, 2)->nullable();
             $table->decimal('ta4', 10, 2)->nullable();
             $table->decimal('ta5', 10, 2)->nullable();
+            $table->decimal('ta6', 10, 2)->nullable();
+            $table->decimal('ta7', 10, 2)->nullable();
             $table->timestamps();
         });
     }

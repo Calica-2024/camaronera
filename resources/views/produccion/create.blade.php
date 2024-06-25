@@ -143,6 +143,8 @@
                                             <option value="ta3">TA3</option>
                                             <option value="ta4">TA4</option>
                                             <option value="ta5">TA5</option>
+                                            <option value="ta6">TA6</option>
+                                            <option value="ta7">TA7</option>
                                         </select>
                                         @if ($errors->has('tabla_alimentacion'))
                                             <div class="invalid-feedback" style="display: inline !important">
@@ -163,6 +165,61 @@
                                             </div>
                                         @endif
                                     </div>
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <label for="crecimiento1">Crecimiento Proyecto Dia 0 - 15</label>
+                                    <input type="text" name="crecimiento1" class="form-control @error('crecimiento1') is-invalid @enderror" id="crecimiento1" placeholder="Crecimiento Proyecto Dia 0 - 15" maxlength="15" value="{{ old('crecimiento1') }}">
+                                    @if ($errors->has('crecimiento1'))
+                                        <div class="invalid-feedback" style="display: inline !important">
+                                            @foreach ($errors->get('crecimiento1') as $error)
+                                                {{ $error }}<br>
+                                            @endforeach
+                                        </div>
+                                    @endif
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <label for="crecimiento2">Crecimiento Proyecto Dia 15 - 30</label>
+                                    <input type="text" name="crecimiento2" class="form-control @error('crecimiento2') is-invalid @enderror" id="crecimiento2" placeholder="Crecimiento Proyecto Dia 15 - 30" maxlength="15" value="{{ old('crecimiento2') }}">
+                                    @if ($errors->has('crecimiento2'))
+                                        <div class="invalid-feedback" style="display: inline !important">
+                                            @foreach ($errors->get('crecimiento2') as $error)
+                                                {{ $error }}<br>
+                                            @endforeach
+                                        </div>
+                                    @endif
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <label for="crecimiento3">Crecimiento Proyecto Dia 30 - 45</label>
+                                    <input type="text" name="crecimiento3" class="form-control @error('crecimiento3') is-invalid @enderror" id="crecimiento3" placeholder="Crecimiento Proyecto Dia 30 - 45" maxlength="15" value="{{ old('crecimiento3') }}">
+                                    @if ($errors->has('crecimiento3'))
+                                        <div class="invalid-feedback" style="display: inline !important">
+                                            @foreach ($errors->get('crecimiento3') as $error)
+                                                {{ $error }}<br>
+                                            @endforeach
+                                        </div>
+                                    @endif
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <label for="crecimiento4">Crecimiento Proyecto Dia 45 - 60</label>
+                                    <input type="text" name="crecimiento4" class="form-control @error('crecimiento4') is-invalid @enderror" id="crecimiento4" placeholder="Crecimiento Proyecto Dia 45 - 60" maxlength="15" value="{{ old('crecimiento4') }}">
+                                    @if ($errors->has('crecimiento4'))
+                                        <div class="invalid-feedback" style="display: inline !important">
+                                            @foreach ($errors->get('crecimiento4') as $error)
+                                                {{ $error }}<br>
+                                            @endforeach
+                                        </div>
+                                    @endif
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <label for="crecimiento5">Crecimiento Proyecto Dia > 60</label>
+                                    <input type="text" name="crecimiento5" class="form-control @error('crecimiento5') is-invalid @enderror" id="crecimiento5" placeholder="Crecimiento Proyecto Dia > 60" maxlength="15" value="{{ old('crecimiento5') }}">
+                                    @if ($errors->has('crecimiento5'))
+                                        <div class="invalid-feedback" style="display: inline !important">
+                                            @foreach ($errors->get('crecimiento5') as $error)
+                                                {{ $error }}<br>
+                                            @endforeach
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                             <div class="card-footer">

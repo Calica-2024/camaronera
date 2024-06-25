@@ -12,18 +12,19 @@ use App\Models\Balanceado;
 use App\Models\Produccion;
 use App\Models\ProyectoCultivo;
 use App\Models\TablaAlimentacion;
+use App\Models\ProyectoReal;
 
 class ProduccionesController extends Controller
 {
     
     protected $grupo = "producciones";
     protected $modulo = "Producciones";
-    protected $crecimientoPorDias = [
-        ["min" => 0, "max" => 15, "crecimiento" => 0.28],
-        ["min" => 15, "max" => 30, "crecimiento" => 0.40],
-        ["min" => 30, "max" => 45, "crecimiento" => 0.55],
-        ["min" => 45, "max" => 60, "crecimiento" => 0.55],
-        ["min" => 60, "max" => PHP_INT_MAX, "crecimiento" => 0.55], // PHP_INT_MAX para manejar el caso "> 60"
+    protected $crecimientoPorDias1 = [
+        ["min" => 0, "max" => 15, "crecimiento" => 0.35],
+        ["min" => 15, "max" => 30, "crecimiento" => 0.45],
+        ["min" => 30, "max" => 45, "crecimiento" => 0.47],
+        ["min" => 45, "max" => 60, "crecimiento" => 0.47],
+        ["min" => 60, "max" => PHP_INT_MAX, "crecimiento" => 0.44], // PHP_INT_MAX para manejar el caso "> 60"
     ];
     /**
      * Display a listing of the resource.
@@ -147,6 +148,32 @@ class ProduccionesController extends Controller
                 'regex:/^\d+(\.\d{1,2})?$/',
                 'min:1'
             ],
+
+            'crecimiento1' => [
+                'required',
+                'numeric',
+                'regex:/^\d+(\.\d{1,2})?$/'
+            ],
+            'crecimiento2' => [
+                'required',
+                'numeric',
+                'regex:/^\d+(\.\d{1,2})?$/'
+            ],
+            'crecimiento3' => [
+                'required',
+                'numeric',
+                'regex:/^\d+(\.\d{1,2})?$/'
+            ],
+            'crecimiento4' => [
+                'required',
+                'numeric',
+                'regex:/^\d+(\.\d{1,2})?$/'
+            ],
+            'crecimiento5' => [
+                'required',
+                'numeric',
+                'regex:/^\d+(\.\d{1,2})?$/'
+            ],
             'tabla_alimentacion' => 'required|string',
         ]);
         $data['id_piscina'] = $piscina->id;
@@ -170,7 +197,13 @@ class ProduccionesController extends Controller
         $dias = $produccion->dias_ciclo;
         $fechaInicial = Carbon::parse($produccion->fecha);
         $data = [];
-        $crecimientoProy = $this->crecimientoPorDias;
+        $crecimientoProy = [
+            ["min" => 0, "max" => 15, "crecimiento" => $produccion->crecimiento1],
+            ["min" => 15, "max" => 30, "crecimiento" => $produccion->crecimiento2],
+            ["min" => 30, "max" => 45, "crecimiento" => $produccion->crecimiento3],
+            ["min" => 45, "max" => 60, "crecimiento" => $produccion->crecimiento4],
+            ["min" => 60, "max" => PHP_INT_MAX, "crecimiento" => $produccion->crecimiento5], // PHP_INT_MAX para manejar el caso "> 60"
+        ];
         $sumaDensRal = 0;
         for ($i = 0; $i < $dias; $i++) {
             $data = [];
@@ -202,6 +235,10 @@ class ProduccionesController extends Controller
                     $data['peso_corporal'] = $tabla->ta4;
                 }elseif($produccion->tabla_alimentacion == "ta5"){
                     $data['peso_corporal'] = $tabla->ta5;
+                }elseif($produccion->tabla_alimentacion == "ta6"){
+                    $data['peso_corporal'] = $tabla->ta6;
+                }elseif($produccion->tabla_alimentacion == "ta7"){
+                    $data['peso_corporal'] = $tabla->ta7;
                 }
                 
                 // Definir las variables
@@ -266,6 +303,10 @@ class ProduccionesController extends Controller
                     $data['peso_corporal'] = $tabla->ta4;
                 }elseif($produccion->tabla_alimentacion == "ta5"){
                     $data['peso_corporal'] = $tabla->ta5;
+                }elseif($produccion->tabla_alimentacion == "ta6"){
+                    $data['peso_corporal'] = $tabla->ta6;
+                }elseif($produccion->tabla_alimentacion == "ta7"){
+                    $data['peso_corporal'] = $tabla->ta7;
                 }
             
                 // Definir las variables
@@ -356,6 +397,10 @@ class ProduccionesController extends Controller
                 $data['peso_corporal'] = $tabla->ta4;
             }elseif($produccion->tabla_alimentacion == "ta5"){
                 $data['peso_corporal'] = $tabla->ta5;
+            }elseif($produccion->tabla_alimentacion == "ta6"){
+                $data['peso_corporal'] = $tabla->ta6;
+            }elseif($produccion->tabla_alimentacion == "ta7"){
+                $data['peso_corporal'] = $tabla->ta7;
             }
             
             // Definir las variables
@@ -369,7 +414,65 @@ class ProduccionesController extends Controller
             $data['alimento_dia'] = $resultado;
             $data['alimento_area'] = number_format(($data['alimento_dia'] / $produccion->piscina->area_ha), 2);
             $data['alimento_aculumado'] = $data['alimento_dia'];
+        }else{
+            
+            $registroAnterior = ProyectoCultivo::where('id_produccion', $produccion->id)
+                                                    ->where('num_dia', ($item->num_dia - 1))
+                                                    ->first();
+
+            $data['densidad_raleada'] = $densidad_raleada;
+
+            if ($item->num_dia < 30) {
+                $resultadoSupervivencia = ((($registroAnterior->supervivencia_base*0.01) - ((1 - ($produccion->supervivencia_30*0.01) )/29))) - ($data['densidad_raleada']/$produccion->densidad);
+                $data['supervivencia_base'] = $resultadoSupervivencia*100;
+            }elseif ($item->num_dia == 30) {
+                $sumaDensRal = ProyectoCultivo::where('id_produccion', $produccion->id)
+                                ->whereBetween('num_dia', [1, 29])
+                                ->sum('densidad_raleada');
+                $sumaDensRal += $densidad_raleada;
+                $resultadoSupervivencia = ( ($produccion->supervivencia_30*0.01) - ($data['densidad_raleada']/$produccion->densidad) ) -  ( $sumaDensRal/$produccion->densidad ) ;
+                $data['supervivencia_base'] = $resultadoSupervivencia*100;
+            }elseif ($item->num_dia > 30) {
+                $resultadoSupervivencia = ((($registroAnterior->supervivencia_base/100) - (( ($produccion->supervivencia_30/100)  - ($produccion->supervivencia_fin/100) ) / ($produccion->dias_ciclo - 30) ))*100) - ($data['densidad_raleada']/$produccion->densidad);
+                $data['supervivencia_base'] = $resultadoSupervivencia;
+            }
+
+            $data['densidad'] = ( ($data['supervivencia_base']*0.01) * $produccion->densidad );
+
+            $data['biomasa_raleada'] = ($data['densidad_raleada'] * $item->peso_proyecto * 22) + $registroAnterior->biomasa_raleada;
+
+            $data['biomasa'] = $data['densidad'] * $item->peso_proyecto * 22;
+            
+            // Obtener el registro con el peso más cercano menor o igual al buscado
+            $pesoBuscado = $item->peso_proyecto;
+            $tabla = TablaAlimentacion::where('pesos', '<=', $pesoBuscado)->orderBy('pesos', 'desc')->first();
+
+            if($produccion->tabla_alimentacion == "ta1"){
+                $data['peso_corporal'] = $tabla->ta1;
+            }elseif($produccion->tabla_alimentacion == "ta2"){
+                $data['peso_corporal'] = $tabla->ta2;
+            }elseif($produccion->tabla_alimentacion == "ta3"){
+                $data['peso_corporal'] = $tabla->ta3;
+            }elseif($produccion->tabla_alimentacion == "ta4"){
+                $data['peso_corporal'] = $tabla->ta4;
+            }elseif($produccion->tabla_alimentacion == "ta5"){
+                $data['peso_corporal'] = $tabla->ta5;
+            }
+            
+            // Definir las variables
+            $p4 = $data['biomasa']; // Verifica si $data['biomasa'] tiene el valor esperado
+            $q4 = $data['peso_corporal']*0.01; // Verifica si $data['peso_corporal'] tiene el valor esperado
+            $b6 = $produccion->piscina->area_ha; // Verifica si $produccion->piscina->area_ha tiene el valor esperado
+            $b12 = $produccion->multiplo_redondeo; // Verifica si $produccion->multiplo_redondeo tiene el valor esperado
+            // Aplicar la fórmula utilizando la función de redondeo personalizada
+            $resultado = $this->redondeo_mult((($p4 * $q4) / 2.20462) * $b6, $b12);
+            
+            $data['alimento_dia'] = $resultado;
+            $data['alimento_area'] = number_format(($data['alimento_dia'] / $produccion->piscina->area_ha), 2);
+            $data['alimento_aculumado'] = $data['alimento_dia'] + $registroAnterior->alimento_aculumado;
         }
+
+
         $item->update($data);
 
         $items = ProyectoCultivo::where('id_produccion', $produccion->id)->orderBy('num_dia', 'ASC')->get();
@@ -391,8 +494,14 @@ class ProduccionesController extends Controller
         $balanceado = Balanceado::where('estado', 1)->first();
         $dias = $produccion->dias_ciclo;
         $ultimaFecha = Carbon::parse($item->fecha)->addDay();
-        $crecimientoProy = $this->crecimientoPorDias;
-        $sumaDensRal = 0;
+        $crecimientoProy = [
+            ["min" => 0, "max" => 15, "crecimiento" => $produccion->crecimiento1],
+            ["min" => 15, "max" => 30, "crecimiento" => $produccion->crecimiento2],
+            ["min" => 30, "max" => 45, "crecimiento" => $produccion->crecimiento3],
+            ["min" => 45, "max" => 60, "crecimiento" => $produccion->crecimiento4],
+            ["min" => 60, "max" => PHP_INT_MAX, "crecimiento" => $produccion->crecimiento5], // PHP_INT_MAX para manejar el caso "> 60"
+        ];
+        #$sumaDensRal = 0;
         for ($i = $item->num_dia; $i < $dias; $i++) {
             $data = [];
             $data['num_dia'] = $i+1;
@@ -422,17 +531,21 @@ class ProduccionesController extends Controller
             $data['densidad_raleada'] = 0;
 
             if ($data['num_dia'] < 30) {
-                $resultadoSupervivencia = ((($registroAnterior->supervivencia_base/100) - ((100/100 - $produccion->supervivencia_30/100 )/29))*100) - ($data['densidad_raleada']/$produccion->densidad);
-                $data['supervivencia_base'] = $resultadoSupervivencia;
+                $resultadoSupervivencia = ((($registroAnterior->supervivencia_base*0.01) - (((1) - ($produccion->supervivencia_30*0.01) )/29))) - ($data['densidad_raleada']/$produccion->densidad);
+                $data['supervivencia_base'] = $resultadoSupervivencia*100;
             }elseif ($data['num_dia'] == 30) {
-                $resultadoSupervivencia = ( ($produccion->supervivencia_30) - ($data['densidad_raleada']/$produccion->densidad) ) -  ( $sumaDensRal/$produccion->densidad ) ;
-                $data['supervivencia_base'] = $resultadoSupervivencia;
+                $sumaDensRal = ProyectoCultivo::where('id_produccion', $produccion->id)
+                                ->whereBetween('num_dia', [1, 29])
+                                ->sum('densidad_raleada');
+
+                $resultadoSupervivencia = ( ($produccion->supervivencia_30*0.01) - ($data['densidad_raleada']/$produccion->densidad) ) -  ( $sumaDensRal/$produccion->densidad ) ;
+                $data['supervivencia_base'] = $resultadoSupervivencia*100;
             }elseif ($data['num_dia'] > 30) {
                 $resultadoSupervivencia = ((($registroAnterior->supervivencia_base/100) - (( ($produccion->supervivencia_30/100)  - ($produccion->supervivencia_fin/100) ) / ($produccion->dias_ciclo - 30) ))*100) - ($data['densidad_raleada']/$produccion->densidad);
                 $data['supervivencia_base'] = $resultadoSupervivencia;
             }
             
-            $data['densidad'] = ( ( $data['supervivencia_base'] * $produccion->densidad )/100 );
+            $data['densidad'] = ( ($data['supervivencia_base']*0.01) * $produccion->densidad );
             $data['biomasa_raleada'] = (($data['densidad_raleada'] * $data['peso_proyecto'] * 22) + $registroAnterior->biomasa_raleada);
             $data['biomasa'] = $data['densidad'] * $data['peso_proyecto'] * 22;
             #dd($data['biomasa']);
@@ -490,7 +603,7 @@ class ProduccionesController extends Controller
             $data['id_balanceado'] = 2;
 
             $registroProyecto = ProyectoCultivo::create($data);
-            $sumaDensRal += $data['densidad_raleada'];
+            #$sumaDensRal += $data['densidad_raleada'];
         }
     }
     
@@ -505,9 +618,10 @@ class ProduccionesController extends Controller
         if(!$produccion){
             return redirect('producciones')->withErrors('El Registro No Existe');
         }
-        $vista = "Consultar Producción " . $produccion->fecha . " - " . $produccion->dias_ciclo . " días";
+        $vista = "Consultar Producción " . $produccion->fecha . " - " . $produccion->dias_ciclo . " días - " . $produccion->piscina->camaronera->nombre . ': ' . $produccion->piscina->nombre;
         $proyectoItems = ProyectoCultivo::where('id_produccion', $id)->orderBy('num_dia', 'asc')->get();
-        return view('produccion.show', compact('grupo', 'modulo', 'vista', 'produccion', 'proyectoItems'));
+        $produccionItems = ProyectoReal::where('id_produccion', $id)->orderBy('num_dia', 'asc')->get();
+        return view('produccion.show', compact('grupo', 'modulo', 'vista', 'produccion', 'proyectoItems', 'produccionItems'));
     }
 
     /**
@@ -581,6 +695,32 @@ class ProduccionesController extends Controller
                 'regex:/^\d+(\.\d{1,2})?$/',
                 'min:0.01'
             ],
+
+            'crecimiento1' => [
+                'required',
+                'numeric',
+                'regex:/^\d+(\.\d{1,2})?$/'
+            ],
+            'crecimiento2' => [
+                'required',
+                'numeric',
+                'regex:/^\d+(\.\d{1,2})?$/'
+            ],
+            'crecimiento3' => [
+                'required',
+                'numeric',
+                'regex:/^\d+(\.\d{1,2})?$/'
+            ],
+            'crecimiento4' => [
+                'required',
+                'numeric',
+                'regex:/^\d+(\.\d{1,2})?$/'
+            ],
+            'crecimiento5' => [
+                'required',
+                'numeric',
+                'regex:/^\d+(\.\d{1,2})?$/'
+            ],
         ]);
         $produccion_activa = Produccion::where('id_piscina', $produccion->id_piscina)
             ->where('estado', 1)
@@ -617,5 +757,18 @@ class ProduccionesController extends Controller
         } catch (\Illuminate\Database\QueryException $e) {
             return redirect('producciones/piscina/'.$produccion->id_piscina)->withErrors('No se puede eliminar, mantiene registros relacionados.');
         }
+    }
+    
+    public function crearItemReal(string $id)
+    {
+        $grupo = $this->grupo;
+        $modulo = $this->modulo;
+        $piscina = Piscina::find($id);
+        if(!$piscina){
+            return redirect('producciones')->withErrors('El Registro No Existe');
+        }
+        $vista = "Producciones: " . $piscina->camaronera->nombre . " - Piscina: " . $piscina->num . ' - ' . $piscina->nombre;
+        $producciones = Produccion::where('id_piscina', $piscina->id)->get();
+        return view('produccion.piscinas', compact('grupo', 'modulo', 'vista', 'piscina', 'producciones'));
     }
 }

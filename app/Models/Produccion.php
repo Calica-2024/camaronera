@@ -25,6 +25,11 @@ class Produccion extends Model
         'costo_fijo',
         'tabla_alimentacion',
         'estado',
+        'crecimiento1',
+        'crecimiento2',
+        'crecimiento3',
+        'crecimiento4',
+        'crecimiento5',
     ];
     
     public $timestamps = true;

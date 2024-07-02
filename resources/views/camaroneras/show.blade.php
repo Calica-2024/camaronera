@@ -206,7 +206,7 @@
                                         <td>{{ $piscina->nombre }}</td>
                                         <td>{{ $piscina->area_ha }}</td>
                                         <td class="text-center">
-                                            <a href="#" data-toggle="modal" data-target="#piscinasEdit">
+                                            <a href="#" data-toggle="modal" data-target="#piscinasEdit{{ $piscina->id }}">
                                                 <i class="fas fa-edit"></i> Editar
                                             </a>
                                         </td>
@@ -221,7 +221,7 @@
                                         </td>
                                     </tr>
                                     <!-- Modal -->
-                                    <div class="modal fade" id="piscinasEdit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal fade" id="piscinasEdit{{ $piscina->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                         <div class="modal-dialog" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header">

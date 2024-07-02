@@ -68,7 +68,7 @@
                     <th class="text-center">Días</th>
                     <th class="text-center">Peso<br>Transf</th>
                     <th class="text-center">Peso<br>Act</th>
-                    <th class="text-center">Gr/día</th>
+                    {{-- <th class="text-center">Gr/día</th> --}}
                     <th class="text-center">Increm</th>
                     <th class="text-center">Inc. Prom.<br>3sem</th>
                     <th class="text-center">Kg/ha<br>prom</th>
@@ -85,24 +85,29 @@
                 </thead>
                 <tbody>
                   @foreach ($items as $item)
+                    @php
+                      $proyecto = $proyectoItems->where('id_produccion', $item->id_produccion)->where('num_dia', $item->num_dia)->first();
+                      $clasePeso = $item->peso_real >= $proyecto->peso_proyecto ? 'text-success' : 'text-danger';
+                      $anterior = $itemAnteriores->where('id_produccion', $item->id_produccion)->first();
+                    @endphp
                     <tr>
-                      <td>{{ $item->produccion->piscina->numero }}</td>
+                      <td><a href="{{ url('producciones/'.$item->id_produccion) }}">{{ $item->produccion->piscina->numero }} <i class="fas fa-sign-in-alt"></i></a></td>
                       <td>{{ $item->balanceado->nombre }}</td>
                       <td>{{ $item->produccion->piscina->area_ha }}</td>
                       <td>{{ $item->num_dia }}</td>
                       <td>{{ $item->produccion->peso_transferencia }}</td>
-                      <td>{{ $item->peso_real }}</td>
-                      <td>x</td>
-                      <td>x</td>
+                      <td class="{{ $clasePeso }}"><i class="fas fa-arrow-up"></i> {{ $item->peso_real }}</td>
+                      {{-- <td>x</td> --}}
+                      <td>{{ $item->peso_real_anterior }}</td>
                       <td>x</td>
                       <td>{{ number_format($item->alimento/$item->produccion->piscina->area_ha, 2) }}</td>
-                      <td>x</td>
+                      <td>{{ $item->densidad_consumo }}</td>
                       <td>x</td>
                       <td>{{ $item->densidad_actual }}</td>
                       <td>x</td>
                       <td>x</td>
                       <!-- aqui se resta con nuevo rpoy d -->
-                      <td>{{ $item->densidad_actual - 0 }}</td>
+                      <td>{{ $proyecto->densidad }}</td>
                       <td>{{ $item->biomasa_actual }}</td>
                       <td>{{ $item->biomasa_actual * $item->produccion->piscina->area_ha }}</td>
                       <td>{{ $item->densidad_raleada }}</td>

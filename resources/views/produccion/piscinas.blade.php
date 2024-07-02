@@ -41,7 +41,6 @@
                             <th class="text-center">Días Ciclo</th>
                             <th class="text-center">Densidad Siembra</th>
                             <th class="text-center">Estado</th>
-                            <th class="text-center">Producciones</th>
                             <th style="width: 10px"><i class="fas fa-cogs"></i></th>
                         </tr>
                     </thead>
@@ -53,7 +52,6 @@
                                 <td class="text-center">{{ $item->dias_ciclo }}</td>
                                 <td class="text-center">{{ $item->densidad }}</td>
                                 <td class="text-center">{{ $item->estado == 1 ? 'Activo' : 'Finalizada' }}</td>
-                                <td class="text-center">{{ count($producciones->where('id_piscina', $item->id)) }}</td>
                                 <td>
                                     <a class="" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
                                         <i class="fas fa-cogs"></i>

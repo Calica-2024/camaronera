@@ -121,34 +121,42 @@ class ProyectoRealController extends Controller
             $data['biomasa_raleada_acumulada'] = $data['densidad_raleada'];
             $data['alimento_acumulado'] = $data['alimento'];
         }else{
-            $data['peso_real_anterior'] = $data['peso_real'] - $proyAnterior->peso_real;
+            if($data['peso_real'] > 0){
+                $data['peso_real_anterior'] = $data['peso_real'] - $proyAnterior->peso_real;
+            }else{
+                $data['peso_real_anterior'] = 0;
+            }
             $data['alimento_acumulado'] = $data['alimento'] + $proyAnterior->alimento_acumulado;
             $data['biomasa_raleada'] = ($data['densidad_raleada'] * $data['peso_real'] * 22) + $proyAnterior->biomasa_raleada;
             $data['biomasa_raleada_acumulada'] = $data['densidad_raleada'] + $proyAnterior->biomasa_raleada_acumulada;
         }
 
-        
-        // Obtener el registro con el peso más cercano menor o igual al buscado
-        $pesoBuscado = $data['peso_real'];
-        $tabla = TablaAlimentacion::where('pesos', '<=', $pesoBuscado)->orderBy('pesos', 'desc')->first();
+        if($data['peso_real'] > 0){
+            // Obtener el registro con el peso más cercano menor o igual al buscado
+            $pesoBuscado = $data['peso_real'];
+            $tabla = TablaAlimentacion::where('pesos', '<=', $pesoBuscado)->orderBy('pesos', 'desc')->first();
 
-        if($produccion->tabla_alimentacion == "ta1"){
-            $data['peso_corporal'] = $tabla->ta1;
-        }elseif($produccion->tabla_alimentacion == "ta2"){
-            $data['peso_corporal'] = $tabla->ta2;
-        }elseif($produccion->tabla_alimentacion == "ta3"){
-            $data['peso_corporal'] = $tabla->ta3;
-        }elseif($produccion->tabla_alimentacion == "ta4"){
-            $data['peso_corporal'] = $tabla->ta4;
-        }elseif($produccion->tabla_alimentacion == "ta5"){
-            $data['peso_corporal'] = $tabla->ta5;
-        }elseif($produccion->tabla_alimentacion == "ta6"){
-            $data['peso_corporal'] = $tabla->ta6;
-        }elseif($produccion->tabla_alimentacion == "ta7"){
-            $data['peso_corporal'] = $tabla->ta7;
+            if($produccion->tabla_alimentacion == "ta1"){
+                $data['peso_corporal'] = $tabla->ta1;
+            }elseif($produccion->tabla_alimentacion == "ta2"){
+                $data['peso_corporal'] = $tabla->ta2;
+            }elseif($produccion->tabla_alimentacion == "ta3"){
+                $data['peso_corporal'] = $tabla->ta3;
+            }elseif($produccion->tabla_alimentacion == "ta4"){
+                $data['peso_corporal'] = $tabla->ta4;
+            }elseif($produccion->tabla_alimentacion == "ta5"){
+                $data['peso_corporal'] = $tabla->ta5;
+            }elseif($produccion->tabla_alimentacion == "ta6"){
+                $data['peso_corporal'] = $tabla->ta6;
+            }elseif($produccion->tabla_alimentacion == "ta7"){
+                $data['peso_corporal'] = $tabla->ta7;
+            }
+            $densidad_consumo = (( ($data['alimento_calculo'] / ($produccion->piscina->area_ha * 10000)) * 1000 ) / ( $data['peso_real'] * $data['peso_corporal'] ))*100;
+        }else{
+            $data['peso_corporal'] = 0;
+            $densidad_consumo = 0;
         }
 
-        $densidad_consumo = (( ($data['alimento_calculo'] / ($produccion->piscina->area_ha * 10000)) * 1000 ) / ( $data['peso_real'] * $data['peso_corporal'] ))*100;
         $data['densidad_consumo'] = $densidad_consumo;
 
         $supervivencia = ($data['densidad_actual'] / $produccion->densidad)*100;
@@ -298,30 +306,40 @@ class ProyectoRealController extends Controller
                 $data['biomasa_raleada_acumulada'] = $data['densidad_raleada'];
                 $data['alimento_acumulado'] = $data['alimento'];
             }else{
-                $data['peso_real_anterior'] = $data['peso_real'] - $proyAnterior->peso_real;
+                if($data['peso_real'] > 0){
+                    $data['peso_real_anterior'] = $data['peso_real'] - $proyAnterior->peso_real;
+                }else{
+                    $data['peso_real_anterior'] = 0;
+                }
                 $data['alimento_acumulado'] = $data['alimento'] + $proyAnterior->alimento_acumulado;
                 $data['biomasa_raleada'] = ($data['densidad_raleada'] * $data['peso_real'] * 22) + $proyAnterior->biomasa_raleada;
                 $data['biomasa_raleada_acumulada'] = $data['densidad_raleada'] + $proyAnterior->biomasa_raleada_acumulada;
             }
             // Obtener el registro con el peso más cercano menor o igual al buscado
-            $pesoBuscado = $data['peso_real'];
-            $tabla = TablaAlimentacion::where('pesos', '<=', $pesoBuscado)->orderBy('pesos', 'desc')->first();
-            if($produccion->tabla_alimentacion == "ta1"){
-                $data['peso_corporal'] = $tabla->ta1;
-            }elseif($produccion->tabla_alimentacion == "ta2"){
-                $data['peso_corporal'] = $tabla->ta2;
-            }elseif($produccion->tabla_alimentacion == "ta3"){
-                $data['peso_corporal'] = $tabla->ta3;
-            }elseif($produccion->tabla_alimentacion == "ta4"){
-                $data['peso_corporal'] = $tabla->ta4;
-            }elseif($produccion->tabla_alimentacion == "ta5"){
-                $data['peso_corporal'] = $tabla->ta5;
-            }elseif($produccion->tabla_alimentacion == "ta6"){
-                $data['peso_corporal'] = $tabla->ta6;
-            }elseif($produccion->tabla_alimentacion == "ta7"){
-                $data['peso_corporal'] = $tabla->ta7;
+
+            if($data['peso_real'] > 0){
+                $pesoBuscado = $data['peso_real'];
+                $tabla = TablaAlimentacion::where('pesos', '<=', $pesoBuscado)->orderBy('pesos', 'desc')->first();
+                if($produccion->tabla_alimentacion == "ta1"){
+                    $data['peso_corporal'] = $tabla->ta1;
+                }elseif($produccion->tabla_alimentacion == "ta2"){
+                    $data['peso_corporal'] = $tabla->ta2;
+                }elseif($produccion->tabla_alimentacion == "ta3"){
+                    $data['peso_corporal'] = $tabla->ta3;
+                }elseif($produccion->tabla_alimentacion == "ta4"){
+                    $data['peso_corporal'] = $tabla->ta4;
+                }elseif($produccion->tabla_alimentacion == "ta5"){
+                    $data['peso_corporal'] = $tabla->ta5;
+                }elseif($produccion->tabla_alimentacion == "ta6"){
+                    $data['peso_corporal'] = $tabla->ta6;
+                }elseif($produccion->tabla_alimentacion == "ta7"){
+                    $data['peso_corporal'] = $tabla->ta7;
+                }
+                $densidad_consumo = (( ($data['alimento_calculo'] / ($produccion->piscina->area_ha * 10000)) * 1000 ) / ( $data['peso_real'] * $data['peso_corporal'] ))*100;
+            }else{
+                $data['peso_corporal'] = 0;
+                $densidad_consumo = 0;
             }
-            $densidad_consumo = (( ($data['alimento_calculo'] / ($produccion->piscina->area_ha * 10000)) * 1000 ) / ( $data['peso_real'] * $data['peso_corporal'] ))*100;
             $data['densidad_consumo'] = $densidad_consumo;
             $supervivencia = ($data['densidad_actual'] / $produccion->densidad)*100;
             $data['supervivencia'] = $supervivencia;

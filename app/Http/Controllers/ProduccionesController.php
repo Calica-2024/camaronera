@@ -344,7 +344,7 @@ class ProduccionesController extends Controller
             $data['fecha'] = $fechaProyecto;
             $data['dia'] = $diaSemana;
             $dia_anterior = $data['num_dia'];
-            $data['id_balanceado'] = 2;
+            $data['id_balanceado'] = 1;
             $registroProyecto = ProyectoCultivo::create($data);
             $sumaDensRal += $data['densidad_raleada'];
         }
@@ -600,7 +600,7 @@ class ProduccionesController extends Controller
             $data['fecha'] = $fechaProyecto;
             $data['dia'] = $diaSemana;
             $dia_anterior = $data['num_dia'];
-            $data['id_balanceado'] = 2;
+            $data['id_balanceado'] = 1;
 
             $registroProyecto = ProyectoCultivo::create($data);
             #$sumaDensRal += $data['densidad_raleada'];
@@ -751,12 +751,14 @@ class ProduccionesController extends Controller
             return back()->withErrors('La Producción No Existe');
         }
 
-        try {
-            $produccion->delete();
-            return redirect('producciones/piscina/'.$produccion->id_piscina)->with('success', 'Producción eliminada exitosamente.');
-        } catch (\Illuminate\Database\QueryException $e) {
-            return redirect('producciones/piscina/'.$produccion->id_piscina)->withErrors('No se puede eliminar, mantiene registros relacionados.');
-        }
+        $this->eliminarRegistros($id);
+        return redirect('producciones/piscina/'.$produccion->id_piscina)->with('success', 'Producción eliminada exitosamente.');
+    }
+
+    function eliminarRegistros($id){
+        ProyectoReal::where('id_produccion', $id)->delete();
+        ProyectoCultivo::where('id_produccion', $id)->delete();
+        Produccion::find($id)->delete();
     }
     
     public function crearItemReal(string $id)

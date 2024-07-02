@@ -12,6 +12,7 @@ use App\Models\Produccion;
 use App\Models\ProyectoCultivo;
 use App\Models\TablaAlimentacion;
 use App\Models\ProyectoReal;
+use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
@@ -32,6 +33,7 @@ class DashboardController extends Controller
         
         $camaronerasUser = UserCamaronera::where('id_user', auth()->id())->get();
         $items = [];
+        $proyectoItems = [];
         if($camaronerasUser->isNotEmpty()){
             // Verificar si el valor 'camaronera' está presente en la solicitud
             if ($request->camaronera) {
@@ -62,11 +64,19 @@ class DashboardController extends Controller
 
             // Obtener los proyectos reales asociados a las producciones obtenidas y filtrarlos por la fecha
             $items = ProyectoReal::whereIn('id_produccion', $producciones)
-                                 ->whereDate('fecha', $fecha)
-                                 ->get();
+                                    ->whereDate('fecha', $fecha)
+                                    ->get();
+                                    
+            $itemAnteriores = ProyectoReal::whereIn('id_produccion', $producciones)
+                                            ->whereDate('fecha', Carbon::parse($fecha)->subDay())
+                                            ->get();
+
+            $proyectoItems = ProyectoCultivo::whereIn('id_produccion', $producciones)
+                                            ->whereDate('fecha', $fecha)
+                                            ->get();
         }
 
-        return view('dashboard.dashboard', compact('grupo', 'modulo', 'camaronerasUser', 'items'));
+        return view('dashboard.dashboard', compact('grupo', 'modulo', 'camaronerasUser', 'items', 'itemAnteriores', 'proyectoItems'));
     }
 
     /**

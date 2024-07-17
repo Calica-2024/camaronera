@@ -737,8 +737,25 @@ class ProduccionesController extends Controller
         // Llamar a la función borrarProyecto después de actualizar la producción y luego crear nuevo proyecto
         $this->borrarProyecto($produccion->id);
         $this->crearProyecto($produccion->id);
+        $this->updFechasReal($produccion->id);
         
         return redirect('producciones/'.$produccion->id)->with('success', 'Producción Actualizada Exitosamente');
+    }
+
+    public function updFechasReal($id_prod){
+        $items = ProyectoReal::where('id_produccion', $id_prod)->orderBy('num_dia', 'ASC')->get();
+        // Obtener la producción correspondiente para obtener la fecha base
+        $produccion = Produccion::find($id_prod);
+        
+        // Obtener la fecha base de la producción
+        $fecha_base = Carbon::parse($produccion->fecha);
+
+        // Iterar sobre los items y actualizar las fechas
+        foreach ($items as $index => $item) {
+            $nueva_fecha = $fecha_base->copy()->addDays($index);
+            $item->fecha = $nueva_fecha;
+            $item->save();
+        }
     }
 
     /**

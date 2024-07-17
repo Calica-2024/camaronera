@@ -48,15 +48,15 @@
                             <th style="width: 2%">Fecha</th>
                             <th style="width: 2%">Día</th>
                             <th style="width: 2%">Peso Proy.</th>
-                            <th style="width: 2%">Peso (g)</th>
+                            <th style="width: 2%" class="bg-warning">Peso (g)</th>
                             <th style="width: 2%">Crecimiento</th>
-                            <th>Alim.</th>
+                            <th class="bg-warning">Alim.</th>
                             <th>Tipo Alim.</th>
-                            <th>Alim. Calc.</th>
+                            <th class="bg-warning">Alim. Calc.</th>
                             <th>% P.C.</th>
                             <th>Dens. Cons.</th>
-                            <th>Dens. Muest.</th>
-                            <th>Dens. Actual.</th>
+                            <th class="bg-info">Dens. Muest.</th>
+                            <th class="bg-warning">Dens. Actual.</th>
                             <th>% Sup.</th>
                             <th>Dens. Ral.</th>
                             <th>BM Ral.</th>
@@ -77,15 +77,15 @@
                                 <td>{{ Carbon::parse($item->fecha)->format('d/m/y') }}</td>
                                 <td>{{ mb_substr($item->dia, 0, 3, 'UTF-8') }}</td>
                                 <td>{{ $itemProy->peso_proyecto }}</td>
-                                <td>{{ $item->peso_real }}</td>
+                                <td class="bg-warning">{{ $item->peso_real }}</td>
                                 <td>{{ $item->peso_real_anterior }}</td>
-                                <td>{{ $item->alimento }}</td>
+                                <td class="bg-warning">{{ $item->alimento }}</td>
                                 <td>{{ $item->balanceado->nombre }}</td>
-                                <td>{{ $item->alimento_calculo }}</td>
+                                <td class="bg-warning">{{ $item->alimento_calculo }}</td>
                                 <td>{{ $item->peso_corporal }}%</td>
                                 <td>{{ $item->densidad_consumo }}</td>
-                                <td>{{ $item->densidad_muestreo }}</td>
-                                <td>{{ $item->densidad_actual }}</td>
+                                <td class="bg-info">{{ $item->densidad_muestreo }}</td>
+                                <td class="bg-warning">{{ $item->densidad_actual }}</td>
                                 <td>{{ number_format($item->supervivencia, 1) }}%</td>
                                 <td>{{ $item->densidad_raleada }}</td>
                                 <td>{{ $item->biomasa_raleada }}</td>
@@ -99,7 +99,7 @@
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="prodReal{{ $item->id }}Label">Actualizar Registro {{ $item->num_dia }}</h5>
+                                            <h5 class="modal-title" id="prodReal{{ $item->id }}Label">Actualizar Registro #{{ $item->num_dia }}</h5>
                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
@@ -111,7 +111,7 @@
                                                 <div class="row">
                                                     <div class="col-md-4 col-sm-6 form-group">
                                                         <label for="peso_real" style="font-size: 13px">Peso Real</label>
-                                                        <input type="text" name="peso_real" class="form-control @error('peso_real') is-invalid @enderror" id="peso_real" autofocus value="{{ $item->peso_real }}" oninput="decimales(this)">
+                                                        <input type="text" name="peso_real" class="form-control @error('peso_real') is-invalid @enderror" id="peso_real"  value="{{ $item->peso_real }}" oninput="decimales(this)">
                                                         @if ($errors->has('peso_real'))
                                                             <div class="invalid-feedback" style="display: inline !important">
                                                                 @foreach ($errors->get('peso_real') as $error)
@@ -122,7 +122,7 @@
                                                     </div>
                                                     <div class="col-md-4 col-sm-6 form-group">
                                                         <label for="alimento" style="font-size: 13px">Alimento Real</label>
-                                                        <input type="text" name="alimento" class="form-control @error('alimento') is-invalid @enderror" id="alimento" autofocus value="{{ $item->alimento }}" oninput="decimales(this)">
+                                                        <input type="text" name="alimento" class="form-control @error('alimento') is-invalid @enderror" id="alimento"  value="{{ $item->alimento }}" oninput="decimales(this)">
                                                         @if ($errors->has('alimento'))
                                                             <div class="invalid-feedback" style="display: inline !important">
                                                                 @foreach ($errors->get('alimento') as $error)
@@ -133,7 +133,7 @@
                                                     </div>
                                                     <div class="col-md-4 col-sm-6 form-group">
                                                         <label for="alimento_calculo" style="font-size: 13px">Alim. Calculo</label>
-                                                        <input type="text" name="alimento_calculo" class="form-control @error('alimento_calculo') is-invalid @enderror" id="alimento_calculo" autofocus value="{{ $item->alimento_calculo }}" oninput="decimales(this)">
+                                                        <input type="text" name="alimento_calculo" class="form-control @error('alimento_calculo') is-invalid @enderror" id="alimento_calculo"  value="{{ $item->alimento_calculo }}" oninput="decimales(this)">
                                                         @if ($errors->has('alimento_calculo'))
                                                             <div class="invalid-feedback" style="display: inline !important">
                                                                 @foreach ($errors->get('alimento_calculo') as $error)
@@ -144,7 +144,7 @@
                                                     </div>
                                                     <div class="col-md-4 col-sm-6 form-group">
                                                         <label for="densidad_muestreo" style="font-size: 13px">Dens. Muestreo</label>
-                                                        <input type="text" name="densidad_muestreo" class="form-control @error('densidad_muestreo') is-invalid @enderror" id="densidad_muestreo" autofocus value="{{ $item->densidad_muestreo }}" oninput="decimales(this)">
+                                                        <input type="text" name="densidad_muestreo" class="form-control @error('densidad_muestreo') is-invalid @enderror" id="densidad_muestreo"  value="{{ $item->densidad_muestreo }}" oninput="decimales(this)">
                                                         @if ($errors->has('densidad_muestreo'))
                                                             <div class="invalid-feedback" style="display: inline !important">
                                                                 @foreach ($errors->get('densidad_muestreo') as $error)
@@ -155,7 +155,7 @@
                                                     </div>
                                                     <div class="col-md-4 col-sm-6 form-group">
                                                         <label for="densidad_actual" style="font-size: 13px">Dens. Actual</label>
-                                                        <input type="text" name="densidad_actual" class="form-control @error('densidad_actual') is-invalid @enderror" id="densidad_actual" autofocus value="{{ $item->densidad_raleada }}" oninput="decimales(this)">
+                                                        <input type="text" name="densidad_actual" class="form-control @error('densidad_actual') is-invalid @enderror" id="densidad_actual"  value="{{ $item->densidad_actual }}" oninput="decimales(this)">
                                                         @if ($errors->has('densidad_actual'))
                                                             <div class="invalid-feedback" style="display: inline !important">
                                                                 @foreach ($errors->get('densidad_actual') as $error)
@@ -166,7 +166,7 @@
                                                     </div>
                                                     <div class="col-md-4 col-sm-6 form-group">
                                                         <label for="densidad_raleada" style="font-size: 13px">Dens. Raleada</label>
-                                                        <input type="text" name="densidad_raleada" class="form-control @error('densidad_raleada') is-invalid @enderror" id="densidad_raleada" autofocus value="{{ $item->densidad_raleada }}" oninput="decimales(this)">
+                                                        <input type="text" name="densidad_raleada" class="form-control @error('densidad_raleada') is-invalid @enderror" id="densidad_raleada"  value="{{ $item->densidad_raleada }}" oninput="decimales(this)">
                                                         @if ($errors->has('densidad_raleada'))
                                                             <div class="invalid-feedback" style="display: inline !important">
                                                                 @foreach ($errors->get('densidad_raleada') as $error)
@@ -216,7 +216,7 @@
                             <th class="fixed-column">#Día</th>
                             <th>Fecha</th>
                             <th>Día</th>
-                            <th>Peso (g)</th>
+                            <th class="bg-warning">Peso (g)</th>
                             <th>Crec. L.</th>
                             <th>Sup %</th>
                             <th>Dens.</th>
@@ -238,7 +238,7 @@
                             <td class="fixed-column"><a href="#" data-toggle="modal" data-target="#regProy{{ $item->id }}"><i class="fas fa-edit"></i> {{ $item->num_dia }}</a></td>
                             <td>{{ Carbon::parse($item->fecha)->format('d/m/y') }}</td>
                             <td>{{ mb_substr($item->dia, 0, 3, 'UTF-8') }}</td>
-                            <td>{{ $item->peso_proyecto }}</td>
+                            <td class="bg-warning">{{ $item->peso_proyecto }}</td>
                             <td>{{ $item->crecimiento_lineal }}</td>
                             <td>{{ number_format($item->supervivencia_base, 1) }}%</td>
                             <td>{{ $item->densidad }}</td>
@@ -269,7 +269,7 @@
                                                 @csrf
                                                 <div class="form-group">
                                                     <label for="densidad_raleada">Densidad Raleada</label>
-                                                    <input type="text" name="densidad_raleada" class="form-control @error('densidad_raleada') is-invalid @enderror" id="densidad_raleada" placeholder="Densidad Raleada" oninput="decimales(this)" autofocus value="{{ $item->densidad_raleada }}"/>
+                                                    <input type="text" name="densidad_raleada" class="form-control @error('densidad_raleada') is-invalid @enderror" id="densidad_raleada" placeholder="Densidad Raleada" oninput="decimales(this)"  value="{{ $item->densidad_raleada }}"/>
                                                     @if ($errors->has('densidad_raleada'))
                                                         <div class="invalid-feedback" style="display: inline !important">
                                                             @foreach ($errors->get('densidad_raleada') as $error)

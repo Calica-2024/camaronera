@@ -34,6 +34,7 @@ class DashboardController extends Controller
         $camaronerasUser = UserCamaronera::where('id_user', auth()->id())->get();
         $items = [];
         $proyectoItems = [];
+        $itemAnteriores = [];
         if($camaronerasUser->isNotEmpty()){
             // Verificar si el valor 'camaronera' está presente en la solicitud
             if ($request->camaronera) {
@@ -62,18 +63,44 @@ class DashboardController extends Controller
                 $fecha = now()->toDateString();
             }
 
+            // Inicializar el arreglo para contar domingos por producción
+            $domingosPorProduccion = [];
+
+            // Contar domingos
+            foreach ($producciones as $idProduccion) {
+                // Obtener los 3 primeros domingos para esta producción
+                $domingos = ProyectoReal::where('id_produccion', $idProduccion)
+                    ->where('dia', 'domingo') // Filtrar por el campo 'dia'
+                    ->whereDate('fecha', '<=', $fecha) // Asegurarse que la fecha sea menor o igual a la indicada
+                    ->orderBy('fecha', 'desc') // Ordenar de forma descendente
+                    ->take(3) // Limitar a los 3 primeros
+                    ->get();
+            
+                // Guardar las fechas de los domingos encontrados
+                $inc3sem = 0;
+                if($domingos->count() > 0){
+                    $inc3sem = $domingos->sum('peso_real_anterior') / $domingos->count();
+                }
+                $domingosPorProduccion[$idProduccion] = $inc3sem;
+            }
+
             // Obtener los proyectos reales asociados a las producciones obtenidas y filtrarlos por la fecha
             $items = ProyectoReal::whereIn('id_produccion', $producciones)
                                     ->whereDate('fecha', $fecha)
                                     ->get();
-                                    
-            $itemAnteriores = ProyectoReal::whereIn('id_produccion', $producciones)
-                                            ->whereDate('fecha', Carbon::parse($fecha)->subDay())
-                                            ->get();
+
+            // Añadir el peso promedio a cada item que coincide con id_produccion
+            foreach ($items as $item) {
+                $item->inc3sem = $domingosPorProduccion[$item->id_produccion] ?? 0; // Agregar el promedio
+            }
 
             $proyectoItems = ProyectoCultivo::whereIn('id_produccion', $producciones)
                                             ->whereDate('fecha', $fecha)
                                             ->get();
+                                    
+            $itemAnteriores = [];
+            
+            //return count($proyectoItems);
         }
 
         return view('dashboard.dashboard', compact('grupo', 'modulo', 'camaronerasUser', 'items', 'itemAnteriores', 'proyectoItems'));

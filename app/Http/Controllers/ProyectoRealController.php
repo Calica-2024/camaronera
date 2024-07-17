@@ -100,11 +100,25 @@ class ProyectoRealController extends Controller
         ]);
         $data['num_dia'] = $request->num_dia;
         $data['fecha'] = $request->fecha;
-        $data['peso_real'] = $request->peso_real;
+        if($request->peso_real == 0){
+            $diaAnterior = $request->num_dia - 1;
+            if($diaAnterior == 0){
+                $data['peso_real'] = $produccion->peso_transferencia;
+            }else{
+                $proyAnterior = ProyectoReal::where('id_produccion', $id)->where('num_dia', $diaAnterior)->first();
+                $data['peso_real'] = $proyAnterior->peso_real;
+            }
+        }else{
+            $data['peso_real'] = $request->peso_real;
+        }
         $data['alimento'] = $request->alimento;
         $data['alimento_calculo'] = $request->alimento_calculo;
         $data['densidad_muestreo'] = $request->densidad_muestreo;
-        $data['densidad_actual'] = $request->densidad_actual;
+        if($data['num_dia'] != 1){
+            $data['densidad_actual'] = $request->densidad_actual == 0 ? $proyAnterior->densidad_actual : $request->densidad_actual;
+        }else{
+            $data['densidad_actual'] = $request->densidad_actual == 0 ? $produccion->densidad : $request->densidad_actual;
+        }
         $data['densidad_raleada'] = $request->densidad_raleada;
         $data['id_produccion'] = $id;
         // Convertir la fecha a un objeto Carbon
@@ -151,7 +165,13 @@ class ProyectoRealController extends Controller
             }elseif($produccion->tabla_alimentacion == "ta7"){
                 $data['peso_corporal'] = $tabla->ta7;
             }
-            $densidad_consumo = (( ($data['alimento_calculo'] / ($produccion->piscina->area_ha * 10000)) * 1000 ) / ( $data['peso_real'] * $data['peso_corporal'] ))*100;
+            $divisor1 = ($produccion->piscina->area_ha * 10000);
+            $divisor2 = ( $data['peso_real'] * $data['peso_corporal'] );
+            if($divisor1 == 0 || $divisor2 == 0){
+                $densidad_consumo = null;
+            }else{
+                $densidad_consumo = (( ($data['alimento_calculo'] / ($produccion->piscina->area_ha * 10000)) * 1000 ) / ( $data['peso_real'] * $data['peso_corporal'] ))*100;
+            }
         }else{
             $data['peso_corporal'] = 0;
             $densidad_consumo = 0;
@@ -180,8 +200,6 @@ class ProyectoRealController extends Controller
         $pesoProd = $produccion->peso_transferencia;
         $densidad = $produccion->densidad;
         $area = $produccion->piscina->area_ha;
-        
-        
 
         if($data['num_dia'] == 1){
             $data['fca'] = 0;
@@ -298,6 +316,7 @@ class ProyectoRealController extends Controller
             $data['alimento'] = $item->alimento;
             $data['alimento_calculo'] = $item->alimento_calculo;
             $data['densidad_muestreo'] = $item->densidad_muestreo;
+            //$data['densidad_actual'] = $item->densidad_actual == 0 ? $proyAnterior->densidad_actual : $item->densidad_actual;
             $data['densidad_actual'] = $item->densidad_actual;
             $data['densidad_raleada'] = $item->densidad_raleada;
             if($data['num_dia'] == 1){
@@ -335,7 +354,13 @@ class ProyectoRealController extends Controller
                 }elseif($produccion->tabla_alimentacion == "ta7"){
                     $data['peso_corporal'] = $tabla->ta7;
                 }
-                $densidad_consumo = (( ($data['alimento_calculo'] / ($produccion->piscina->area_ha * 10000)) * 1000 ) / ( $data['peso_real'] * $data['peso_corporal'] ))*100;
+                $divisor1 = ($produccion->piscina->area_ha * 10000);
+                $divisor2 = ( $data['peso_real'] * $data['peso_corporal'] );
+                if($divisor1 == 0 || $divisor2 == 0){
+                    $densidad_consumo = 0;
+                }else{
+                    $densidad_consumo = (( ($data['alimento_calculo'] / $divisor1) * 1000 ) / $divisor2)*100;
+                }
             }else{
                 $data['peso_corporal'] = 0;
                 $densidad_consumo = 0;
@@ -364,7 +389,13 @@ class ProyectoRealController extends Controller
             }else{
                 $formulaFca = ($alimAcum / (((($bmActual + $bmRal) - ($pesoProd * $densidad * 22)) / 2.20462) * $area));
                 if($formulaFca != 0){
-                    $data['fca'] = $formulaFca;
+                    // Redondear a 2 decimales
+                    $data['fca'] = number_format($formulaFca, 2, '.', '');
+        
+                    // Validar el rango de fca
+                    if ($data['fca'] < 0 || $data['fca'] > 10000) {
+                        $data['fca'] = 0; // Ajusta este valor según tus necesidades
+                    }
                 }else{
                     $data['fca'] = 0;
                 }

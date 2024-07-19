@@ -41,6 +41,7 @@ class PiscinaController extends Controller
         $data['nombre'] = strtoupper($data['nombre']);
         // Agregar el estado
         $data['estado'] = 1;
+        $data['tipo'] = 1;
         // Crear la piscina
         $camaronera = Piscina::create($data);
         

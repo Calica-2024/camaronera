@@ -55,6 +55,10 @@ class DashboardController extends Controller
                                         ->selectRaw('max(id) as id')
                                         ->pluck('id');
 
+            $produccionesItems = Produccion::whereIn('id_piscina', $piscinas)
+                                            ->where('estado', 1)
+                                            ->get();
+
             // Verificar si el valor 'fecha' está presente en la solicitud
             if ($request->has('fecha')) {
                 $fecha = $request->fecha;
@@ -103,7 +107,7 @@ class DashboardController extends Controller
             //return count($proyectoItems);
         }
 
-        return view('dashboard.dashboard', compact('grupo', 'modulo', 'camaronerasUser', 'items', 'itemAnteriores', 'proyectoItems'));
+        return view('dashboard.dashboard', compact('grupo', 'modulo', 'camaronerasUser', 'items', 'itemAnteriores', 'proyectoItems', 'produccionesItems'));
     }
 
     /**

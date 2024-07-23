@@ -621,7 +621,8 @@ class ProduccionesController extends Controller
         $vista = "Consultar Producción " . $produccion->fecha . " - " . $produccion->dias_ciclo . " días - " . $produccion->piscina->camaronera->nombre . ': ' . $produccion->piscina->nombre;
         $proyectoItems = ProyectoCultivo::where('id_produccion', $id)->orderBy('num_dia', 'asc')->get();
         $produccionItems = ProyectoReal::where('id_produccion', $id)->orderBy('num_dia', 'asc')->get();
-        return view('produccion.show', compact('grupo', 'modulo', 'vista', 'produccion', 'proyectoItems', 'produccionItems'));
+        $balanceados = Balanceado::get();
+        return view('produccion.show', compact('grupo', 'modulo', 'vista', 'produccion', 'proyectoItems', 'produccionItems', 'balanceados'));
     }
 
     /**

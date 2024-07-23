@@ -29,6 +29,8 @@
         <script src="{{ asset("plugins/jquery/jquery.min.js") }}"></script>
         <!-- jQuery UI 1.11.4 -->
         <script src="{{ asset("plugins/jquery-ui/jquery-ui.min.js") }}"></script>
+        <script src="{{ asset("justgage/justgage.js") }}"></script>
+        <script src="{{ asset("justgage/raphael-2.1.4.min.js") }}"></script>
         @include('template.modals')
     </head>
     <body class="hold-transition sidebar-mini layout-fixed sidebar-collapse">
@@ -47,9 +49,14 @@
                     <!-- Messages Dropdown Menu -->
                     
                     <li class="nav-item">
-                        <a class="nav-link" href="#" role="button">
-                            <i class="fas fa-cogs"></i>
+                        <a class="dropdown-item" href="{{ route('logout') }}"
+                        onclick="event.preventDefault();
+                            document.getElementById('logout-form').submit();">
+                        <i class="fas fa-power-off"></i>
                         </a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            @csrf
+                        </form>
                     </li>
                 </ul>
             </nav>

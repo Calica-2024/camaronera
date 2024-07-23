@@ -58,6 +58,22 @@
                                         <input type="hidden" name="fecha" value="{{ $fechaProxima }}">
                                         <div class="modal-body">
                                             <div class="row">
+                                                <div class="col-md-12 form-group">
+                                                    <label for="id_balanceado">Balanceado</label>
+                                                    <select name="id_balanceado" class="form-control @error('id_balanceado') is-invalid @enderror" id="id_balanceado">
+                                                        <option value="">Seleccione una opción</option>
+                                                        @foreach ($balanceados as $balanceado)
+                                                            <option value="{{ $balanceado->id }}">{{ $balanceado->nombre }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                    @if ($errors->has('id_balanceado'))
+                                                        <div class="invalid-feedback" style="display: inline !important">
+                                                            @foreach ($errors->get('id_balanceado') as $error)
+                                                                {{ $error }}<br>
+                                                            @endforeach
+                                                        </div>
+                                                    @endif
+                                                </div>
                                                 <div class="col-md-4 col-sm-6 form-group">
                                                     <label for="peso_real" style="font-size: 13px">Peso Real</label>
                                                     <input type="text" name="peso_real" class="form-control @error('peso_real') is-invalid @enderror" id="peso_real" value="{{ old('peso_real') ?? 0 }}" oninput="decimales(this)" autofocus>

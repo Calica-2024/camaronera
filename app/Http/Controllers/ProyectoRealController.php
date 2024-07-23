@@ -97,6 +97,10 @@ class ProyectoRealController extends Controller
                 'regex:/^\d+(\.\d{1,2})?$/',
                 'min:0'
             ],
+            'id_balanceado' => [
+                'required',
+                'numeric',
+            ],
         ]);
         $data['num_dia'] = $request->num_dia;
         $data['fecha'] = $request->fecha;
@@ -127,7 +131,7 @@ class ProyectoRealController extends Controller
         $diaSemana = $fecha->locale('es')->isoFormat('dddd');
         // Asignar el día al array de datos
         $data['dia'] = $diaSemana;
-        $data['id_balanceado'] = 1;
+        $data['id_balanceado'] = $request->id_balanceado;
 
         if($data['num_dia'] == 1){
             $data['peso_real_anterior'] = 0;

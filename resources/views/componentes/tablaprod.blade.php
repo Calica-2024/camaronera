@@ -22,6 +22,7 @@
     </ul>
     <div class="tab-content" id="pills-tabContent">
         <div class="tab-pane fade show active" id="pills-real" role="tabpanel" aria-labelledby="pills-real-tab">
+            {{--  
             <div class="card-header">
                 <h3 class="card-title">Items</h3>
                 <div class="card-tools">
@@ -39,8 +40,9 @@
                     </div>
                 </div>
             </div>
+            --}}
             <!-- /.card-header -->
-            <div class="card-body table-responsive p-0" style="height: 750px;">
+            <div class="card-body table-responsive p-0">
                 <table class="table table-head-fixed text-nowrap table-bordered table-striped table-hover">
                     <thead>
                         <tr style="font-size: 14px">
@@ -191,6 +193,7 @@
             </div>
         </div>
         <div class="tab-pane fade" id="pills-estimado" role="tabpanel" aria-labelledby="pills-estimado-tab">
+            {{-- 
             <div class="card-header">
                 <h3 class="card-title">Proyecto Productivo</h3>
                 <div class="card-tools">
@@ -208,8 +211,9 @@
                     </div>
                 </div>
             </div>
+            --}}
             <!-- /.card-header -->
-            <div class="card-body table-responsive p-0" style="height: 750px;">
+            <div class="card-body table-responsive p-0">
                 <table class="table table-head-fixed text-nowrap table-bordered table-striped table-hover">
                     <thead>
                         <tr style="font-size: 14px">

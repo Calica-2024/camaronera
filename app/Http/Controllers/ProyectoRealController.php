@@ -62,37 +62,41 @@ class ProyectoRealController extends Controller
                 'required',
             ],
             'peso_real' => [
-                'required',
+                'nullable',
                 'numeric',
                 'regex:/^\d+(\.\d{1,2})?$/',
-                'min:0'
             ],
             'alimento' => [
-                'required',
+                'nullable',
                 'numeric',
                 'regex:/^\d+(\.\d{1,2})?$/',
                 'min:0'
             ],
             'alimento_calculo' => [
-                'required',
+                'nullable',
                 'numeric',
                 'regex:/^\d+(\.\d{1,2})?$/',
                 'min:0'
             ],
             'densidad_muestreo' => [
-                'required',
+                'nullable',
                 'numeric',
                 'regex:/^\d+(\.\d{1,2})?$/',
                 'min:0'
             ],
             'densidad_actual' => [
-                'required',
+                'nullable',
                 'numeric',
                 'regex:/^\d+(\.\d{1,2})?$/',
                 'min:0'
             ],
+            'densidad_oficina' => [
+                'nullable',
+                'numeric',
+                'regex:/^\d+(\.\d{1,2})?$/',
+            ],
             'densidad_raleada' => [
-                'required',
+                'nullable',
                 'numeric',
                 'regex:/^\d+(\.\d{1,2})?$/',
                 'min:0'
@@ -104,14 +108,8 @@ class ProyectoRealController extends Controller
         ]);
         $data['num_dia'] = $request->num_dia;
         $data['fecha'] = $request->fecha;
-        if($request->peso_real == 0){
-            $diaAnterior = $request->num_dia - 1;
-            if($diaAnterior == 0){
-                $data['peso_real'] = $produccion->peso_transferencia;
-            }else{
-                $proyAnterior = ProyectoReal::where('id_produccion', $id)->where('num_dia', $diaAnterior)->first();
-                $data['peso_real'] = $proyAnterior->peso_real;
-            }
+        if($request->peso_real == 0 || empty($request->peso_real)){
+            $data['peso_real'] = null;
         }else{
             $data['peso_real'] = $request->peso_real;
         }
@@ -177,42 +175,52 @@ class ProyectoRealController extends Controller
                 $densidad_consumo = (( ($data['alimento_calculo'] / ($produccion->piscina->area_ha * 10000)) * 1000 ) / ( $data['peso_real'] * $data['peso_corporal'] ))*100;
             }
         }else{
-            $data['peso_corporal'] = 0;
-            $densidad_consumo = 0;
+            $data['peso_corporal'] = null;
+            $densidad_consumo = null;
         }
-
-        $data['densidad_consumo'] = $densidad_consumo;
-
-        $supervivencia = ($data['densidad_actual'] / $produccion->densidad)*100;
-        $data['supervivencia'] = $supervivencia;
         
-        $data['biomasa_actual'] = $data['densidad_actual'] * $data['peso_real'] *22;
-        
-        // Definir las variables
-        $biomasaActual = $data['biomasa_actual']; // Verifica si $data['biomasa'] tiene el valor esperado
-        $pesoCorporal = $data['peso_corporal']/100; // Verifica si $data['peso_corporal'] tiene el valor esperado
-        $area = $produccion->piscina->area_ha; // Verifica si $produccion->piscina->area_ha tiene el valor esperado
-        $multiplo = $produccion->multiplo_redondeo; // Verifica si $produccion->multiplo_redondeo tiene el valor esperado
-        // Aplicar la fórmula utilizando la función de redondeo personalizada
-        $resultado = $this->redondeo_mult((($biomasaActual * $pesoCorporal) / 2.20462) * $area, $multiplo);
-        $data['recomendacion_alimento'] = $resultado;
-        
-        //formula 2
-        $alimAcum = $data['alimento_acumulado'];
-        $bmActual = $data['biomasa_actual'];
-        $bmRal = $data['biomasa_raleada'];
-        $pesoProd = $produccion->peso_transferencia;
-        $densidad = $produccion->densidad;
-        $area = $produccion->piscina->area_ha;
-
-        if($data['num_dia'] == 1){
-            $data['fca'] = 0;
+        if($request->peso_real == 0 || empty($request->peso_real)){
+            $data['fca'] = null;
+            $data['recomendacion_alimento'] = null;
+            $data['densidad_consumo'] = null;
+            $data['supervivencia'] = null;
+            $data['biomasa_actual'] = null;
         }else{
-            $formulaFca = ($alimAcum / (((($bmActual + $bmRal) - ($pesoProd * $densidad * 22)) / 2.20462) * $area));
-            if($formulaFca != 0){
-                $data['fca'] = $formulaFca;
-            }else{
+
+            $data['densidad_consumo'] = $densidad_consumo;
+    
+            $supervivencia = ($data['densidad_actual'] / $produccion->densidad)*100;
+            $data['supervivencia'] = $supervivencia;
+            
+            $data['biomasa_actual'] = $data['densidad_actual'] * $data['peso_real'] *22;
+
+            
+            // Definir las variables
+            $biomasaActual = $data['biomasa_actual']; // Verifica si $data['biomasa'] tiene el valor esperado
+            $pesoCorporal = $data['peso_corporal']/100; // Verifica si $data['peso_corporal'] tiene el valor esperado
+            $area = $produccion->piscina->area_ha; // Verifica si $produccion->piscina->area_ha tiene el valor esperado
+            $multiplo = $produccion->multiplo_redondeo; // Verifica si $produccion->multiplo_redondeo tiene el valor esperado
+            // Aplicar la fórmula utilizando la función de redondeo personalizada
+            $resultado = $this->redondeo_mult((($biomasaActual * $pesoCorporal) / 2.20462) * $area, $multiplo);
+            $data['recomendacion_alimento'] = $resultado;
+            
+            //formula 2
+            $alimAcum = $data['alimento_acumulado'];
+            $bmActual = $data['biomasa_actual'];
+            $bmRal = $data['biomasa_raleada'];
+            $pesoProd = $produccion->peso_transferencia;
+            $densidad = $produccion->densidad;
+            $area = $produccion->piscina->area_ha;
+    
+            if($data['num_dia'] == 1){
                 $data['fca'] = 0;
+            }else{
+                $formulaFca = ($alimAcum / (((($bmActual + $bmRal) - ($pesoProd * $densidad * 22)) / 2.20462) * $area));
+                if($formulaFca != 0){
+                    $data['fca'] = $formulaFca;
+                }else{
+                    $data['fca'] = 0;
+                }
             }
         }
 
@@ -288,11 +296,20 @@ class ProyectoRealController extends Controller
                 'regex:/^\d+(\.\d{1,2})?$/',
                 'min:0'
             ],
+            'densidad_oficina' => [
+                'nullable',
+                'numeric',
+                'regex:/^\d+(\.\d{1,2})?$/',
+            ],
             'densidad_raleada' => [
                 'required',
                 'numeric',
                 'regex:/^\d+(\.\d{1,2})?$/',
                 'min:0'
+            ],
+            'id_balanceado' => [
+                'required',
+                'numeric',
             ],
         ]);
 

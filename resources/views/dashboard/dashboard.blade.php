@@ -1,31 +1,8 @@
 @extends('template.template')
 @section('contenido')
-    <style>
-      #miDiv {
-          padding: 10px; /* Reduce el padding si es necesario */
-          background-color: #f0f0f0;
-          overflow-x: auto;
-      }
-      table {
-          width: 100%;
-          border-collapse: collapse;
-      }
-      th, td {
-          border: 1px solid #ddd;
-          padding: 4px; /* Reduce el padding para ajustar más contenido */
-          text-align: left;
-          font-size: 10px; /* Reduce el tamaño de la fuente */
-      }
-      th {
-          background-color: #f2f2f2;
-      }
-     th {
-       cursor: pointer;
-     }
-     th:hover {
-       background: yellow;
-     }
-    </style>
+    @php
+        use Carbon\Carbon;
+    @endphp
     <!-- Content Header (Page header) -->
     <section class="content-header">
       {{--  
@@ -52,6 +29,7 @@
     
           // Obtener la fecha de la solicitud, si existe, de lo contrario usar la fecha actual
           $fechaRequest = request('fecha') ? request('fecha') : date('Y-m-d');
+          $tablaRequest = request('tabla');
         @endphp
         <form method="get" action="" id="autoSubmitForm">
           <div class="row">
@@ -71,6 +49,35 @@
               </select>
             </div>
             <div class="form-group col-lg-2">
+              <label for="camaronera">Tabla BW</label>
+              <select class="form-control" id="tabla" name="tabla" onchange="document.getElementById('autoSubmitForm').submit()">
+                <option value="">
+                  Todas
+                </option>
+                <option value="ta1" {{ 'ta1' == $tablaRequest ? 'selected' : '' }}>
+                  TA1
+                </option>
+                <option value="ta2" {{ 'ta2' == $tablaRequest ? 'selected' : '' }}>
+                  TA2
+                </option>
+                <option value="ta3" {{ 'ta3' == $tablaRequest ? 'selected' : '' }}>
+                  TA3
+                </option>
+                <option value="ta4" {{ 'ta4' == $tablaRequest ? 'selected' : '' }}>
+                  TA4
+                </option>
+                <option value="ta5" {{ 'ta5' == $tablaRequest ? 'selected' : '' }}>
+                  TA5
+                </option>
+                <option value="ta6" {{ 'ta6' == $tablaRequest ? 'selected' : '' }}>
+                  TA6
+                </option>
+                <option value="ta7" {{ 'ta7' == $tablaRequest ? 'selected' : '' }}>
+                  TA7
+                </option>
+              </select>
+            </div>
+            <div class="form-group col-lg-2">
               <label for="fecha">Fecha</label>
               <input type="date" class="form-control" id="fecha" name="fecha" value="{{ $fechaRequest }}" onchange="document.getElementById('autoSubmitForm').submit()">
             </div>
@@ -83,56 +90,72 @@
       $items_json = json_encode($items);
     @endphp
     <!-- Botón para generar el PDF -->
-    <button id="descargarPdf">Descargar PDF</button>
     <section class="content">
+      @php
+          $items = $items;
+          $itemAnteriores = $itemAnteriores;
+          $proyectoItems = $proyectoItems;
+          $produccionesItems = $produccionesItems;
+      @endphp
+
+      <!-- Formulario para enviar los datos al controlador -->
+      <form id="pdfForm" action="{{ url('/resumen') }}" method="POST" style="display:none;">
+          @csrf
+          <input type="hidden" name="items" value="{{ json_encode($items) }}">
+          <input type="hidden" name="itemAnteriores" value="{{ json_encode($itemAnteriores) }}">
+          <input type="hidden" name="proyectoItems" value="{{ json_encode($proyectoItems) }}">
+          <input type="hidden" name="produccionesItems" value="{{ json_encode($produccionesItems) }}">
+      </form>
+      <a class="btn btn-primary" href="#" id="descargarPdf">Descargar PDF</a>
+      <div class="row">
+        <div class="col-md-2">
+          <div id="pesotransf" class=""></div>
+        </div>
+        <div class="col-md-2">
+          <div id="denstransf" class=""></div>
+        </div>
+        <div class="col-md-2">
+          <div id="increm" class=""></div>
+        </div>
+        <div class="col-md-2">
+          <div id="sobrevivencia" class=""></div>
+        </div>
+        <div class="col-md-2">
+          <div id="biomasa" class=""></div>
+        </div>
+        <div class="col-md-2">
+          <div id="densidadprom" class=""></div>
+        </div>
+      </div>
       <div class="row">
         <div class="col-12">
           <div class="card">
             <div class="card-body table-responsive p-0" id="miDiv">
-              <div class="row">
-                <div class="col-md-2">
-                  <div id="pesotransf" class=""></div>
-                </div>
-                <div class="col-md-2">
-                  <div id="denstransf" class=""></div>
-                </div>
-                <div class="col-md-2">
-                  <div id="increm" class=""></div>
-                </div>
-                <div class="col-md-2">
-                  <div id="sobrevivencia" class=""></div>
-                </div>
-                <div class="col-md-2">
-                  <div id="biomasa" class=""></div>
-                </div>
-                <div class="col-md-2">
-                  <div id="densidadprom" class=""></div>
-                </div>
-              </div>
-
               <table class="table table-head-fixed text-nowrap table-bordered" id="grid" >
                 <thead>
                   <tr>
-                    <th data-type="number">#PS</th>
-                    <th data-type="string">Tipo Bal</th>
-                    <th data-type="number">ha</th>
-                    <th data-type="number" onclick="sortGrid(3, 'number')">Días</th>
-                    <th data-type="number">Peso<br>Transf</th>
-                    <th data-type="number">Peso<br>Act</th>
-                    <!-- <th data-type="number">Gr/día</th> -->
-                    <th data-type="number">Increm</th>
-                    <th data-type="number">Inc. Prom.<br>3sem</th>
-                    <th data-type="number">Kg/ha<br>prom</th>
-                    <th data-type="number">ind/M2 M</th>
-                    <th data-type="string">Alerta <br> Alim</th>
-                    <th data-type="number">Dens<br>bio</th>
-                    <th data-type="number">Pobl.</th>
-                    <!-- <th data-type="number">Proy<br> Anim. M</th> -->
-                    <th data-type="number">Dens <br> Proy</th>
-                    <th data-type="number">Desvio</th>
-                    <th data-type="number">Lbs/ha</th>
-                    <th data-type="number">lbs/total</th>
-                    <th data-type="number">raleo</th>
+                    <th data-type="number" class="bg-secondary">#PS <i class="fas"></i></th>
+                    <th data-type="string" class="bg-secondary">Sem. <i class="fas"></i></th>
+                    <th data-type="string" class="bg-secondary">Tipo Bal <i class="fas"></i></th>
+                    <th data-type="number" class="bg-warning">ha <i class="fas"></i></th>
+                    <th data-type="number" class="bg-warning" onclick="sortGrid(3, 'number')">Días <i class="fas"></i></th>
+                    <th data-type="number" class="bg-warning">Peso<br>Transf <i class="fas"></i></th>
+                    <th data-type="string" class="bg-success">Peso<br>Act <i class="fas"></i></th>
+                    <th data-type="string" class="bg-success">Increm <i class="fas"></i></th>
+                    <th data-type="string" class="bg-success">Inc. Prom.<br>3sem <i class="fas"></i></th>
+                    <th data-type="number" class="bg-success">Kg/ha<br>prom <i class="fas"></i></th>
+                    <th data-type="number" class="bg-success">ind/M2 M <i class="fas"></i></th>
+                    <th data-type="string" class="bg-success">Alerta <br> Alim <i class="fas"></i></th>
+                    <th data-type="number" class="bg-primary">Dens<br>bio <i class="fas"></i></th>
+                    <th data-type="number" class="bg-primary">Dens<br>ADM <i class="fas"></i></th>
+                    <th data-type="number" class="bg-primary">Pobl. <i class="fas"></i></th>
+                    <th data-type="number" class="bg-primary">Dens <br> Proy <i class="fas"></i></th>
+                    <th data-type="number" class="bg-primary">Desvio <i class="fas"></i></th>
+                    <th data-type="number" class="bg-primary">Lbs/ha <i class="fas"></i></th>
+                    <th data-type="number" class="bg-primary">lbs/total <i class="fas"></i></th>
+                    <th data-type="number" class="bg-primary">raleo <i class="fas"></i></th>
+                    <th data-type="number" class="bg-primary">FCA <i class="fas"></i></th>
+                    <th data-type="number" class="bg-primary">FCA <br>Proy <i class="fas"></i></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -145,6 +168,7 @@
                     @endphp
                     <tr>
                       <td><a href="{{ url('producciones/'.$item->id_produccion) }}">{{ $item->produccion->piscina->numero }} <i class="fas fa-sign-in-alt"></i></a></td>
+                      <td>{{ Carbon::parse($item->fecha)->weekOfYear }}</td>
                       <td>{{ $item->balanceado->nombre }}</td>
                       <td>{{ $item->produccion->piscina->area_ha }}</td>
                       <td class="sortable">{{ $item->num_dia }}</td>
@@ -178,6 +202,7 @@
                         @endif
                       </td>
                       <td>{{ $item->densidad_actual }}</td>
+                      <td>{{ $item->densidad_oficina }}</td>
                       <td>{{ $item->densidad_muestreo }}</td>
                       {{-- <td>{{ $proyecto->biomasa }}</td> --}}
                       <!-- aqui se resta con nuevo rpoy d -->
@@ -186,6 +211,8 @@
                       <td>{{ $item->biomasa_actual }}</td>
                       <td>{{ $item->alimento }}</td>
                       <td>{{ $item->densidad_raleada }}</td>
+                      <td>{{ $item->fca }}</td>
+                      <td>{{ $proyecto->fca }}</td>
 
                     </tr>
                   @endforeach
@@ -201,40 +228,58 @@
     </section>
 
     <script>
-        const grid = document.getElementById('grid');
-    
-        grid.addEventListener('click', function(e) {
-            if (e.target.tagName !== 'TH') return;
-    
-            const th = e.target;
-            // Si TH, entonces ordena
-            sortGrid(th.cellIndex, th.dataset.type, th);
+        document.getElementById('descargarPdf').addEventListener('click', function(event) {
+            event.preventDefault();
+            document.getElementById('pdfForm').submit();
         });
-    
-        function sortGrid(colNum, type, th) {
-            const tbody = grid.querySelector('tbody');
-            const rowsArray = Array.from(tbody.rows);
-            const isAscending = th.dataset.order === 'asc' || !th.dataset.order; // Determina si el orden es ascendente o descendente
-            th.dataset.order = isAscending ? 'desc' : 'asc'; // Alterna la dirección de ordenamiento
-    
-            // Comparador basado en el tipo de datos
-            let compare;
-            switch (type) {
-                case 'number':
-                    compare = (rowA, rowB) => (parseFloat(rowA.cells[colNum].innerHTML) - parseFloat(rowB.cells[colNum].innerHTML)) * (isAscending ? 1 : -1);
-                    break;
-                case 'string':
-                    compare = (rowA, rowB) => rowA.cells[colNum].innerHTML.localeCompare(rowB.cells[colNum].innerHTML) * (isAscending ? 1 : -1);
-                    break;
-            }
-    
-            // Ordenar las filas
-            rowsArray.sort(compare);
-    
-            // Reinsertar las filas ordenadas en el tbody
-            tbody.append(...rowsArray);
-        }
     </script>
+
+    <script>
+      const grid = document.getElementById('grid');
+  
+      grid.addEventListener('click', function(e) {
+        if (e.target.tagName !== 'TH') return;
+  
+        const th = e.target;
+        // Si TH, entonces ordena
+        sortGrid(th.cellIndex, th.dataset.type, th);
+      });
+  
+      function sortGrid(colNum, type, th) {
+        const tbody = grid.querySelector('tbody');
+        const rowsArray = Array.from(tbody.rows);
+        const isAscending = th.dataset.order === 'asc' || !th.dataset.order; // Determina si el orden es ascendente o descendente
+        th.dataset.order = isAscending ? 'desc' : 'asc'; // Alterna la dirección de ordenamiento
+  
+        // Comparador basado en el tipo de datos
+        let compare;
+        switch (type) {
+          case 'number':
+            compare = (rowA, rowB) => (parseFloat(rowA.cells[colNum].innerHTML) - parseFloat(rowB.cells[colNum].innerHTML)) * (isAscending ? 1 : -1);
+            break;
+          case 'string':
+            compare = (rowA, rowB) => rowA.cells[colNum].innerHTML.localeCompare(rowB.cells[colNum].innerHTML) * (isAscending ? 1 : -1);
+            break;
+        }
+  
+        // Ordenar las filas
+        rowsArray.sort(compare);
+  
+        // Reinsertar las filas ordenadas en el tbody
+        tbody.append(...rowsArray);
+  
+        // Quitar iconos de todas las cabeceras
+        grid.querySelectorAll('th i').forEach(icon => {
+          icon.className = 'fas';
+          icon.classList.remove('text-primary');
+        });
+  
+        // Agregar el icono de orden en la cabecera actual
+        const icon = th.querySelector('i');
+        icon.className = isAscending ? 'fas fa-arrow-up text-primary' : 'fas fa-arrow-down text-primary';
+      }
+    </script>
+  
 
     <!-- Incluir la biblioteca html2pdf.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
@@ -251,7 +296,7 @@
               filename: 'documento.pdf',
               image: { type: 'jpeg', quality: 0.98 },
               html2canvas: { scale: 2 },
-              jsPDF: { unit: 'in', format: 'letter', orientation: 'landscape' } // Cambiar a orientación horizontal
+              jsPDF: { unit: 'in', format: 'A4', orientation: 'landscape' } // Cambiar a orientación horizontal
           };
 
           // Generar el PDF

@@ -76,7 +76,7 @@
                                                 </div>
                                                 <div class="col-md-4 col-sm-6 form-group">
                                                     <label for="peso_real" style="font-size: 13px">Peso Real</label>
-                                                    <input type="text" name="peso_real" class="form-control @error('peso_real') is-invalid @enderror" id="peso_real" value="{{ old('peso_real') ?? 0 }}" oninput="decimales(this)" autofocus>
+                                                    <input type="text" name="peso_real" class="form-control @error('peso_real') is-invalid @enderror" id="peso_real" value="{{ old('peso_real') }}" oninput="decimales(this)" autofocus>
                                                     @if ($errors->has('peso_real'))
                                                         <div class="invalid-feedback" style="display: inline !important">
                                                             @foreach ($errors->get('peso_real') as $error)
@@ -87,7 +87,7 @@
                                                 </div>
                                                 <div class="col-md-4 col-sm-6 form-group">
                                                     <label for="alimento" style="font-size: 13px">Alimento Real</label>
-                                                    <input type="text" name="alimento" class="form-control @error('alimento') is-invalid @enderror" id="alimento" value="{{old('alimento') ?? 0 }}" oninput="decimales(this)">
+                                                    <input type="text" name="alimento" class="form-control @error('alimento') is-invalid @enderror" id="alimento" value="{{old('alimento') }}" oninput="decimales(this)">
                                                     @if ($errors->has('alimento'))
                                                         <div class="invalid-feedback" style="display: inline !important">
                                                             @foreach ($errors->get('alimento') as $error)
@@ -98,7 +98,7 @@
                                                 </div>
                                                 <div class="col-md-4 col-sm-6 form-group">
                                                     <label for="alimento_calculo" style="font-size: 13px">Alim. Calculo</label>
-                                                    <input type="text" name="alimento_calculo" class="form-control @error('alimento_calculo') is-invalid @enderror" id="alimento_calculo" value="{{old('alimento_calculo')?? 0 }}" oninput="decimales(this)">
+                                                    <input type="text" name="alimento_calculo" class="form-control @error('alimento_calculo') is-invalid @enderror" id="alimento_calculo" value="{{old('alimento_calculo') }}" oninput="decimales(this)">
                                                     @if ($errors->has('alimento_calculo'))
                                                         <div class="invalid-feedback" style="display: inline !important">
                                                             @foreach ($errors->get('alimento_calculo') as $error)
@@ -109,7 +109,7 @@
                                                 </div>
                                                 <div class="col-md-4 col-sm-6 form-group">
                                                     <label for="densidad_muestreo" style="font-size: 13px">Dens. Muestreo</label>
-                                                    <input type="text" name="densidad_muestreo" class="form-control @error('densidad_muestreo') is-invalid @enderror" id="densidad_muestreo" value="{{old('densidad_muestreo') ?? 0 }}" oninput="decimales(this)">
+                                                    <input type="text" name="densidad_muestreo" class="form-control @error('densidad_muestreo') is-invalid @enderror" id="densidad_muestreo" value="{{old('densidad_muestreo') }}" oninput="decimales(this)">
                                                     @if ($errors->has('densidad_muestreo'))
                                                         <div class="invalid-feedback" style="display: inline !important">
                                                             @foreach ($errors->get('densidad_muestreo') as $error)
@@ -120,7 +120,7 @@
                                                 </div>
                                                 <div class="col-md-4 col-sm-6 form-group">
                                                     <label for="densidad_actual" style="font-size: 13px">Dens. Actual</label>
-                                                    <input type="text" name="densidad_actual" class="form-control @error('densidad_actual') is-invalid @enderror" id="densidad_actual" value="{{old('densidad_actual') ?? 0 }}" oninput="decimales(this)">
+                                                    <input type="text" name="densidad_actual" class="form-control @error('densidad_actual') is-invalid @enderror" id="densidad_actual" value="{{old('densidad_actual') }}" oninput="decimales(this)">
                                                     @if ($errors->has('densidad_actual'))
                                                         <div class="invalid-feedback" style="display: inline !important">
                                                             @foreach ($errors->get('densidad_actual') as $error)
@@ -131,10 +131,21 @@
                                                 </div>
                                                 <div class="col-md-4 col-sm-6 form-group">
                                                     <label for="densidad_raleada" style="font-size: 13px">Dens. Raleada</label>
-                                                    <input type="text" name="densidad_raleada" class="form-control @error('densidad_raleada') is-invalid @enderror" id="densidad_raleada" value="{{old('densidad_raleada') ?? 0 }}" oninput="decimales(this)">
+                                                    <input type="text" name="densidad_raleada" class="form-control @error('densidad_raleada') is-invalid @enderror" id="densidad_raleada" value="{{old('densidad_raleada') }}" oninput="decimales(this)">
                                                     @if ($errors->has('densidad_raleada'))
                                                         <div class="invalid-feedback" style="display: inline !important">
                                                             @foreach ($errors->get('densidad_raleada') as $error)
+                                                                {{ $error }}<br>
+                                                            @endforeach
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                                <div class="col-md-4 col-sm-6 form-group">
+                                                    <label for="densidad_oficina" style="font-size: 13px">Dens. Oficina</label>
+                                                    <input type="text" name="densidad_oficina" class="form-control @error('densidad_oficina') is-invalid @enderror" id="densidad_oficina" oninput="decimales(this)">
+                                                    @if ($errors->has('densidad_oficina'))
+                                                        <div class="invalid-feedback" style="display: inline !important">
+                                                            @foreach ($errors->get('densidad_oficina') as $error)
                                                                 {{ $error }}<br>
                                                             @endforeach
                                                         </div>

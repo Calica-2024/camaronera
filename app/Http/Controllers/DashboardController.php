@@ -13,6 +13,8 @@ use App\Models\ProyectoCultivo;
 use App\Models\TablaAlimentacion;
 use App\Models\ProyectoReal;
 use Carbon\Carbon;
+use Barryvdh\DomPDF\Facade\Pdf; // Asegúrate de importar el facade
+
 
 class DashboardController extends Controller
 {
@@ -30,6 +32,7 @@ class DashboardController extends Controller
 
         $request->camaronera;
         $request->fecha;
+        $request->tabla;
         
         $camaronerasUser = UserCamaronera::where('id_user', auth()->id())->get();
         $items = [];
@@ -46,14 +49,21 @@ class DashboardController extends Controller
 
             // Obtener las piscinas correspondientes al id_camaronera determinado
             $piscinas = Piscina::where('id_camaronera', $idCamaronera)->pluck('id');
-            
-            // Obtener las producciones en estado 1, agrupadas por id_piscina, y seleccionando la producción con el mayor id por piscina
-            $producciones = Produccion::whereIn('id_piscina', $piscinas)
-                                        ->where('estado', 1)
-                                        ->orderBy('id', 'desc')
-                                        ->groupBy('id_piscina')
-                                        ->selectRaw('max(id) as id')
-                                        ->pluck('id');
+    
+            // Construir la consulta de producciones en estado 1, agrupadas por id_piscina, y seleccionando la producción con el mayor id por piscina
+            $produccionesQuery = Produccion::whereIn('id_piscina', $piscinas)
+                                            ->where('estado', 1)
+                                            ->orderBy('id', 'desc')
+                                            ->groupBy('id_piscina')
+                                            ->selectRaw('max(id) as id');
+                                            
+            // Aplicar el filtro de 'tabla_alimentacion' si el valor de 'tabla' está presente en la solicitud
+            if ($request->tabla) {
+                $produccionesQuery->where('tabla_alimentacion', $request->tabla);
+            }
+    
+            // Obtener los IDs de las producciones
+            $producciones = $produccionesQuery->pluck('id');
 
             $produccionesItems = Produccion::whereIn('id_piscina', $piscinas)
                                             ->where('estado', 1)
@@ -89,7 +99,9 @@ class DashboardController extends Controller
             }
 
             // Obtener los proyectos reales asociados a las producciones obtenidas y filtrarlos por la fecha
-            $items = ProyectoReal::whereIn('id_produccion', $producciones)
+            $items = ProyectoReal::with('produccion.piscina')
+                                    ->with('balanceado')
+                                    ->whereIn('id_produccion', $producciones)
                                     ->whereDate('fecha', $fecha)
                                     ->get();
 
@@ -108,6 +120,21 @@ class DashboardController extends Controller
         }
 
         return view('dashboard.dashboard', compact('grupo', 'modulo', 'camaronerasUser', 'items', 'itemAnteriores', 'proyectoItems', 'produccionesItems'));
+    }
+    
+    public function resumen(Request $request)
+    {
+        // Decodificar los arrays JSON recibidos
+        $items = json_decode($request->input('items'), true);
+        $itemAnteriores = json_decode($request->input('itemAnteriores'), true);
+        $proyectoItems = json_decode($request->input('proyectoItems'), true);
+        $produccionesItems = json_decode($request->input('produccionesItems'), true);
+
+        // Generar el PDF
+        $pdf = Pdf::loadView('dashboard.resumen', compact('items', 'itemAnteriores', 'proyectoItems', 'produccionesItems'))->setPaper('a4', 'landscape');
+
+        // Descargar el PDF
+        return $pdf->download('resumen.pdf');
     }
 
     /**

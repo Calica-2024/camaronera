@@ -34,6 +34,7 @@ Route::middleware('auth')->group(function () {
     //    return view('welcome');
     //});
     Route::get('/', [DashboardController::class, 'index']);
+    Route::post('/resumen', [DashboardController::class, 'resumen']);
     Route::get('/dashboard', [DashboardController::class, 'index']);
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

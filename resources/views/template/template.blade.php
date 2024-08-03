@@ -29,8 +29,8 @@
         <script src="{{ asset("/public/plugins/jquery/jquery.min.js") }}"></script>
         <!-- jQuery UI 1.11.4 -->
         <script src="{{ asset("/public/plugins/jquery-ui/jquery-ui.min.js") }}"></script>
-        <script src="{{ asset("justgage/justgage.js") }}"></script>
-        <script src="{{ asset("justgage/raphael-2.1.4.min.js") }}"></script>
+        <script src="{{ asset("/public/justgage/justgage.js") }}"></script>
+        <script src="{{ asset("/public/justgage/raphael-2.1.4.min.js") }}"></script>
         @include('template.modals')
     </head>
     <body class="hold-transition sidebar-mini layout-fixed sidebar-collapse">

@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Calica | Control {{ $modulo ? ' - ' . $modulo : ''  }}</title>
+        <title>Shrympi | Control {{ $modulo ? ' - ' . $modulo : ''  }}</title>
         <!-- Tell the browser to be responsive to screen width -->
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- Font Awesome -->
@@ -66,9 +66,9 @@
             <aside class="main-sidebar sidebar-dark-primary elevation-4">
                 <!-- Brand Logo -->
                 <a href="{{ url('/dashboard') }}" class="brand-link">
-                    <img src="{{ asset("/public/dist/img/AdminLTELogo.png") }}" alt="Calica Control" class="brand-image img-circle elevation-3"
+                    <img src="{{ asset("/public/dist/img/AdminLTELogo.png") }}" alt="shrympi" class="brand-image img-circle elevation-3"
                         style="opacity: .8">
-                    <span class="brand-text font-weight-light">CalicaControl</span>
+                    <span class="brand-text font-weight-light">Shrympi</span>
                 </a>
 
                 <!-- Sidebar -->

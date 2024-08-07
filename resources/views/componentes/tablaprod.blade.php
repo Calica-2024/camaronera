@@ -71,6 +71,7 @@
                     <thead>
                         <tr style="font-size: 14px">
                             <th class="fixed-column" style="width: 20px">Sem.</th>
+                            <th class="fixed-column" style="width: 2%">Mtr.</th>
                             <th class="fixed-column" style="width: 2%">#Día</th>
                             <th style="width: 20px">Fecha</th>
                             <th style="width: 20px">Día</th>
@@ -82,7 +83,7 @@
                             <th class="bg-warning" style="width: 20px">Alim. <br> Calc.</th>
                             <th style="width: 20px">% P.C.</th>
                             <th style="width: 20px">Dens. <br> Cons.</th>
-                            <th style="width: 20px" class="bg-info">Dens. <br> Muest.</th>
+                            <th style="width: 20px" class="bg-warning">Dens. <br> Muest.</th>
                             <th style="width: 20px" class="bg-warning">Dens. <br> Actual.</th>
                             <th style="width: 20px">% Sup.</th>
                             <th style="width: 20px">Dens. <br> Ral.</th>
@@ -130,7 +131,7 @@
                                     $isHoy = $item->fecha === now()->format('Y-m-d');
                                     $esDomingo = $item->dia === 'domingo';
                                 @endphp
-                                <tr class="{{ $isHidden ? 'hidden' : '' }}" data-week="{{ $startOfWeek }}" style="background-color: {{ $isHoy ? '#ffe9a6' : ($esDomingo ? '#54a7ff' : 'transparent') }}">
+                                <tr class="{{ $isHidden ? 'hidden' : '' }}" data-week="{{ $startOfWeek }}" style="background-color: {{ $isHoy ? '#ffe9a6' : ($esDomingo ? '#c9e3ff' : 'transparent') }}">
                                     <td>
                                         {{ Carbon::parse($item->fecha)->weekOfYear }}
                                         @if ($isLastItem)
@@ -140,6 +141,7 @@
                                         @endif
                                     </td>
                                     <!-- Las demás columnas -->
+                                    <td class="fixed-column"><a href="#"></i> <i class="fas fa-temperature-low"></i></a></td>
                                     <td class="fixed-column"><a href="#" data-toggle="modal" data-target="#prodReal{{ $item->id }}"><i class="fas fa-edit"></i> {{ $item->num_dia }}</a></td>
                                     <td>{{ Carbon::parse($item->fecha)->format('d/m/y') }}</td>
                                     <td>{{ mb_substr($item->dia, 0, 3, 'UTF-8') }}</td>
@@ -151,7 +153,7 @@
                                     <td class="bg-warning">{{ $item->alimento_calculo }}</td>
                                     <td>{{ $item->peso_corporal }}%</td>
                                     <td>{{ $item->densidad_consumo }}</td>
-                                    <td class="bg-info">{{ $item->densidad_muestreo }}</td>
+                                    <td class="bg-warning">{{ $item->densidad_muestreo }}</td>
                                     <td class="bg-warning">{{ $item->densidad_actual }}</td>
                                     <td>{{ number_format($item->supervivencia, 1) }}%</td>
                                     <td>{{ $item->densidad_raleada }}</td>

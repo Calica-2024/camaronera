@@ -425,17 +425,22 @@ class ProyectoRealController extends Controller
             $pesoProd = $produccion->peso_transferencia;
             $densidad = $produccion->densidad;
             $area = $produccion->piscina->area_ha;
+            
             if($data['num_dia'] == 1){
                 $data['fca'] = 0;
             }else{
-                $formulaFca = ($alimAcum / (((($bmActual + $bmRal) - ($pesoProd * $densidad * 22)) / 2.20462) * $area));
-                if($formulaFca != 0){
-                    // Redondear a 2 decimales
-                    $data['fca'] = number_format($formulaFca, 2, '.', '');
-        
-                    // Validar el rango de fca
-                    if ($data['fca'] < 0 || $data['fca'] > 10000) {
-                        $data['fca'] = 0; // Ajusta este valor según tus necesidades
+                if($pesoProd > 0 && $densidad > 0 && ($bmActual + $bmRal) > 0){
+                    $formulaFca = ($alimAcum / (((($bmActual + $bmRal) - ($pesoProd * $densidad * 22)) / 2.20462) * $area));
+                    if($formulaFca != 0){
+                        // Redondear a 2 decimales
+                        $data['fca'] = number_format($formulaFca, 2, '.', '');
+            
+                        // Validar el rango de fca
+                        if ($data['fca'] < 0 || $data['fca'] > 10000) {
+                            $data['fca'] = 0; // Ajusta este valor según tus necesidades
+                        }
+                    }else{
+                        $data['fca'] = 0;
                     }
                 }else{
                     $data['fca'] = 0;

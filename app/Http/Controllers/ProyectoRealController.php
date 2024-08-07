@@ -429,7 +429,7 @@ class ProyectoRealController extends Controller
             if($data['num_dia'] == 1){
                 $data['fca'] = 0;
             }else{
-                if($pesoProd > 0 && $densidad > 0 && ($bmActual + $bmRal) > 0){
+                if(((($bmActual + $bmRal) - ($pesoProd * $densidad * 22))) > 0){
                     $formulaFca = ($alimAcum / (((($bmActual + $bmRal) - ($pesoProd * $densidad * 22)) / 2.20462) * $area));
                     if($formulaFca != 0){
                         // Redondear a 2 decimales

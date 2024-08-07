@@ -188,7 +188,37 @@ class ProduccionesController extends Controller
         }
         $produccion = Produccion::create($data);
         $this->crearProyecto($produccion->id);
+        $this->crearProyectoReal($produccion->id);
         return redirect('producciones/'.$produccion->id)->with('success', 'Producción Creada Exitosamente');
+    }
+
+    public function crearProyectoReal($id){
+        $produccion = Produccion::find($id);
+        $balanceado = Balanceado::where('estado', 1)->first();
+        $dias = $produccion->dias_ciclo;
+        $fechaInicial = Carbon::parse($produccion->fecha);
+        $data = [];
+        $sumaDensRal = 0;
+        for ($i = 0; $i < $dias; $i++) {
+            $data = [];
+
+            $data['num_dia'] = $i+1;
+            $fechaProyecto = $fechaInicial->copy()->addDays($i);
+            $diaSemana = $fechaProyecto->locale('es')->isoFormat('dddd');
+            
+
+            if($data['num_dia'] == 1){
+                $data['peso_real'] = $produccion->peso_transferencia;
+                $data['densidad_actual'] = $produccion->densidad;
+            }
+            
+            $data['id_produccion'] = $id;
+            $data['fecha'] = $fechaProyecto;
+            $data['dia'] = $diaSemana;
+            $dia_anterior = $data['num_dia'];
+            $data['id_balanceado'] = 1;
+            $registroProyecto = ProyectoReal::create($data);
+        }
     }
 
     public function crearProyecto($id){
@@ -739,22 +769,56 @@ class ProduccionesController extends Controller
         $this->borrarProyecto($produccion->id);
         $this->crearProyecto($produccion->id);
         $this->updFechasReal($produccion->id);
+        $this->updateReal($produccion->id);
         
         return redirect('producciones/'.$produccion->id)->with('success', 'Producción Actualizada Exitosamente');
     }
+    
+    public function updateReal($id_prod){
+        $produccion = Produccion::find($id_prod);
+        $dias_ciclo = $produccion->dias_ciclo;
+        $items = ProyectoReal::where('id_produccion', $id_prod)->orderBy('num_dia', 'ASC')->get();
+        
+        $num_dias_actuales = $items->count();
+        $ultima_fecha = Carbon::parse($items->last()->fecha);
+        // Establecer el idioma a español
+        $ultima_fecha->locale('es');
 
-    public function updFechasReal($id_prod){
+        if ($num_dias_actuales < $dias_ciclo) {
+            // Crear los días faltantes
+            for ($i = $num_dias_actuales + 1; $i <= $dias_ciclo; $i++) {
+                $ultima_fecha->addDay(); // Incrementar la fecha en un día
+                ProyectoReal::create([
+                    'id_produccion' => $id_prod,
+                    'num_dia' => $i,
+                    'id_balanceado' => 1,
+                    'fecha' => $ultima_fecha->toDateString(),
+                    'dia' => $ultima_fecha->isoFormat('dddd'),
+                    // Puedes añadir otros campos necesarios aquí
+                ]);
+            }
+        } elseif ($num_dias_actuales > $dias_ciclo) {
+            // Eliminar los días excedentes
+            ProyectoReal::where('id_produccion', $id_prod)
+                        ->where('num_dia', '>', $dias_ciclo)
+                        ->delete();
+        }
+    }
+
+    public function updFechasReal($id_prod)
+    {
         $items = ProyectoReal::where('id_produccion', $id_prod)->orderBy('num_dia', 'ASC')->get();
         // Obtener la producción correspondiente para obtener la fecha base
         $produccion = Produccion::find($id_prod);
         
         // Obtener la fecha base de la producción
-        $fecha_base = Carbon::parse($produccion->fecha);
-
-        // Iterar sobre los items y actualizar las fechas
+        $fecha_base = Carbon::parse($produccion->fecha)->locale('es');
+    
+        // Iterar sobre los items y actualizar las fechas y el nombre del día
         foreach ($items as $index => $item) {
             $nueva_fecha = $fecha_base->copy()->addDays($index);
-            $item->fecha = $nueva_fecha;
+            $item->fecha = $nueva_fecha->toDateString();
+            $item->dia = $nueva_fecha->isoFormat('dddd'); // Asignar el nombre del día en español
             $item->save();
         }
     }

@@ -225,7 +225,7 @@
                                 </div>
                                 <div class="form-group mb-0">
                                     <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" name="estado" class="custom-control-input" id="exampleCheck1" {{ $produccion->estado == 1 ? 'checked' : '' }} disabled>
+                                        <input type="checkbox" name="estado" class="custom-control-input" id="exampleCheck1" {{ $produccion->estado == 1 ? 'checked' : '' }}>
                                         <label class="custom-control-label" for="exampleCheck1">Activo</label>
                                     </div>
                                 </div>

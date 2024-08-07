@@ -31,6 +31,7 @@
                         </p>
                     </div>
                     <div class="col-sm-6">
+                        {{-- 
                         @php 
                             use Carbon\Carbon;
                             $ultimoRegistro = $produccionItems->last(); 
@@ -161,6 +162,7 @@
                                 </div>
                             </div>
                         </div>
+                        --}}
                     </div>
                 </div>
             </div>

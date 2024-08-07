@@ -1,4 +1,4 @@
-
+<script src="{{ asset('/public/plugins/chart.js/Chart.js') }}"></script>
 @php
     use Carbon\Carbon;
 @endphp
@@ -13,6 +13,27 @@
         display: none;
     }
 </style>
+
+<div>
+    <div id="chartContainer" class="row">
+        <div class="col-md-4">
+            <canvas id="comparativeChart" width="400" height="200"></canvas>
+        </div>
+        <div class="col-md-4">
+            <canvas id="growthChart" width="400" height="200"></canvas>
+        </div>
+        <div class="col-md-4">
+            <canvas id="densityChart" width="400" height="200"></canvas>    
+        </div>
+    </div>
+</div>
+
+<script>
+    // Pasar los datos de PHP a JavaScript
+    window.produccionItems = {!! json_encode($produccionItems) !!};
+    window.proyectoItems = {!! json_encode($proyectoItems) !!};
+</script>
+<script src="{{ asset('/public/assets/js/graficosprod.js') }}"></script>
 
 <div class="card">
     <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">

@@ -267,31 +267,31 @@ class ProyectoRealController extends Controller
 
         $data = $request->validate([
             'peso_real' => [
-                'required',
+                'nullable',
                 'numeric',
                 'regex:/^\d+(\.\d{1,2})?$/',
                 'min:0'
             ],
             'alimento' => [
-                'required',
+                'nullable',
                 'numeric',
                 'regex:/^\d+(\.\d{1,2})?$/',
                 'min:0'
             ],
             'alimento_calculo' => [
-                'required',
+                'nullable',
                 'numeric',
                 'regex:/^\d+(\.\d{1,2})?$/',
                 'min:0'
             ],
             'densidad_muestreo' => [
-                'required',
+                'nullable',
                 'numeric',
                 'regex:/^\d+(\.\d{1,2})?$/',
                 'min:0'
             ],
             'densidad_actual' => [
-                'required',
+                'nullable',
                 'numeric',
                 'regex:/^\d+(\.\d{1,2})?$/',
                 'min:0'
@@ -302,7 +302,7 @@ class ProyectoRealController extends Controller
                 'regex:/^\d+(\.\d{1,2})?$/',
             ],
             'densidad_raleada' => [
-                'required',
+                'nullable',
                 'numeric',
                 'regex:/^\d+(\.\d{1,2})?$/',
                 'min:0'
@@ -348,6 +348,26 @@ class ProyectoRealController extends Controller
             }else{
                 if($data['peso_real'] > 0){
                     $data['peso_real_anterior'] = $data['peso_real'] - $proyAnterior->peso_real;
+                    if ($data['peso_real'] == $data['peso_real_anterior']) {
+                        $diaAnterior = $item->num_dia - 1;
+                        $pesoAnterior = ProyectoReal::where('id_produccion', $produccion->id)
+                                                    ->where('num_dia', $diaAnterior)
+                                                    ->first();
+                    
+                        while ($pesoAnterior && ($pesoAnterior->peso_real === null || $pesoAnterior->peso_real === 0) && $diaAnterior > 0) {
+                            $diaAnterior--;
+                            $pesoAnterior = ProyectoReal::where('id_produccion', $produccion->id)
+                                                        ->where('num_dia', $diaAnterior)
+                                                        ->first();
+                        }
+                    
+                        if ($pesoAnterior && $pesoAnterior->peso_real !== null && $pesoAnterior->peso_real !== 0) {
+                            $data['peso_real_anterior'] = $data['peso_real'] - $pesoAnterior->peso_real;
+                        } else {
+                            // Manejar el caso donde no se encontró un registro válido
+                            $data['peso_real_anterior'] = 0; // O cualquier otro valor que tenga sentido para tu lógica
+                        }
+                    }
                 }else{
                     $data['peso_real_anterior'] = 0;
                 }

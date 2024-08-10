@@ -13,6 +13,7 @@ use App\Models\Produccion;
 use App\Models\ProyectoCultivo;
 use App\Models\TablaAlimentacion;
 use App\Models\ProyectoReal;
+use App\Models\Telemetria;
 
 class ProduccionesController extends Controller
 {
@@ -651,8 +652,12 @@ class ProduccionesController extends Controller
         $vista = "Consultar Producción " . $produccion->fecha . " - " . $produccion->dias_ciclo . " días - " . $produccion->piscina->camaronera->nombre . ': ' . $produccion->piscina->nombre;
         $proyectoItems = ProyectoCultivo::where('id_produccion', $id)->orderBy('num_dia', 'asc')->get();
         $produccionItems = ProyectoReal::where('id_produccion', $id)->orderBy('num_dia', 'asc')->get();
+        $telemetrias = Telemetria::whereIn('id_p_real', $produccionItems->pluck('id'))->get();// Asignar la telemetría correspondiente a cada item de produccionItems
+        $produccionItems->each(function ($item) use ($telemetrias) {
+            $item->telemetria = $telemetrias->firstWhere('id_p_real', $item->id);
+        });
         $balanceados = Balanceado::get();
-        return view('produccion.show', compact('grupo', 'modulo', 'vista', 'produccion', 'proyectoItems', 'produccionItems', 'balanceados'));
+        return view('produccion.show', compact('grupo', 'modulo', 'vista', 'produccion', 'proyectoItems', 'produccionItems', 'balanceados', 'telemetrias'));
     }
 
     /**
@@ -781,6 +786,8 @@ class ProduccionesController extends Controller
         
         $num_dias_actuales = $items->count();
         $ultima_fecha = Carbon::parse($items->last()->fecha);
+        echo($items->last()->alimento_acumulado);
+        $alimento_acumulado = $items->last()->alimento_acumulado;
         // Establecer el idioma a español
         $ultima_fecha->locale('es');
 
@@ -794,6 +801,7 @@ class ProduccionesController extends Controller
                     'id_balanceado' => 1,
                     'fecha' => $ultima_fecha->toDateString(),
                     'dia' => $ultima_fecha->isoFormat('dddd'),
+                    'alimento_acumulado' => $alimento_acumulado,
                     // Puedes añadir otros campos necesarios aquí
                 ]);
             }

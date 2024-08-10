@@ -141,7 +141,7 @@
                                         @endif
                                     </td>
                                     <!-- Las demás columnas -->
-                                    <td class="fixed-column"><a href="#"></i> <i class="fas fa-temperature-low"></i></a></td>
+                                    <td class="fixed-column"><a href="#" data-toggle="modal" data-target="#telemetria{{ $item->id }}"></i> <i class="fas fa-temperature-low"></i></a></td>
                                     <td class="fixed-column"><a href="#" data-toggle="modal" data-target="#prodReal{{ $item->id }}"><i class="fas fa-edit"></i> {{ $item->num_dia }}</a></td>
                                     <td>{{ Carbon::parse($item->fecha)->format('d/m/y') }}</td>
                                     <td>{{ mb_substr($item->dia, 0, 3, 'UTF-8') }}</td>
@@ -163,6 +163,138 @@
                                     <td>{{ $item->alimento_acumulado }}</td>
                                     <td>{{ $item->fca }}</td>
                                 </tr>
+                                <!-- Modal -->
+                                <div class="modal fade" id="telemetria{{ $item->id }}" tabindex="-1" aria-labelledby="telemetria{{ $item->id }}Label" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="telemetria{{ $item->id }}Label">Telemetría {{ $item->fecha }}</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <form action="{{ url('telemetria') }}" method="POST">
+                                                @method('POST')
+                                                @csrf
+                                                <input type="hidden" name="id_p_real" value="{{ $item->id }}">
+                                                <div class="modal-body">
+                                                    <h5 class="text-bold">Telemtría A.M.</h5>
+                                                    <div class="row">
+                                                        <div class="col-md-4 col-sm-6 form-group">
+                                                            <label for="hora1" style="font-size: 13px">Hora</label>
+                                                            <input type="time" name="hora1" class="form-control @error('hora1') is-invalid @enderror" id="hora1"  value="{{ $item->telemetria ? $item->telemetria->hora1 : '' }}" oninput="decimales(this)">
+                                                            @if ($errors->has('hora1'))
+                                                                <div class="invalid-feedback" style="display: inline !important">
+                                                                    @foreach ($errors->get('hora1') as $error)
+                                                                        {{ $error }}<br>
+                                                                    @endforeach
+                                                                </div>
+                                                            @endif
+                                                        </div>
+                                                        <div class="col-md-4 col-sm-6 form-group">
+                                                            <label for="temperatura1" style="font-size: 13px">Temperatura</label>
+                                                            <input type="text" name="temperatura1" class="form-control @error('temperatura1') is-invalid @enderror" id="temperatura1"  value="{{ $item->telemetria ? $item->telemetria->temperatura1 : '' }}" oninput="decimales(this)">
+                                                            @if ($errors->has('temperatura1'))
+                                                                <div class="invalid-feedback" style="display: inline !important">
+                                                                    @foreach ($errors->get('temperatura1') as $error)
+                                                                        {{ $error }}<br>
+                                                                    @endforeach
+                                                                </div>
+                                                            @endif
+                                                        </div>
+                                                        <div class="col-md-4 col-sm-6 form-group">
+                                                            <label for="oxigeno1" style="font-size: 13px">Oxigeno</label>
+                                                            <input type="text" name="oxigeno1" class="form-control @error('oxigeno1') is-invalid @enderror" id="oxigeno1"  value="{{ $item->telemetria ? $item->telemetria->oxigeno1 : '' }}" oninput="decimales(this)">
+                                                            @if ($errors->has('oxigeno1'))
+                                                                <div class="invalid-feedback" style="display: inline !important">
+                                                                    @foreach ($errors->get('oxigeno1') as $error)
+                                                                        {{ $error }}<br>
+                                                                    @endforeach
+                                                                </div>
+                                                            @endif
+                                                        </div>
+                                                    </div>
+                                                    <h5 class="text-bold">Telemtría Medio Día</h5>
+                                                    <div class="row">
+                                                        <div class="col-md-4 col-sm-6 form-group">
+                                                            <label for="hora2" style="font-size: 13px">Hora</label>
+                                                            <input type="time" name="hora2" class="form-control @error('hora2') is-invalid @enderror" id="hora2"  value="{{ $item->telemetria ? $item->telemetria->hora2 : '' }}" oninput="decimales(this)">
+                                                            @if ($errors->has('hora2'))
+                                                                <div class="invalid-feedback" style="display: inline !important">
+                                                                    @foreach ($errors->get('hora2') as $error)
+                                                                        {{ $error }}<br>
+                                                                    @endforeach
+                                                                </div>
+                                                            @endif
+                                                        </div>
+                                                        <div class="col-md-4 col-sm-6 form-group">
+                                                            <label for="temperatura2" style="font-size: 13px">Temperatura</label>
+                                                            <input type="text" name="temperatura2" class="form-control @error('temperatura2') is-invalid @enderror" id="temperatura2"  value="{{ $item->telemetria ? $item->telemetria->temperatura2 : '' }}" oninput="decimales(this)">
+                                                            @if ($errors->has('temperatura2'))
+                                                                <div class="invalid-feedback" style="display: inline !important">
+                                                                    @foreach ($errors->get('temperatura2') as $error)
+                                                                        {{ $error }}<br>
+                                                                    @endforeach
+                                                                </div>
+                                                            @endif
+                                                        </div>
+                                                        <div class="col-md-4 col-sm-6 form-group">
+                                                            <label for="oxigeno2" style="font-size: 13px">Oxigeno</label>
+                                                            <input type="text" name="oxigeno2" class="form-control @error('oxigeno2') is-invalid @enderror" id="oxigeno2"  value="{{ $item->telemetria ? $item->telemetria->oxigeno2 : '' }}" oninput="decimales(this)">
+                                                            @if ($errors->has('oxigeno2'))
+                                                                <div class="invalid-feedback" style="display: inline !important">
+                                                                    @foreach ($errors->get('oxigeno2') as $error)
+                                                                        {{ $error }}<br>
+                                                                    @endforeach
+                                                                </div>
+                                                            @endif
+                                                        </div>
+                                                    </div>
+                                                    <h5 class="text-bold">Telemtría P.M.</h5>
+                                                    <div class="row">
+                                                        <div class="col-md-4 col-sm-6 form-group">
+                                                            <label for="hora3" style="font-size: 13px">Hora</label>
+                                                            <input type="time" name="hora3" class="form-control @error('hora3') is-invalid @enderror" id="hora3" value="{{ $item->telemetria ? $item->telemetria->hora3 : '' }}">
+                                                            @if ($errors->has('hora3'))
+                                                                <div class="invalid-feedback" style="display: inline !important">
+                                                                    @foreach ($errors->get('hora3') as $error)
+                                                                        {{ $error }}<br>
+                                                                    @endforeach
+                                                                </div>
+                                                            @endif
+                                                        </div>
+                                                        <div class="col-md-4 col-sm-6 form-group">
+                                                            <label for="temperatura3" style="font-size: 13px">Temperatura</label>
+                                                            <input type="text" name="temperatura3" class="form-control @error('temperatura3') is-invalid @enderror" id="temperatura3"  value="{{ $item->telemetria ? $item->telemetria->temperatura3 : '' }}" oninput="decimales(this)">
+                                                            @if ($errors->has('temperatura3'))
+                                                                <div class="invalid-feedback" style="display: inline !important">
+                                                                    @foreach ($errors->get('temperatura3') as $error)
+                                                                        {{ $error }}<br>
+                                                                    @endforeach
+                                                                </div>
+                                                            @endif
+                                                        </div>
+                                                        <div class="col-md-4 col-sm-6 form-group">
+                                                            <label for="oxigeno3" style="font-size: 13px">Oxigeno</label>
+                                                            <input type="text" name="oxigeno3" class="form-control @error('oxigeno3') is-invalid @enderror" id="oxigeno3"  value="{{ $item->telemetria ? $item->telemetria->oxigeno3 : '' }}" oninput="decimales(this)">
+                                                            @if ($errors->has('oxigeno3'))
+                                                                <div class="invalid-feedback" style="display: inline !important">
+                                                                    @foreach ($errors->get('oxigeno3') as $error)
+                                                                        {{ $error }}<br>
+                                                                    @endforeach
+                                                                </div>
+                                                            @endif
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                                    <button type="submit" class="btn btn-primary">Actualizar Telemtria</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
                                 <!-- Modal -->
                                 <div class="modal fade" id="prodReal{{ $item->id }}" tabindex="-1" aria-labelledby="prodReal{{ $item->id }}Label" aria-hidden="true">
                                     <div class="modal-dialog">
@@ -261,11 +393,11 @@
                                                             @endif
                                                         </div>
                                                         <div class="col-md-4 col-sm-6 form-group">
-                                                            <label for="densidad_oficina" style="font-size: 13px">Dens. Oficina</label>
-                                                            <input type="text" name="densidad_oficina" class="form-control @error('densidad_oficina') is-invalid @enderror" id="densidad_oficina"  value="{{ $item->densidad_oficina }}" oninput="decimales(this)">
-                                                            @if ($errors->has('densidad_oficina'))
+                                                            <label for="hora" style="font-size: 13px">Dens. Oficina</label>
+                                                            <input type="text" name="hora" class="form-control @error('hora') is-invalid @enderror" id="hora"  value="{{ $item->hora }}" oninput="decimales(this)">
+                                                            @if ($errors->has('hora'))
                                                                 <div class="invalid-feedback" style="display: inline !important">
-                                                                    @foreach ($errors->get('densidad_oficina') as $error)
+                                                                    @foreach ($errors->get('hora') as $error)
                                                                         {{ $error }}<br>
                                                                     @endforeach
                                                                 </div>

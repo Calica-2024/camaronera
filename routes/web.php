@@ -11,6 +11,7 @@ use App\Http\Controllers\ProduccionesController;
 use App\Http\Controllers\CultivoDiasController;
 use App\Http\Controllers\TablaAlimentacionController;
 use App\Http\Controllers\ProyectoRealController;
+use App\Http\Controllers\TelemetriaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -59,6 +60,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/proyectoReal/{produccion}', [ProyectoRealController::class, 'store']);
     Route::put('/proyectoReal/upd/{id}', [ProyectoRealController::class, 'update']);
     Route::get('/proyectoReal/destroy/{id}', [ProyectoRealController::class, 'destroy']);
+    
+    Route::resource('/telemetria', TelemetriaController::class);
 });
 
 require __DIR__.'/auth.php';

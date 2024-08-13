@@ -151,6 +151,7 @@
                     <th data-type="number" class="bg-primary">Pobl. <i class="fas"></i></th>
                     <th data-type="number" class="bg-primary">Dens <br> Proy <i class="fas"></i></th>
                     <th data-type="number" class="bg-primary">Desvio <i class="fas"></i></th>
+                    <th data-type="number" class="bg-primary">% SUP. <i class="fas"></i></th>
                     <th data-type="number" class="bg-primary">Lbs/ha <i class="fas"></i></th>
                     <th data-type="number" class="bg-primary">lbs/total <i class="fas"></i></th>
                     <th data-type="number" class="bg-primary">raleo <i class="fas"></i></th>
@@ -208,6 +209,7 @@
                       <!-- aqui se resta con nuevo rpoy d -->
                       <td>{{ $proyecto->densidad }}</td>
                       <td class="{{ $proyecto->densidad - $item->densidad_actual > 0 ? 'text-danger' : 'text-success' }}">{{ number_format($proyecto->densidad - $item->densidad_actual, 2) }}</td>
+                      <td>{{ $item->supervivencia }}%</td>
                       <td>{{ $item->biomasa_actual }}</td>
                       <td>{{ $item->alimento }}</td>
                       <td>{{ $item->densidad_raleada }}</td>

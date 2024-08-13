@@ -134,29 +134,29 @@
               <table class="table table-head-fixed text-nowrap table-bordered" id="grid" >
                 <thead>
                   <tr>
-                    <th data-type="number" class="bg-secondary">#PS <i class="fas"></i></th>
-                    <th data-type="string" class="bg-secondary">Sem. <i class="fas"></i></th>
-                    <th data-type="string" class="bg-secondary">Tipo Bal <i class="fas"></i></th>
-                    <th data-type="number" class="bg-warning">ha <i class="fas"></i></th>
-                    <th data-type="number" class="bg-warning" onclick="sortGrid(3, 'number')">Días <i class="fas"></i></th>
-                    <th data-type="number" class="bg-warning">Peso<br>Transf <i class="fas"></i></th>
-                    <th data-type="string" class="bg-success">Peso<br>Act <i class="fas"></i></th>
-                    <th data-type="string" class="bg-success">Increm <i class="fas"></i></th>
-                    <th data-type="string" class="bg-success">Inc. Prom.<br>3sem <i class="fas"></i></th>
-                    <th data-type="number" class="bg-success">Kg/ha<br>prom <i class="fas"></i></th>
-                    <th data-type="number" class="bg-success">ind/M2 M <i class="fas"></i></th>
-                    <th data-type="string" class="bg-success">Alerta <br> Alim <i class="fas"></i></th>
-                    <th data-type="number" class="bg-primary">Dens<br>bio <i class="fas"></i></th>
-                    <th data-type="number" class="bg-primary">Dens<br>ADM <i class="fas"></i></th>
-                    <th data-type="number" class="bg-primary">Pobl. <i class="fas"></i></th>
-                    <th data-type="number" class="bg-primary">Dens <br> Proy <i class="fas"></i></th>
-                    <th data-type="number" class="bg-primary">Desvio <i class="fas"></i></th>
-                    <th data-type="number" class="bg-primary">% SUP. <i class="fas"></i></th>
-                    <th data-type="number" class="bg-primary">Lbs/ha <i class="fas"></i></th>
-                    <th data-type="number" class="bg-primary">lbs/total <i class="fas"></i></th>
-                    <th data-type="number" class="bg-primary">raleo <i class="fas"></i></th>
-                    <th data-type="number" class="bg-primary">FCA <i class="fas"></i></th>
-                    <th data-type="number" class="bg-primary">FCA <br>Proy <i class="fas"></i></th>
+                    <th data-type="number" style="background-color: #bbbbbb">#PS <i class="fas"></i></th>
+                    <th data-type="string" style="background-color: #bbbbbb">Sem. <i class="fas"></i></th>
+                    <th data-type="string" style="background-color: #bbbbbb">Tipo Bal <i class="fas"></i></th>
+                    <th data-type="number" style="background-color: #ffdd79">ha <i class="fas"></i></th>
+                    <th data-type="number" style="background-color: #ffdd79" onclick="sortGrid(3, 'number')">Días <i class="fas"></i></th>
+                    <th data-type="number" style="background-color: #ffdd79">Peso<br>Transf <i class="fas"></i></th>
+                    <th data-type="string" style="background-color: #ff7878a6">Peso<br>Act <i class="fas"></i></th>
+                    <th data-type="string" style="background-color: #ff7878a6">Increm <i class="fas"></i></th>
+                    <th data-type="string" style="background-color: #ff7878a6">Inc. Prom.<br>3sem <i class="fas"></i></th>
+                    <th data-type="number" style="background-color: #ff7878a6">Kg/ha<br>prom <i class="fas"></i></th>
+                    <th data-type="number" style="background-color: #ff7878a6">ind/M2 M <i class="fas"></i></th>
+                    <th data-type="string" style="background-color: #ff7878a6">Alerta <br> Alim <i class="fas"></i></th>
+                    <th data-type="number" style="background-color: #429dff">Dens<br>bio <i class="fas"></i></th>
+                    <th data-type="number" style="background-color: #429dff">Dens<br>ADM <i class="fas"></i></th>
+                    <th data-type="number" style="background-color: #429dff">Pobl. <i class="fas"></i></th>
+                    <th data-type="number" style="background-color: #429dff">Dens <br> Proy <i class="fas"></i></th>
+                    <th data-type="number" style="background-color: #429dff">Desvio <i class="fas"></i></th>
+                    <th data-type="number" style="background-color: #429dff">% SUP. <i class="fas"></i></th>
+                    <th data-type="number" style="background-color: #429dff">Lbs/ha <i class="fas"></i></th>
+                    <th data-type="number" style="background-color: #429dff">lbs/total <i class="fas"></i></th>
+                    <th data-type="number" style="background-color: #429dff">raleo <i class="fas"></i></th>
+                    <th data-type="number" style="background-color: #429dff">FCA <i class="fas"></i></th>
+                    <th data-type="number" style="background-color: #429dff">FCA <br>Proy <i class="fas"></i></th>
                   </tr>
                 </thead>
                 <tbody>

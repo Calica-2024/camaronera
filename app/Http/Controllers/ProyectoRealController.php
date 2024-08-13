@@ -13,6 +13,7 @@ use App\Models\Produccion;
 use App\Models\ProyectoCultivo;
 use App\Models\TablaAlimentacion;
 use App\Models\ProyectoReal;
+use App\Models\MovimientosBalanceado;
 
 class ProyectoRealController extends Controller
 {
@@ -316,6 +317,20 @@ class ProyectoRealController extends Controller
         $real->update($data);
 
         $this->procesarUpdate($real);
+        
+        $inventario = [
+            'id_camaronera' => $real->produccion->piscina->camaronera->id,
+            'id_balanceado' => $request->id_balanceado,
+            'tipo_movimiento' => 'salida',
+            'cantidad' => $request->alimento,
+            'descripcion' => 'Balanceado para producción',
+        ];
+        
+        // Usar updateOrCreate para insertar o actualizar el registro
+        MovimientosBalanceado::updateOrCreate(
+            ['id_p_real' => $real->id],  // Condición para buscar el registro
+            $inventario            // Datos a actualizar o insertar
+        );
 
         return redirect('producciones/'.$real->id_produccion)->with('success', 'Registro actualizado correctamente');
     }

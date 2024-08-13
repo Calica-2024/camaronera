@@ -130,6 +130,23 @@
                                     </li>
                                 </ul>
                             </li>
+                            <li class="nav-item {{ $grupo == 'inventario' ? 'has-treeview menu-open' : '' }}">
+                                <a href="#" class="nav-link {{ $grupo == 'inventario' ? 'active' : '' }}">
+                                    <i class="fas fa-dolly-flatbed"></i>
+                                    <p>
+                                        Inventario
+                                        <i class="right fas fa-angle-left"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="{{ url('inventario/balanceados') }}" class="nav-link {{ $modulo == 'InvBalanceados' ? 'active' : '' }}">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Balanceados</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
                             <li class="nav-item {{ $grupo == 'producciones' ? 'has-treeview menu-open' : '' }}">
                                 <a href="#" class="nav-link {{ $grupo == 'producciones' ? 'active' : '' }}">
                                     <i class="fas fa-industry"></i>

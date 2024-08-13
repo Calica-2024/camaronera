@@ -12,6 +12,7 @@ use App\Http\Controllers\CultivoDiasController;
 use App\Http\Controllers\TablaAlimentacionController;
 use App\Http\Controllers\ProyectoRealController;
 use App\Http\Controllers\TelemetriaController;
+use App\Http\Controllers\MovimientoBalanceadoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -62,6 +63,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/proyectoReal/destroy/{id}', [ProyectoRealController::class, 'destroy']);
     
     Route::resource('/telemetria', TelemetriaController::class);
+    
+    Route::get('/inventario/balanceados', [MovimientoBalanceadoController::class, 'index']);
+    Route::get('/inventario/balanceados/{camaronera}', [MovimientoBalanceadoController::class, 'show']);
+    Route::get('/inventario/bal/{camaronera}/{balanceado}', [MovimientoBalanceadoController::class, 'movimientos']);
+    Route::post('/inventario/store/bal/{camaronera}/{balanceado}', [MovimientoBalanceadoController::class, 'store']);
 });
 
 require __DIR__.'/auth.php';

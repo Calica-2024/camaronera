@@ -71,7 +71,6 @@
                     <thead>
                         <tr style="font-size: 14px">
                             <th class="fixed-column" style="width: 20px">Sem.</th>
-                            <th class="fixed-column" style="width: 2%">Mtr.</th>
                             <th class="fixed-column" style="width: 2%">#Día</th>
                             <th style="width: 20px">Fecha</th>
                             <th style="width: 20px">Día</th>
@@ -92,6 +91,7 @@
                             <th style="width: 20px">Recom <br> Alim.</th>
                             <th style="width: 20px">Alim. <br> Acum.</th>
                             <th style="width: 20px">FCA</th>
+                            <th class="fixed-column" style="width: 2%">Mtr.</th>
                             {{-- <th>ROI</th> --}}
                         </tr>
                     </thead>
@@ -141,7 +141,6 @@
                                         @endif
                                     </td>
                                     <!-- Las demás columnas -->
-                                    <td class="fixed-column"><a href="#" data-toggle="modal" data-target="#telemetria{{ $item->id }}"></i> <i class="fas fa-temperature-low"></i></a></td>
                                     <td class="fixed-column"><a href="#" data-toggle="modal" data-target="#prodReal{{ $item->id }}"><i class="fas fa-edit"></i> {{ $item->num_dia }}</a></td>
                                     <td>{{ Carbon::parse($item->fecha)->format('d/m/y') }}</td>
                                     <td>{{ mb_substr($item->dia, 0, 3, 'UTF-8') }}</td>
@@ -162,6 +161,7 @@
                                     <td>{{ $item->recomendacion_alimento }}</td>
                                     <td>{{ $item->alimento_acumulado }}</td>
                                     <td>{{ $item->fca }}</td>
+                                    <td><a href="#" data-toggle="modal" data-target="#telemetria{{ $item->id }}"></i> <i class="fas fa-temperature-low"></i></a></td>
                                 </tr>
                                 <!-- Modal -->
                                 <div class="modal fade" id="telemetria{{ $item->id }}" tabindex="-1" aria-labelledby="telemetria{{ $item->id }}Label" aria-hidden="true">

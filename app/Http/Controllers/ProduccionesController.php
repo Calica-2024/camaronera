@@ -183,10 +183,12 @@ class ProduccionesController extends Controller
             ->first();
 
         if ($produccion_activa) {
-            $data['estado'] = 0;
-        } else {
-            $data['estado'] = 1;
+            // Cambiar el estado de la producción activa a 0
+            $produccion_activa->estado = 0;
+            $produccion_activa->save();
         }
+
+        $data['estado'] = 1;
         $produccion = Produccion::create($data);
         $this->crearProyecto($produccion->id);
         $this->crearProyectoReal($produccion->id);
@@ -758,16 +760,7 @@ class ProduccionesController extends Controller
                 'regex:/^\d+(\.\d{1,2})?$/'
             ],
         ]);
-        $produccion_activa = Produccion::where('id_piscina', $produccion->id_piscina)
-            ->where('estado', 1)
-            ->whereNot('id', $produccion->id)
-            ->first();
-
-        if ($produccion_activa) {
-            echo $data['estado'] = 0;
-        } else {
-            echo $data['estado'] = 1;
-        }
+        $data['estado'] = $request->has('estado') ? 1 : 0;
         $produccion->update($data);
 
         // Llamar a la función borrarProyecto después de actualizar la producción y luego crear nuevo proyecto

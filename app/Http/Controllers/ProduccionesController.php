@@ -653,7 +653,7 @@ class ProduccionesController extends Controller
         }
         $vista = "Consultar Producción " . $produccion->fecha . " - " . $produccion->dias_ciclo . " días - " . $produccion->piscina->camaronera->nombre . ': ' . $produccion->piscina->nombre;
         $proyectoItems = ProyectoCultivo::where('id_produccion', $id)->orderBy('num_dia', 'asc')->get();
-        $produccionItems = ProyectoReal::where('id_produccion', $id)->orderBy('num_dia', 'asc')->get();
+        $produccionItems = ProyectoReal::where('id_produccion', $id)->whereDate('Fecha', '<=', Carbon::now())->orderBy('num_dia', 'asc')->get();
         $telemetrias = Telemetria::whereIn('id_p_real', $produccionItems->pluck('id'))->get();// Asignar la telemetría correspondiente a cada item de produccionItems
         $produccionItems->each(function ($item) use ($telemetrias) {
             $item->telemetria = $telemetrias->firstWhere('id_p_real', $item->id);

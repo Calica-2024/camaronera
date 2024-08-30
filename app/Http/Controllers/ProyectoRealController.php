@@ -322,7 +322,7 @@ class ProyectoRealController extends Controller
             'id_camaronera' => $real->produccion->piscina->camaronera->id,
             'id_balanceado' => $request->id_balanceado,
             'tipo_movimiento' => 'salida',
-            'cantidad' => $request->alimento,
+            'cantidad' => $request->alimento ?? 0,
             'descripcion' => 'Balanceado para producción',
         ];
         

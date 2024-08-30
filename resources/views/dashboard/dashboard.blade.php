@@ -134,29 +134,31 @@
               <table class="table table-head-fixed text-nowrap table-bordered" id="grid" >
                 <thead>
                   <tr>
-                    <th data-type="number" style="background-color: #bbbbbb">#PS <i class="fas"></i></th>
-                    <th data-type="string" style="background-color: #bbbbbb">Sem. <i class="fas"></i></th>
-                    <th data-type="string" style="background-color: #bbbbbb">Tipo Bal <i class="fas"></i></th>
+                    <th data-type="number" style="background-color: #429dff">#PS <i class="fas"></i></th>
+                    <th style="background-color: #429dff"><i class="fas fa-chart-bar"></i></th>
+                    <th data-type="string" style="background-color: #429dff">Sem. <i class="fas"></i></th>
+                    <th data-type="string" style="background-color: #429dff">Tipo Bal <i class="fas"></i></th>
                     <th data-type="number" style="background-color: #ffdd79">ha <i class="fas"></i></th>
                     <th data-type="number" style="background-color: #ffdd79" onclick="sortGrid(3, 'number')">Días <i class="fas"></i></th>
-                    <th data-type="number" style="background-color: #ffdd79">Peso<br>Transf <i class="fas"></i></th>
-                    <th data-type="string" style="background-color: #ff7878a6">Peso<br>Act <i class="fas"></i></th>
-                    <th data-type="string" style="background-color: #ff7878a6">Increm <i class="fas"></i></th>
-                    <th data-type="string" style="background-color: #ff7878a6">Inc. Prom.<br>3sem <i class="fas"></i></th>
-                    <th data-type="number" style="background-color: #ff7878a6">Kg/ha<br>prom <i class="fas"></i></th>
-                    <th data-type="number" style="background-color: #ff7878a6">ind/M2 M <i class="fas"></i></th>
-                    <th data-type="string" style="background-color: #ff7878a6">Alerta <br> Alim <i class="fas"></i></th>
-                    <th data-type="number" style="background-color: #429dff">Dens<br>bio <i class="fas"></i></th>
-                    <th data-type="number" style="background-color: #429dff">Dens<br>ADM <i class="fas"></i></th>
-                    <th data-type="number" style="background-color: #429dff">Pobl. <i class="fas"></i></th>
-                    <th data-type="number" style="background-color: #429dff">Dens <br> Proy <i class="fas"></i></th>
-                    <th data-type="number" style="background-color: #429dff">Desvio <i class="fas"></i></th>
-                    <th data-type="number" style="background-color: #429dff">% SUP. <i class="fas"></i></th>
-                    <th data-type="number" style="background-color: #429dff">Lbs/ha <i class="fas"></i></th>
-                    <th data-type="number" style="background-color: #429dff">lbs/total <i class="fas"></i></th>
-                    <th data-type="number" style="background-color: #429dff">raleo <i class="fas"></i></th>
-                    <th data-type="number" style="background-color: #429dff">FCA <i class="fas"></i></th>
-                    <th data-type="number" style="background-color: #429dff">FCA <br>Proy <i class="fas"></i></th>
+                    {{-- <th data-type="number" style="background-color: #ffdd79">Peso<br>Transf <i class="fas"></i></th> --}}
+                    <th data-type="number" style="background-color: #ffdd79">Dens<br>Siembra <i class="fas"></i></th>
+                    <th data-type="string" style="background-color: #4fb17887">Peso<br>Act <i class="fas"></i></th>
+                    <th data-type="string" style="background-color: #4fb17887">Increm <i class="fas"></i></th>
+                    <th data-type="string" style="background-color: #4fb17887">Inc. Prom.<br>3sem <i class="fas"></i></th>
+                    {{-- <th data-type="number" style="background-color: #4fb17887">Kg/ha<br>prom <i class="fas"></i></th> --}}
+                    {{-- <th data-type="number" style="background-color: #4fb17887">ind/M2 M <i class="fas"></i></th> --}}
+                    <th data-type="string" style="background-color: #4fb17887">Alerta <br> Alim <i class="fas"></i></th>
+                    <th data-type="number" style="background-color: #ff7878a6">Dens<br>bio <i class="fas"></i></th>
+                    <th data-type="number" style="background-color: #ff7878a6">Dens<br>ADM <i class="fas"></i></th>
+                    <th data-type="number" style="background-color: #ff7878a6">Pobl. <i class="fas"></i></th>
+                    <th data-type="number" style="background-color: #ff7878a6">Dens <br> Proy <i class="fas"></i></th>
+                    <th data-type="number" style="background-color: #ff7878a6">Desvio <i class="fas"></i></th>
+                    <th data-type="number" style="background-color: #ff7878a6">% SUP. <i class="fas"></i></th>
+                    <th data-type="number" style="background-color: #ff7878a6">Lbs/ha <i class="fas"></i></th>
+                    <th data-type="number" style="background-color: #ff7878a6">lbs/total <i class="fas"></i></th>
+                    {{-- <th data-type="number" style="background-color: #ff7878a6">raleo <i class="fas"></i></th> --}}
+                    <th data-type="number" style="background-color: #ff7878a6">FCA <i class="fas"></i></th>
+                    <th data-type="number" style="background-color: #ff7878a6">FCA <br>Proy <i class="fas"></i></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -169,11 +171,17 @@
                     @endphp
                     <tr>
                       <td><a href="{{ url('producciones/'.$item->id_produccion) }}">{{ $item->produccion->piscina->numero }} <i class="fas fa-sign-in-alt"></i></a></td>
+                      <td>
+                        <button type="button" class="btn btn-link p-0" onclick="openModal('{{ $item->id_produccion }}')">
+                          <i class="fas fa-chart-bar"></i>
+                        </button>
+                      </td>
                       <td>{{ Carbon::parse($item->fecha)->weekOfYear }}</td>
                       <td>{{ $item->balanceado->nombre }}</td>
                       <td>{{ $item->produccion->piscina->area_ha }}</td>
                       <td class="sortable">{{ $item->num_dia }}</td>
-                      <td>{{ $item->produccion->peso_transferencia }}</td>
+                      {{-- <td>{{ $item->produccion->peso_transferencia }}</td> --}}
+                      <td>{{ $item->produccion->densidad }}</td>
                       <td class="{{ $clasePeso }}"><i class="{{ $iconoPeso }}"></i> {{ $item->peso_real . '/' . $proyecto->peso_proyecto }}</td>
                       {{-- <td>x</td> --}}
                       <td>{{ $item->peso_real_anterior }}</td>
@@ -185,8 +193,8 @@
                         @endif
                           {{ number_format($item->inc3sem, 2) }}
                       </td>
-                      <td>{{ number_format($item->alimento/$item->produccion->piscina->area_ha, 2) }}</td>
-                      <td>{{ $item->densidad_consumo }}</td>
+                      {{-- <td>{{ number_format($item->alimento/$item->produccion->piscina->area_ha, 2) }}</td> --}}
+                      {{-- <td>{{ $item->densidad_consumo }}</td> --}}
                       <td>
                         @if ($proyecto->alimento_dia != 0)
                           @php
@@ -212,7 +220,7 @@
                       <td>{{ $item->supervivencia }}%</td>
                       <td>{{ $item->biomasa_actual }}</td>
                       <td>{{ $item->alimento }}</td>
-                      <td>{{ $item->densidad_raleada }}</td>
+                      {{-- <td>{{ $item->densidad_raleada }}</td> --}}
                       <td>{{ $item->fca }}</td>
                       <td>{{ $proyecto->fca }}</td>
 
@@ -221,13 +229,119 @@
                 </tbody>
               </table>
             </div>
+
+            <!-- Modal fuera del foreach -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-xl custom-modal">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Detalles de la Producción</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  </div>
+                  <div class="modal-body">
+                    <!-- Contenido del modal -->
+                    <p id="modalContent">Aquí va el contenido del modal.</p>
+                    
+                    
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary">Guardar cambios</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <!-- /.card-body -->
           </div>
           <!-- /.card -->
         </div>
       </div>
       <!-- /.row -->
+      <style>
+        /* Estilo para el modal con altura del 70% de la pantalla */
+        .custom-modal .modal-dialog {
+          height: 70vh; /* 70% de la altura de la ventana del usuario */
+          margin: auto;
+        }
+      
+        .custom-modal .modal-content {
+          height: 100%;
+          display: flex;
+          flex-direction: column;
+        }
+      
+        .custom-modal .modal-body {
+          overflow-y: auto; /* Permite el scroll si el contenido es más largo que la altura del modal */
+        }
+      </style>
     </section>
+
+    <script>
+      function openModal(productionId) {
+        // Muestra el modal
+        var modal = new bootstrap.Modal(document.getElementById('exampleModal'));
+        modal.show();
+    
+        // Imprime un mensaje en la consola
+        console.log('se ejecuto');
+    
+        // Muestra un loader mientras se cargan los datos
+        document.getElementById('modalContent').innerHTML = '<div class="text-center"><div class="spinner-border" role="status"><span class="visually-hidden"></span></div><p>Cargando datos...</p></div>';
+    
+        // Genera la URL usando la función 'url()' de Laravel
+        const url = `{{ url('graficosProd') }}/${productionId}`;
+    
+        // Ejecuta la solicitud AJAX GET a la ruta generada
+        fetch(url)
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Error al cargar los datos');
+            }
+            return response.json(); // Asegúrate de que la respuesta se maneje como JSON
+          })
+          .then(data => {
+            // Actualiza las variables globales con los datos recibidos
+            window.produccionItems = data.produccionItems;
+            window.proyectoItems = data.proyectoItems;
+    
+            // Reemplaza el loader con el contenido del modal
+            document.getElementById('modalContent').innerHTML = `
+              <div>
+                <div id="chartContainer" class="row">
+                  <div class="col-md-6 col-lg-4">
+                    <canvas id="comparativeChart" width="400" height="200"></canvas>
+                  </div>
+                  <div class="col-md-6 col-lg-4">
+                    <canvas id="growthChart" width="400" height="200"></canvas>
+                  </div>
+                  <div class="col-md-6 col-lg-4">
+                    <canvas id="densityChart" width="400" height="200"></canvas>    
+                  </div>
+                </div>
+              </div>
+            `;
+    
+            // Carga y ejecuta el script de gráficos después de que el contenido del modal se haya actualizado
+            const script = document.createElement('script');
+            script.src = '{{ asset('public/assets/js/graficosprod.js') }}'; // Cambia la ruta según corresponda
+            document.body.appendChild(script);
+            
+            // Opcional: Puedes escuchar cuando el script se carga y ejecutar la función de actualización de gráficos si es necesario
+            script.onload = () => {
+              // Llama a la función de actualización de gráficos si es necesario
+              if (typeof updateCharts === 'function') {
+                updateCharts();
+              }
+            };
+          })
+          .catch(error => {
+            // Maneja el error y muestra un mensaje de error en lugar del loader
+            console.error('Error al cargar los datos:', error);
+            document.getElementById('modalContent').innerHTML = 'Error al cargar los datos';
+          });
+      }
+    </script>
 
     <script>
         document.getElementById('descargarPdf').addEventListener('click', function(event) {

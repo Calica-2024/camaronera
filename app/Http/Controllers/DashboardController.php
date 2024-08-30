@@ -156,9 +156,16 @@ class DashboardController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function metricasProd($id)
     {
-        //
+        $proyectoItems = ProyectoCultivo::where('id_produccion', $id)->orderBy('num_dia', 'asc')->get();
+        $produccionItems = ProyectoReal::where('id_produccion', $id)->whereDate('Fecha', '<=', Carbon::now())->orderBy('num_dia', 'asc')->get();
+
+        // Devuelve los datos en formato JSON
+        return response()->json([
+            'proyectoItems' => $proyectoItems,
+            'produccionItems' => $produccionItems
+        ]);
     }
 
     /**

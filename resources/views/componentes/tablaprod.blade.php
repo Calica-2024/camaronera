@@ -72,7 +72,7 @@
             <div class="card-body table-responsive p-0">
                 <table class="table table-head-fixed text-nowrap table-bordered table-striped table-hover">
                     <thead>
-                        <tr style="font-size: 14px">
+                        <tr class="text-uppercase" style="font-size: 14px">
                             <th class="fixed-column" style="width: 20px">Sem.</th>
                             <th class="fixed-column" style="width: 2%">#Día</th>
                             <th style="width: 20px">Fecha</th>
@@ -85,8 +85,8 @@
                             <th class="bg-warning" style="width: 20px">Alim. <br> Calc.</th>
                             <th style="width: 20px">% P.C.</th>
                             <th style="width: 20px">Dens. <br> Cons.</th>
-                            <th style="width: 20px" class="bg-warning">Dens. <br> Muest.</th>
-                            <th style="width: 20px" class="bg-warning">Dens. <br> Actual.</th>
+                            <th style="width: 20px" class="bg-warning">Dens. <br> ATA.</th>
+                            <th style="width: 20px" class="bg-warning">Dens. <br> BIO.</th>
                             <th style="width: 20px">% Sup.</th>
                             <th style="width: 20px">Dens. <br> Ral.</th>
                             <th style="width: 20px">BM <br> Ral.</th>

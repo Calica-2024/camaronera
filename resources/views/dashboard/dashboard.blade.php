@@ -133,7 +133,7 @@
             <div class="card-body table-responsive p-0" id="miDiv">
               <table class="table table-head-fixed text-nowrap table-bordered" id="grid" >
                 <thead>
-                  <tr>
+                  <tr class="text-uppercase">
                     <th data-type="number" style="background-color: #429dff">#PS <i class="fas"></i></th>
                     <th style="background-color: #429dff"><i class="fas fa-chart-bar"></i></th>
                     <th data-type="string" style="background-color: #429dff">Sem. <i class="fas"></i></th>
@@ -148,17 +148,17 @@
                     <th data-type="number" style="background-color: #4fb17887">Kg/ha<br>prom <i class="fas"></i></th>
                     <th data-type="number" style="background-color: #4fb17887">ind/M2 M <i class="fas"></i></th>
                     <th data-type="string" style="background-color: #4fb17887">Alerta <br> Alim <i class="fas"></i></th>
-                    <th data-type="number" style="background-color: #ff7878a6">Dens<br>bio <i class="fas"></i></th>
+                    <th data-type="number" style="background-color: #ff7878a6">Dens<br>BIO <i class="fas"></i></th>
                     <th data-type="number" style="background-color: #ff7878a6">Dens<br>ADM <i class="fas"></i></th>
-                    <th data-type="number" style="background-color: #ff7878a6">Pobl. <i class="fas"></i></th>
+                    <th data-type="number" style="background-color: #ff7878a6">Dens<br>ATA <i class="fas"></i></th>
                     <th data-type="number" style="background-color: #ff7878a6">Dens <br> Proy <i class="fas"></i></th>
+                    <th data-type="number" style="background-color: #ff7878a6">FCA <i class="fas"></i></th>
+                    <th data-type="number" style="background-color: #ff7878a6">FCA <br>Proy <i class="fas"></i></th>
                     <th data-type="number" style="background-color: #ff7878a6">Desvio <i class="fas"></i></th>
                     <th data-type="number" style="background-color: #ff7878a6">% SOB. <i class="fas"></i></th>
                     <th data-type="number" style="background-color: #ff7878a6">Lbs/ha <i class="fas"></i></th>
                     <th data-type="number" style="background-color: #ff7878a6">lbs/total <i class="fas"></i></th>
                     <th data-type="number" style="background-color: #ff7878a6">raleo <i class="fas"></i></th>
-                    <th data-type="number" style="background-color: #ff7878a6">FCA <i class="fas"></i></th>
-                    <th data-type="number" style="background-color: #ff7878a6">FCA <br>Proy <i class="fas"></i></th>
                   </tr>
                 </thead>
                 <tbody style="font-size: 20px; font-weight: bold;">
@@ -216,14 +216,13 @@
                       {{-- <td>{{ $proyecto->biomasa }}</td> --}}
                       <!-- aqui se resta con nuevo rpoy d -->
                       <td>{{ $proyecto->densidad }}</td>
+                      <td>{{ $item->fca }}</td>
+                      <td>{{ $proyecto->fca }}</td>
                       <td class="{{ $proyecto->densidad - $item->densidad_actual > 0 ? 'text-danger' : 'text-success' }}">{{ number_format($proyecto->densidad - $item->densidad_actual, 2) }}</td>
                       <td>{{ $item->supervivencia }}%</td>
                       <td>{{ $item->biomasa_actual }}</td>
                       <td>{{ $item->alimento }}</td>
                       <td>{{ $item->densidad_raleada }}</td>
-                      <td>{{ $item->fca }}</td>
-                      <td>{{ $proyecto->fca }}</td>
-
                     </tr>
                   @endforeach
                 </tbody>
@@ -240,9 +239,7 @@
                   </div>
                   <div class="modal-body">
                     <!-- Contenido del modal -->
-                    <p id="modalContent">Aquí va el contenido del modal.</p>
-                    
-                    
+                    <p id="modalContent">Metricas.</p>
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>

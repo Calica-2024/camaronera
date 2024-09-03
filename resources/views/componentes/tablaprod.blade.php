@@ -16,13 +16,16 @@
 
 <div>
     <div id="chartContainer" class="row">
-        <div class="col-md-4">
+        <div class="col-md-6">
+            <canvas id="balanceado" width="400" height="200"></canvas>
+        </div>
+        <div class="col-md-6">
             <canvas id="comparativeChart" width="400" height="200"></canvas>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-6">
             <canvas id="growthChart" width="400" height="200"></canvas>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-6">
             <canvas id="densityChart" width="400" height="200"></canvas>    
         </div>
     </div>
@@ -95,7 +98,7 @@
                             {{-- <th>ROI</th> --}}
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody style="font-size: 20px; font-weight: bold;">
                         @php
 
                             // Agrupar los registros por semanas (lunes a domingo)
@@ -463,7 +466,7 @@
                             {{-- <th>ROI</th> --}}
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody style="font-size: 20px; font-weight: bold;">
                         @foreach ($proyectoItems as $item)
                         <tr>
                             <td class="fixed-column"><a href="#" data-toggle="modal" data-target="#regProy{{ $item->id }}"><i class="fas fa-edit"></i> {{ $item->num_dia }}</a></td>

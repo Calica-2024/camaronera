@@ -140,28 +140,28 @@
                     <th data-type="string" style="background-color: #429dff">Tipo Bal <i class="fas"></i></th>
                     <th data-type="number" style="background-color: #ffdd79">ha <i class="fas"></i></th>
                     <th data-type="number" style="background-color: #ffdd79" onclick="sortGrid(3, 'number')">Días <i class="fas"></i></th>
-                    {{-- <th data-type="number" style="background-color: #ffdd79">Peso<br>Transf <i class="fas"></i></th> --}}
+                    <th data-type="number" style="background-color: #ffdd79">Peso<br>Transf <i class="fas"></i></th>
                     <th data-type="number" style="background-color: #ffdd79">Dens<br>Siembra <i class="fas"></i></th>
                     <th data-type="string" style="background-color: #4fb17887">Peso<br>Act <i class="fas"></i></th>
                     <th data-type="string" style="background-color: #4fb17887">Increm <i class="fas"></i></th>
                     <th data-type="string" style="background-color: #4fb17887">Inc. Prom.<br>3sem <i class="fas"></i></th>
-                    {{-- <th data-type="number" style="background-color: #4fb17887">Kg/ha<br>prom <i class="fas"></i></th> --}}
-                    {{-- <th data-type="number" style="background-color: #4fb17887">ind/M2 M <i class="fas"></i></th> --}}
+                    <th data-type="number" style="background-color: #4fb17887">Kg/ha<br>prom <i class="fas"></i></th>
+                    <th data-type="number" style="background-color: #4fb17887">ind/M2 M <i class="fas"></i></th>
                     <th data-type="string" style="background-color: #4fb17887">Alerta <br> Alim <i class="fas"></i></th>
                     <th data-type="number" style="background-color: #ff7878a6">Dens<br>bio <i class="fas"></i></th>
                     <th data-type="number" style="background-color: #ff7878a6">Dens<br>ADM <i class="fas"></i></th>
                     <th data-type="number" style="background-color: #ff7878a6">Pobl. <i class="fas"></i></th>
                     <th data-type="number" style="background-color: #ff7878a6">Dens <br> Proy <i class="fas"></i></th>
                     <th data-type="number" style="background-color: #ff7878a6">Desvio <i class="fas"></i></th>
-                    <th data-type="number" style="background-color: #ff7878a6">% SUP. <i class="fas"></i></th>
+                    <th data-type="number" style="background-color: #ff7878a6">% SOB. <i class="fas"></i></th>
                     <th data-type="number" style="background-color: #ff7878a6">Lbs/ha <i class="fas"></i></th>
                     <th data-type="number" style="background-color: #ff7878a6">lbs/total <i class="fas"></i></th>
-                    {{-- <th data-type="number" style="background-color: #ff7878a6">raleo <i class="fas"></i></th> --}}
+                    <th data-type="number" style="background-color: #ff7878a6">raleo <i class="fas"></i></th>
                     <th data-type="number" style="background-color: #ff7878a6">FCA <i class="fas"></i></th>
                     <th data-type="number" style="background-color: #ff7878a6">FCA <br>Proy <i class="fas"></i></th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody style="font-size: 20px; font-weight: bold;">
                   @foreach ($items as $item)
                     @php
                       $proyecto = $proyectoItems->where('id_produccion', $item->id_produccion)->where('num_dia', $item->num_dia)->first();
@@ -180,9 +180,9 @@
                       <td>{{ $item->balanceado->nombre }}</td>
                       <td>{{ $item->produccion->piscina->area_ha }}</td>
                       <td class="sortable">{{ $item->num_dia }}</td>
-                      {{-- <td>{{ $item->produccion->peso_transferencia }}</td> --}}
+                      <td>{{ $item->produccion->peso_transferencia }}</td>
                       <td>{{ $item->produccion->densidad }}</td>
-                      <td class="{{ $clasePeso }}"><i class="{{ $iconoPeso }}"></i> {{ $item->peso_real . '/' . $proyecto->peso_proyecto }}</td>
+                      <td class="{{ $clasePeso }}"><i class="{{ $iconoPeso }}"></i> {{ $item->peso_real }} {{-- $item->peso_real . '/' . $proyecto->peso_proyecto --}}</td>
                       {{-- <td>x</td> --}}
                       <td>{{ $item->peso_real_anterior }}</td>
                       <td class="{{ $item->inc3sem < $item->peso_real_anterior ? 'text-success' : 'text-danger' }}">
@@ -193,8 +193,8 @@
                         @endif
                           {{ number_format($item->inc3sem, 2) }}
                       </td>
-                      {{-- <td>{{ number_format($item->alimento/$item->produccion->piscina->area_ha, 2) }}</td> --}}
-                      {{-- <td>{{ $item->densidad_consumo }}</td> --}}
+                      <td>{{ number_format($item->alimento/$item->produccion->piscina->area_ha, 2) }}</td>
+                      <td>{{ $item->densidad_consumo }}</td>
                       <td>
                         @if ($proyecto->alimento_dia != 0)
                           @php
@@ -220,7 +220,7 @@
                       <td>{{ $item->supervivencia }}%</td>
                       <td>{{ $item->biomasa_actual }}</td>
                       <td>{{ $item->alimento }}</td>
-                      {{-- <td>{{ $item->densidad_raleada }}</td> --}}
+                      <td>{{ $item->densidad_raleada }}</td>
                       <td>{{ $item->fca }}</td>
                       <td>{{ $proyecto->fca }}</td>
 
@@ -309,13 +309,16 @@
             document.getElementById('modalContent').innerHTML = `
               <div>
                 <div id="chartContainer" class="row">
-                  <div class="col-md-6 col-lg-4">
+                  <div class="col-md-6 col-lg-6">
+                    <canvas id="balanceado" width="400" height="200"></canvas>
+                  </div>
+                  <div class="col-md-6 col-lg-6">
                     <canvas id="comparativeChart" width="400" height="200"></canvas>
                   </div>
-                  <div class="col-md-6 col-lg-4">
+                  <div class="col-md-6 col-lg-6">
                     <canvas id="growthChart" width="400" height="200"></canvas>
                   </div>
-                  <div class="col-md-6 col-lg-4">
+                  <div class="col-md-6 col-lg-6">
                     <canvas id="densityChart" width="400" height="200"></canvas>    
                   </div>
                 </div>
@@ -588,7 +591,7 @@
         value: value,
         min: min,
         max: max,
-        title: "Suprv Prom,",
+        title: "Sob Prom,",
         decimals: 2, // Mostrar dos decimales
       });
   </script>

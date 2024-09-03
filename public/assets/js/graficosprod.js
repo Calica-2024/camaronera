@@ -7,8 +7,8 @@ var registro = {
     produccion: {
         items: produccionItems.filter(item => item.dia === 'domingo')
     },
-    proyecto: {
-        items: proyectoItems.filter(item => item.dia === 'domingo')
+    balanceado: {
+        items: produccionItems.filter(item => item.dia === 'domingo')
     }
 };
 
@@ -20,17 +20,18 @@ var produccionCrecimientoData = [];
 var proyectoCrecimientoData = [];
 var produccionDensidadData = [];
 var proyectoDensidadData = [];
+var balanceadoReal = [];
 
 registro.produccion.items.forEach(prodItem => {
-    const projItem = registro.proyecto.items.find(proj => proj.fecha === prodItem.fecha);
+    const projItem = registro.balanceado.items.find(proj => proj.fecha === prodItem.fecha);
     if (projItem) {
         labels.push(prodItem.fecha);
         produccionPesoData.push(prodItem.peso_real);
-        proyectoPesoData.push(projItem.peso_proyecto);
+        balanceadoReal.push(projItem.alimento);
         produccionCrecimientoData.push(prodItem.peso_real_anterior);
-        proyectoCrecimientoData.push(projItem.crecimiento_lineal);
+        balanceadoReal.push(projItem.alimento);
         produccionDensidadData.push(prodItem.densidad_actual);
-        proyectoDensidadData.push(projItem.densidad);
+        balanceadoReal.push(projItem.alimento);
     }
 });
 
@@ -48,8 +49,8 @@ var comparativeChart = new Chart(ctxPeso, {
             fill: false
         },
         {
-            label: 'Proyecto (Peso)',
-            data: proyectoPesoData,
+            label: 'Balanceado (kg)',
+            data: balanceadoReal,
             borderColor: 'rgba(255, 99, 132, 1)',
             borderWidth: 1,
             fill: false
@@ -87,8 +88,8 @@ var growthChart = new Chart(ctxCrecimiento, {
             fill: false
         },
         {
-            label: 'Proyecto (Crecimiento)',
-            data: proyectoCrecimientoData,
+            label: 'Balanceado (kg)',
+            data: balanceadoReal,
             borderColor: 'rgba(255, 99, 132, 1)',
             borderWidth: 1,
             fill: false
@@ -127,8 +128,8 @@ var densityChart = new Chart(ctxDensidad, {
             fill: true
         },
         {
-            label: 'Proyecto (Densidad)',
-            data: proyectoDensidadData,
+            label: 'Producción (Peso)',
+            data: produccionPesoData,
             borderColor: 'rgba(255, 99, 132, 1)',
             backgroundColor: 'rgba(255, 99, 132, 0.2)',
             borderWidth: 1,
@@ -147,6 +148,40 @@ var densityChart = new Chart(ctxDensidad, {
                 title: {
                     display: true,
                     text: 'Densidad'
+                }
+            }
+        }
+    }
+});
+
+// Crear el gráfico de balanceado
+var ctxBalanceado = document.getElementById('balanceado').getContext('2d');
+var balanceado = new Chart(ctxBalanceado, {
+    type: 'line',
+    data: {
+        labels: labels,
+        datasets: [{
+            label: 'Balanceado (kg)',
+            data: balanceadoReal,
+            borderColor: 'rgb(157, 166, 0)',
+            borderWidth: 1,
+            fill: false, // Rellena el área bajo la línea
+            backgroundColor: 'rgb(157, 166, 0)', // Color de relleno
+            tension: 0 // Asegura que las líneas sean rectas
+        }]
+    },
+    options: {
+        scales: {
+            x: {
+                title: {
+                    display: true,
+                    text: 'Fecha'
+                }
+            },
+            y: {
+                title: {
+                    display: true,
+                    text: 'KG'
                 }
             }
         }

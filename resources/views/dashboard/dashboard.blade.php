@@ -107,6 +107,9 @@
           <input type="hidden" name="produccionesItems" value="{{ json_encode($produccionesItems) }}">
       </form>
       <a class="btn btn-primary" href="#" id="descargarPdf">Descargar PDF</a>
+
+      @include('componentes.graficosConsumo')
+
       <div class="row">
         <div class="col-md-2">
           <div id="pesotransf" class=""></div>
@@ -325,16 +328,16 @@
             document.getElementById('modalContent').innerHTML = `
               <div>
                 <div id="chartContainer" class="row">
-                  <div class="col-md-6 col-lg-6">
+                  <div class="col-md-6 col-lg-12">
                     <canvas id="balanceado" width="400" height="200"></canvas>
                   </div>
-                  <div class="col-md-6 col-lg-6">
+                  <div class="col-md-6 col-lg-4">
                     <canvas id="comparativeChart" width="400" height="200"></canvas>
                   </div>
-                  <div class="col-md-6 col-lg-6">
+                  <div class="col-md-6 col-lg-4">
                     <canvas id="growthChart" width="400" height="200"></canvas>
                   </div>
-                  <div class="col-md-6 col-lg-6">
+                  <div class="col-md-6 col-lg-4">
                     <canvas id="densityChart" width="400" height="200"></canvas>    
                   </div>
                 </div>

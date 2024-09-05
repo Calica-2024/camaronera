@@ -28,6 +28,9 @@
                             <a class="btn btn-info" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
                             Ver Parametros De Producción
                             </a>
+                            <a class="btn btn-primary" data-toggle="collapse" href="#chartContainer" role="button" aria-expanded="false" aria-controls="chartContainer">
+                                Ver Graficos
+                            </a>
                         </p>
                     </div>
                     <div class="col-sm-6">

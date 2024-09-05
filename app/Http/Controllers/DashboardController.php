@@ -168,6 +168,26 @@ class DashboardController extends Controller
         ]);
     }
 
+    public function alimentoPiscina($id)
+    {
+        // Recuperar los datos filtrados y ordenados
+        $produccionItems = ProyectoReal::where('id_produccion', $id)
+            ->whereDate('Fecha', '<=', Carbon::now())
+            ->orderBy('num_dia', 'asc')
+            ->get(['alimento', 'fecha']); // Seleccionar solo los campos necesarios
+    
+        // Transformar los datos para devolver solo los campos deseados
+        $resultados = $produccionItems->map(function ($item) {
+            return [
+                'alimento' => $item->alimento,
+                'fecha' => $item->fecha,
+            ];
+        });
+    
+        // Devuelve los datos en formato JSON
+        return response()->json($resultados);
+    }
+
     /**
      * Show the form for editing the specified resource.
      */

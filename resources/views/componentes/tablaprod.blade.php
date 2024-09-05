@@ -14,22 +14,23 @@
     }
 </style>
 
-<div>
-    <div id="chartContainer" class="row">
-        <div class="col-md-6">
-            <canvas id="balanceado" width="400" height="200"></canvas>
+<div id="chartContainer" class="collapse">
+    <div class="row">
+        <div class="col-md-12">
+            <canvas id="balanceado" width="400" style="height: 50rem"></canvas>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
             <canvas id="comparativeChart" width="400" height="200"></canvas>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
             <canvas id="growthChart" width="400" height="200"></canvas>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
             <canvas id="densityChart" width="400" height="200"></canvas>    
         </div>
     </div>
 </div>
+    
 
 <script>
     // Pasar los datos de PHP a JavaScript

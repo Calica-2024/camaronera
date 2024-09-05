@@ -175,11 +175,11 @@ class DashboardController extends Controller
             ->whereDate('Fecha', '<=', Carbon::now())
             ->orderBy('num_dia', 'asc')
             ->get(['alimento', 'fecha']); // Seleccionar solo los campos necesarios
-    
+
         // Transformar los datos para devolver solo los campos deseados
         $resultados = $produccionItems->map(function ($item) {
             return [
-                'alimento' => $item->alimento,
+                'alimento' => $item->alimento ?? 0, // Reemplaza null o valores ausentes por 0
                 'fecha' => $item->fecha,
             ];
         });

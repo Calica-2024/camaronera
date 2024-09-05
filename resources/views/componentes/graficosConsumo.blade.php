@@ -42,7 +42,7 @@ Consumo <i class="fas fa-chart-area"></i>
 <script>
     // Variable global para el gráfico
     let alimentoChart = null;
-    let selectedPiscinas = {}; // Objeto para almacenar las piscinas seleccionadas
+    let selectedPiscinas = {}; // Objeto para almacenar las piscinas seleccionadas con sus datos
   
     // Función para inicializar el gráfico
     function initializeChart() {
@@ -88,27 +88,27 @@ Consumo <i class="fas fa-chart-area"></i>
         // Genera la URL usando la función 'url()' de Laravel directamente en Blade
         const url = `{{ url('alimentoPiscinas') }}/${itemId}`;
   
-        try {
-          // Ejecuta la solicitud AJAX GET a la ruta generada
-          const response = await fetch(url);
-          if (!response.ok) {
-            throw new Error('Error al cargar los datos');
-          }
-          const data = await response.json();
-          console.log('Datos recibidos:', data);
+        // Verificar si los datos ya están cargados
+        if (!selectedPiscinas[numeroPiscina]) {
+          try {
+            // Ejecuta la solicitud AJAX GET a la ruta generada
+            const response = await fetch(url);
+            if (!response.ok) {
+              throw new Error('Error al cargar los datos');
+            }
+            const data = await response.json();
+            console.log('Datos recibidos:', data);
   
-          // Verifica si los datos recibidos son un array y contienen los campos esperados
-          if (Array.isArray(data) && data.every(item => item.alimento !== undefined && item.fecha !== undefined)) {
-            // Extraer fechas y alimentos de los datos recibidos
-            const fechas = data.map(item => item.fecha);
-            const alimentos = data.map(item => item.alimento);
+            // Verifica si los datos recibidos son un array y contienen los campos esperados
+            if (Array.isArray(data) && data.every(item => item.alimento !== undefined && item.fecha !== undefined)) {
+              // Extraer fechas y alimentos de los datos recibidos
+              const fechas = data.map(item => item.fecha);
+              const alimentos = data.map(item => item.alimento);
   
-            // Inicializar el gráfico si no se ha creado
-            initializeChart();
+              // Inicializar el gráfico si no se ha creado
+              initializeChart();
   
-            // Agregar o actualizar el dataset para la piscina seleccionada
-            if (!selectedPiscinas[numeroPiscina]) {
-              // Crear un nuevo dataset para la piscina
+              // Agregar el dataset para la piscina seleccionada
               selectedPiscinas[numeroPiscina] = {
                 label: `Piscina #${numeroPiscina}`,
                 data: alimentos,
@@ -116,38 +116,30 @@ Consumo <i class="fas fa-chart-area"></i>
                 borderWidth: 1,
                 fill: false,
                 backgroundColor: getRandomColor(),
-                tension: 0
+                tension: 0,
+                fechas: fechas // Guardar fechas asociadas
               };
               // Agregar el nuevo dataset al gráfico
               alimentoChart.data.datasets.push(selectedPiscinas[numeroPiscina]);
+  
+              // Actualizar etiquetas (fechas) para que correspondan a las fechas de las piscinas seleccionadas
+              updateChartLabels();
+  
+              // Actualizar el gráfico
+              alimentoChart.update();
             } else {
-              // Actualizar el dataset existente
-              const existingDataset = alimentoChart.data.datasets.find(dataset => dataset.label === `Piscina #${numeroPiscina}`);
-              if (existingDataset) {
-                existingDataset.data = alimentos;
-              }
+              console.error('Datos recibidos no tienen el formato esperado:', data);
             }
-  
-            // Actualizar etiquetas (fechas) para que correspondan a las fechas de las piscinas seleccionadas
-            const allDates = [];
-            for (const dataset of Object.values(selectedPiscinas)) {
-              // Añadir fechas del dataset actual
-              allDates.push(...data.map(item => item.fecha));
-            }
-  
-            // Eliminar fechas duplicadas
-            const uniqueDates = [...new Set(allDates)];
-  
-            // Asignar fechas únicas a las etiquetas del gráfico
-            alimentoChart.data.labels = uniqueDates;
-  
-            // Actualizar el gráfico
-            alimentoChart.update();
-          } else {
-            console.error('Datos recibidos no tienen el formato esperado:', data);
+          } catch (error) {
+            console.error('Error al obtener los datos:', error);
           }
-        } catch (error) {
-          console.error('Error al obtener los datos:', error);
+        } else {
+          // Si los datos ya están cargados, solo agregar el dataset al gráfico si no está ya en el gráfico
+          if (!alimentoChart.data.datasets.find(dataset => dataset.label === `Piscina #${numeroPiscina}`)) {
+            alimentoChart.data.datasets.push(selectedPiscinas[numeroPiscina]);
+            updateChartLabels();
+            alimentoChart.update();
+          }
         }
       } else {
         button.classList.remove('btn-secondary');
@@ -158,11 +150,29 @@ Consumo <i class="fas fa-chart-area"></i>
         if (index !== -1) {
           alimentoChart.data.datasets.splice(index, 1);
           delete selectedPiscinas[numeroPiscina];
-          
+  
+          // Actualizar las etiquetas (fechas) después de eliminar un dataset
+          updateChartLabels();
+  
           // Actualizar el gráfico después de eliminar el dataset
           alimentoChart.update();
         }
       }
+    }
+  
+    // Función para actualizar las etiquetas (fechas) en el gráfico
+    function updateChartLabels() {
+      // Obtener todas las fechas de los datasets seleccionados
+      const allDates = [];
+      for (const dataset of Object.values(selectedPiscinas)) {
+        allDates.push(...dataset.fechas);
+      }
+  
+      // Eliminar fechas duplicadas
+      const uniqueDates = [...new Set(allDates)];
+  
+      // Asignar fechas únicas a las etiquetas del gráfico
+      alimentoChart.data.labels = uniqueDates;
     }
   
     // Función para generar un color aleatorio

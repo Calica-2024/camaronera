@@ -9,7 +9,9 @@ var registro = {
     },
     balanceado: {
         items: produccionItems.filter(item => item.dia === 'domingo')
-    }
+    },
+    todosAlimentos: produccionItems.map(item => item.alimento || 0), // Completar con 0 si no hay alimento
+    todosLabels: produccionItems.map(item => item.fecha) 
 };
 
 // Preparar los datos para el gráfico de peso
@@ -159,10 +161,10 @@ var ctxBalanceado = document.getElementById('balanceado').getContext('2d');
 var balanceado = new Chart(ctxBalanceado, {
     type: 'line',
     data: {
-        labels: labels,
+        labels: registro.todosLabels,
         datasets: [{
             label: 'Balanceado (kg)',
-            data: balanceadoReal,
+            data: registro.todosAlimentos,
             borderColor: 'rgb(157, 166, 0)',
             borderWidth: 1,
             fill: false, // Rellena el área bajo la línea

@@ -169,7 +169,7 @@
                       $iconoPeso = $item->peso_real > $proyecto->peso_proyecto ? 'fas fa-check' : 'fas fa-arrow-up';
                       //$anterior = $itemAnteriores->where('id_produccion', $item->id_produccion)->first();
                     @endphp
-                    <tr>
+                    <tr onclick="selectRow(this)">
                       <td><a href="{{ url('producciones/'.$item->id_produccion) }}">{{ $item->produccion->piscina->numero }} <i class="fas fa-sign-in-alt"></i></a></td>
                       <td>
                         <button type="button" class="btn btn-link p-0" onclick="openModal('{{ $item->id_produccion }}')">
@@ -271,8 +271,27 @@
         .custom-modal .modal-body {
           overflow-y: auto; /* Permite el scroll si el contenido es más largo que la altura del modal */
         }
+
+      .selected-row {
+          background-color: rgb(179, 179, 179);
+      }
       </style>
     </section>
+
+    <script>
+      function selectRow(row) {
+        // Obtener todas las filas de la tabla
+        var rows = document.querySelectorAll('tbody tr');
+
+        // Quitar la clase 'selected-row' de todas las filas
+        rows.forEach(function(r) {
+            r.classList.remove('selected-row');
+        });
+
+        // Añadir la clase 'selected-row' a la fila seleccionada
+        row.classList.add('selected-row');
+      }
+    </script>
 
     <script>
       function openModal(productionId) {
@@ -402,22 +421,22 @@
 
     <!-- Script para generar el PDF -->
     <script>
-      document.getElementById('descargarPdf').addEventListener('click', () => {
-          // Seleccionar el div que quieres convertir a PDF
-          var elemento = document.getElementById('miDiv');
-
-          // Opciones para html2pdf
-          var opciones = {
-              margin: 0.1, // Márgenes reducidos a 0.25 pulgadas en todos los lados
-              filename: 'documento.pdf',
-              image: { type: 'jpeg', quality: 0.98 },
-              html2canvas: { scale: 2 },
-              jsPDF: { unit: 'in', format: 'A4', orientation: 'landscape' } // Cambiar a orientación horizontal
-          };
-
-          // Generar el PDF
-          html2pdf().set(opciones).from(elemento).save();
-      });
+      //document.getElementById('descargarPdf').addEventListener('click', () => {
+      //    // Seleccionar el div que quieres convertir a PDF
+      //    var elemento = document.getElementById('miDiv');
+//
+      //    // Opciones para html2pdf
+      //    var opciones = {
+      //        margin: 0.1, // Márgenes reducidos a 0.25 pulgadas en todos los lados
+      //        filename: 'documento.pdf',
+      //        image: { type: 'jpeg', quality: 0.98 },
+      //        html2canvas: { scale: 2 },
+      //        jsPDF: { unit: 'in', format: 'A4', orientation: 'landscape' } // Cambiar a orientación horizontal
+      //    };
+//
+      //    // Generar el PDF
+      //    html2pdf().set(opciones).from(elemento).save();
+      //});
   </script>
   <script>
       // Convertir el JSON PHP a un array de JavaScript

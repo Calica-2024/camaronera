@@ -132,6 +132,11 @@
       </div>
       <div class="row">
         <div class="col-12">
+          <div>
+            <label>
+              <input type="checkbox" id="filtroMortalidad"> Mostrar solo mortalidad mayor a 8
+            </label>
+          </div>
           <div class="card">
             <div class="card-body table-responsive p-0" id="miDiv">
               <table class="table table-head-fixed text-nowrap table-bordered" id="grid" >
@@ -162,6 +167,7 @@
                     <th data-type="number" style="background-color: #ff7878a6">Lbs/ha <i class="fas"></i></th>
                     <th data-type="number" style="background-color: #ff7878a6">lbs/total <i class="fas"></i></th>
                     <th data-type="number" style="background-color: #ff7878a6">raleo <i class="fas"></i></th>
+                    <th data-type="number" style="background-color: #ff7878a6">mortalidad <i class="fas"></i></th>
                   </tr>
                 </thead>
                 <tbody style="font-size: 20px; font-weight: bold;">
@@ -172,7 +178,7 @@
                       $iconoPeso = $item->peso_real > $proyecto->peso_proyecto ? 'fas fa-check' : 'fas fa-arrow-up';
                       //$anterior = $itemAnteriores->where('id_produccion', $item->id_produccion)->first();
                     @endphp
-                    <tr onclick="selectRow(this)">
+                    <tr onclick="selectRow(this)" aria-label="{{ $item->mortalidad ?? 0 }}">
                       <td><a href="{{ url('producciones/'.$item->id_produccion) }}">{{ $item->produccion->piscina->numero }} <i class="fas fa-sign-in-alt"></i></a></td>
                       <td>
                         <button type="button" class="btn btn-link p-0" onclick="openModal('{{ $item->id_produccion }}')">
@@ -226,6 +232,7 @@
                       <td>{{ $item->biomasa_actual }}</td>
                       <td>{{ $item->alimento }}</td>
                       <td>{{ $item->densidad_raleada }}</td>
+                      <td class="mortalidad-cell {{ $item->mortalidad > 8 ? 'text-danger' : 'text-success' }}" data-mortalidad="{{ $item->mortalidad }}">{{ $item->mortalidad > 8 ? 'Mortalidad' : 'Normal' }}</td>
                     </tr>
                   @endforeach
                 </tbody>
@@ -278,6 +285,10 @@
       .selected-row {
           background-color: rgb(179, 179, 179);
       }
+      .ocultar-fila {
+          display: none;
+      }
+      
       </style>
     </section>
 
@@ -294,6 +305,44 @@
         // Añadir la clase 'selected-row' a la fila seleccionada
         row.classList.add('selected-row');
       }
+
+      document.addEventListener('DOMContentLoaded', function() {
+    var filtroMortalidad = document.getElementById('filtroMortalidad');
+    
+    filtroMortalidad.addEventListener('change', function() {
+        var filtroActivo = this.checked; // Estado del checkbox
+        console.log("Filtro activo:", filtroActivo); // Depuración
+        
+        var filas = document.querySelectorAll('#grid tbody tr');
+        
+        filas.forEach(function(fila) {
+            var mortalidadStr = fila.getAttribute('aria-label');
+            console.log("Valor original de aria-label:", mortalidadStr); // Depuración
+            
+            var mortalidad = parseFloat(mortalidadStr);
+            console.log("Mortalidad convertida:", mortalidad); // Depuración
+
+            if (!isNaN(mortalidad)) {
+                if (filtroActivo) {
+                    // Si el filtro está activo, añade la clase si mortalidad <= 8
+                    if (mortalidad > 8) {
+                        fila.classList.remove('ocultar-fila');
+                    } else {
+                        fila.classList.add('ocultar-fila');
+                    }
+                } else {
+                    // Si el filtro no está activo, elimina la clase para mostrar todas las filas
+                    fila.classList.remove('ocultar-fila');
+                }
+            } else {
+                // Si mortalidad no es un número válido, asegura que la fila sea visible
+                fila.classList.remove('ocultar-fila');
+            }
+        });
+    });
+});
+
+
     </script>
 
     <script>

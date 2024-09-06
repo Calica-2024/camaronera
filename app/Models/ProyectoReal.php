@@ -25,6 +25,7 @@ class ProyectoReal extends Model
         'densidad_muestreo',
         'densidad_actual',
         'densidad_oficina',
+        'mortalidad',
         'supervivencia',
         'densidad_raleada',
         'densidad_raleada_acumulada',

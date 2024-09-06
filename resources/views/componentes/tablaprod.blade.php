@@ -397,11 +397,11 @@
                                                             @endif
                                                         </div>
                                                         <div class="col-md-4 col-sm-6 form-group">
-                                                            <label for="hora" style="font-size: 13px">Dens. Oficina</label>
-                                                            <input type="text" name="hora" class="form-control @error('hora') is-invalid @enderror" id="hora"  value="{{ $item->hora }}" oninput="decimales(this)">
-                                                            @if ($errors->has('hora'))
+                                                            <label for="mortalidad" style="font-size: 13px">Mortalidad</label>
+                                                            <input type="text" name="mortalidad" class="form-control @error('mortalidad') is-invalid @enderror" id="mortalidad"  value="{{ $item->mortalidad }}" oninput="decimales(this)">
+                                                            @if ($errors->has('mortalidad'))
                                                                 <div class="invalid-feedback" style="display: inline !important">
-                                                                    @foreach ($errors->get('hora') as $error)
+                                                                    @foreach ($errors->get('mortalidad') as $error)
                                                                         {{ $error }}<br>
                                                                     @endforeach
                                                                 </div>

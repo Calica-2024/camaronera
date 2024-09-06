@@ -297,7 +297,7 @@ class ProyectoRealController extends Controller
                 'regex:/^\d+(\.\d{1,2})?$/',
                 'min:0'
             ],
-            'densidad_oficina' => [
+            'mortalidad' => [
                 'nullable',
                 'numeric',
                 'regex:/^\d+(\.\d{1,2})?$/',

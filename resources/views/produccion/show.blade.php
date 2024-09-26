@@ -33,6 +33,45 @@
                             </a>
                         </p>
                     </div>
+                    <div class="card-body table-responsive p-0">
+                        <table class="table table-bordered text-center text-uppercase">
+                            <thead>
+                                <th>Peso (g)</th>
+                                <th>DIAS</th>
+                                <th>Lineal</th>
+                                <th>Sob. %</th>
+                                <th>FCA</th>
+                                <th>LB/HA</th>
+                            </thead>
+                            <tbody>
+                                @php
+                                    // Obtener el último elemento cuyo día sea "domingo"
+                                    $ultimoElemento = $produccionItems->filter(function($item) {
+                                        return $item->dia === 'domingo';
+                                    })->last();
+                                @endphp
+                                <td>
+                                    {{ $ultimoElemento->peso_real }}
+                                </td>
+                                <td>
+                                    {{ $ultimoElemento->num_dia }}
+                                </td>
+                                <td>
+                                    {{-- Verificar que num_dia no sea 0 para evitar división por cero --}}
+                                    {{ $ultimoElemento->num_dia != 0 ? number_format($ultimoElemento->peso_real / ($ultimoElemento->num_dia / 7), 2) : 'N/A' }}
+                                </td>
+                                <td>
+                                    {{ $ultimoElemento->supervivencia }} %
+                                </td>
+                                <td>
+                                    {{ $ultimoElemento->fca }}
+                                </td>
+                                <td>
+                                    {{ number_format($ultimoElemento->biomasa_actual/$produccion->piscina->area_ha, 2) }}
+                                </td>
+                            </tbody>
+                        </table>
+                    </div>
                     <div class="col-sm-6">
                         {{-- 
                         @php 

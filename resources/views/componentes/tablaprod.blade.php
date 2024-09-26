@@ -364,7 +364,7 @@
                                                             @endif
                                                         </div>
                                                         <div class="col-md-4 col-sm-6 form-group">
-                                                            <label for="densidad_muestreo" style="font-size: 13px">Dens. Muestreo</label>
+                                                            <label for="densidad_muestreo" style="font-size: 13px">Dens. Atarraya</label>
                                                             <input type="text" name="densidad_muestreo" class="form-control @error('densidad_muestreo') is-invalid @enderror" id="densidad_muestreo"  value="{{ $item->densidad_muestreo }}" oninput="decimales(this)">
                                                             @if ($errors->has('densidad_muestreo'))
                                                                 <div class="invalid-feedback" style="display: inline !important">
@@ -375,7 +375,7 @@
                                                             @endif
                                                         </div>
                                                         <div class="col-md-4 col-sm-6 form-group">
-                                                            <label for="densidad_actual" style="font-size: 13px">Dens. Actual</label>
+                                                            <label for="densidad_actual" style="font-size: 13px">Dens. Biologo</label>
                                                             <input type="text" name="densidad_actual" class="form-control @error('densidad_actual') is-invalid @enderror" id="densidad_actual"  value="{{ $item->densidad_actual }}" oninput="decimales(this)">
                                                             @if ($errors->has('densidad_actual'))
                                                                 <div class="invalid-feedback" style="display: inline !important">

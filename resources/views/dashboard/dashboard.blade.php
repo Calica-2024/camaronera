@@ -150,12 +150,12 @@
                     <th data-type="number" style="background-color: #ffdd79" onclick="sortGrid(3, 'number')">Días <i class="fas"></i></th>
                     <th data-type="number" style="background-color: #ffdd79">Peso<br>Transf <i class="fas"></i></th>
                     <th data-type="number" style="background-color: #ffdd79">Dens<br>Siembra <i class="fas"></i></th>
-                    <th data-type="string" style="background-color: #4fb17887">Peso<br>Act <i class="fas"></i></th>
+                    <th data-type="number" style="background-color: #4fb17887">Peso<br>Act <i class="fas"></i></th>
                     <th data-type="string" style="background-color: #4fb17887">Increm <i class="fas"></i></th>
-                    <th data-type="string" style="background-color: #4fb17887">Inc. Prom.<br>3sem <i class="fas"></i></th>
+                    <th data-type="number" style="background-color: #4fb17887">Inc. Prom.<br>3sem <i class="fas"></i></th>
                     <th data-type="number" style="background-color: #4fb17887">Kg/ha<br>prom <i class="fas"></i></th>
                     <th data-type="number" style="background-color: #4fb17887">ind/M2 M <i class="fas"></i></th>
-                    <th data-type="string" style="background-color: #4fb17887">Alerta <br> Alim <i class="fas"></i></th>
+                    <th data-type="number" style="background-color: #4fb17887">Alerta <br> Alim <i class="fas"></i></th>
                     <th data-type="number" style="background-color: #ff7878a6">Dens<br>BIO <i class="fas"></i></th>
                     <th data-type="number" style="background-color: #ff7878a6">Dens<br>ADM <i class="fas"></i></th>
                     <th data-type="number" style="background-color: #ff7878a6">Dens<br>ATA <i class="fas"></i></th>
@@ -179,7 +179,7 @@
                       //$anterior = $itemAnteriores->where('id_produccion', $item->id_produccion)->first();
                     @endphp
                     <tr onclick="selectRow(this)" aria-label="{{ $item->mortalidad ?? 0 }}">
-                      <td><a href="{{ url('producciones/'.$item->id_produccion) }}">{{ $item->produccion->piscina->numero }} <i class="fas fa-sign-in-alt"></i></a></td>
+                      <td>{{ $item->produccion->piscina->numero }}<a href="{{ url('producciones/'.$item->id_produccion) }}"><i class="fas fa-sign-in-alt fs-5"></i></a></td>
                       <td>
                         <button type="button" class="btn btn-link p-0" onclick="openModal('{{ $item->id_produccion }}')">
                           <i class="fas fa-chart-bar"></i>
@@ -191,34 +191,32 @@
                       <td class="sortable">{{ $item->num_dia }}</td>
                       <td>{{ $item->produccion->peso_transferencia }}</td>
                       <td>{{ $item->produccion->densidad }}</td>
-                      <td class="{{ $clasePeso }}"><i class="{{ $iconoPeso }}"></i> {{ $item->peso_real }} {{-- $item->peso_real . '/' . $proyecto->peso_proyecto --}}</td>
+                      <td class="{{ $clasePeso }}"> {{ $item->peso_real }} <i class="{{ $iconoPeso }}"></i></td>
                       {{-- <td>x</td> --}}
                       <td>{{ $item->peso_real_anterior }}</td>
                       <td class="{{ $item->inc3sem < $item->peso_real_anterior ? 'text-success' : 'text-danger' }}">
-                        @if ($item->inc3sem < $item->peso_real_anterior)
-                            <span>&uarr;</span> <!-- Flecha hacia arriba -->
-                        @elseif ($item->inc3sem > $item->peso_real_anterior)
-                            <span>&darr;</span> <!-- Flecha hacia abajo -->
-                        @endif
                           {{ number_format($item->inc3sem, 2) }}
+                          @if ($item->inc3sem < $item->peso_real_anterior)
+                              <span>&uarr;</span> <!-- Flecha hacia arriba -->
+                          @elseif ($item->inc3sem > $item->peso_real_anterior)
+                              <span>&darr;</span> <!-- Flecha hacia abajo -->
+                          @endif
                       </td>
                       <td>{{ number_format($item->alimento/$item->produccion->piscina->area_ha, 2) }}</td>
                       <td>{{ $item->densidad_consumo }}</td>
-                      <td>
-                        @if ($proyecto->alimento_dia != 0)
-                          @php
-                            $diferencia = (($item->alimento - $proyecto->alimento_dia) / $proyecto->alimento_dia) * 100;
-                            $clase = $diferencia < 0 ? 'text-danger' : 'text-success';
-                            $icono = $diferencia < 0 ? 'fa-arrow-up' : 'fa-check';
-                          @endphp
-                          <span class="{{ $clase }}">
-                            <i class="fas {{ $icono }}"></i>
+                      @if ($proyecto->alimento_dia != 0)
+                        @php
+                          $diferencia = (($item->alimento - $proyecto->alimento_dia) / $proyecto->alimento_dia) * 100;
+                          $clase = $diferencia < 0 ? 'text-danger' : 'text-success';
+                          $icono = $diferencia < 0 ? 'fa-arrow-up' : 'fa-check';
+                        @endphp
+                        <td class="{{ $clase }}">
                             {{ number_format($diferencia, 2) }}%
-                          </span>
-                        @else
-                          N/A
-                        @endif
-                      </td>
+                            <i class="fas {{ $icono }}"></i>
+                        </td>
+                      @else
+                        <td>N/A</td>
+                      @endif
                       <td>{{ $item->densidad_actual }}</td>
                       <td>{{ $item->densidad_oficina }}</td>
                       <td>{{ $item->densidad_muestreo }}</td>
@@ -240,11 +238,11 @@
             </div>
 
             <!-- Modal fuera del foreach -->
-            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal fade" id="produccionMOdal" tabindex="-1" aria-labelledby="produccionMOdalLabel" aria-hidden="true">
               <div class="modal-dialog modal-xl custom-modal">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Detalles de la Producción</h5>
+                    <h5 class="modal-title" id="produccionMOdalLabel">Detalles de la Producción</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   </div>
                   <div class="modal-body">
@@ -348,7 +346,7 @@
     <script>
       function openModal(productionId) {
         // Muestra el modal
-        var modal = new bootstrap.Modal(document.getElementById('exampleModal'));
+        var modal = new bootstrap.Modal(document.getElementById('produccionMOdal'));
         modal.show();
     
         // Imprime un mensaje en la consola

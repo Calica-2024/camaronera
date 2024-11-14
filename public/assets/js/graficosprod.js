@@ -49,13 +49,6 @@ var comparativeChart = new Chart(ctxPeso, {
             borderColor: 'rgba(75, 192, 192, 1)',
             borderWidth: 1,
             fill: false
-        },
-        {
-            label: 'Balanceado (kg)',
-            data: balanceadoReal,
-            borderColor: 'rgba(255, 99, 132, 1)',
-            borderWidth: 1,
-            fill: false
         }]
     },
     options: {
@@ -85,13 +78,6 @@ var growthChart = new Chart(ctxCrecimiento, {
         datasets: [{
             label: 'Producción (Crecimiento)',
             data: produccionCrecimientoData,
-            borderColor: 'rgba(75, 192, 192, 1)',
-            borderWidth: 1,
-            fill: false
-        },
-        {
-            label: 'Balanceado (kg)',
-            data: balanceadoReal,
             borderColor: 'rgba(255, 99, 132, 1)',
             borderWidth: 1,
             fill: false
@@ -126,14 +112,6 @@ var densityChart = new Chart(ctxDensidad, {
             data: produccionDensidadData,
             borderColor: 'rgba(75, 192, 192, 1)',
             backgroundColor: 'rgba(75, 192, 192, 0.2)',
-            borderWidth: 1,
-            fill: true
-        },
-        {
-            label: 'Producción (Peso)',
-            data: produccionPesoData,
-            borderColor: 'rgba(255, 99, 132, 1)',
-            backgroundColor: 'rgba(255, 99, 132, 0.2)',
             borderWidth: 1,
             fill: true
         }]

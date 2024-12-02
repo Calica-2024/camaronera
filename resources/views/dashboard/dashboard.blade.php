@@ -157,7 +157,7 @@
                     <th data-type="number" style="background-color: #4fb17887">ind/M2 M <i class="fas"></i></th>
                     <th data-type="number" style="background-color: #4fb17887">Alerta <br> Alim <i class="fas"></i></th>
                     <th data-type="number" style="background-color: #ff7878a6">Dens<br>BIO <i class="fas"></i></th>
-                    <th data-type="number" style="background-color: #ff7878a6">Dens<br>ADM <i class="fas"></i></th>
+                    <th data-type="number" style="background-color: #ff7878a6">Dens<br>CONS <i class="fas"></i></th>
                     <th data-type="number" style="background-color: #ff7878a6">Dens<br>ATA <i class="fas"></i></th>
                     <th data-type="number" style="background-color: #ff7878a6">Dens <br> Proy <i class="fas"></i></th>
                     <th data-type="number" style="background-color: #ff7878a6">FCA <i class="fas"></i></th>
@@ -179,22 +179,22 @@
                       //$anterior = $itemAnteriores->where('id_produccion', $item->id_produccion)->first();
                     @endphp
                     <tr onclick="selectRow(this)" aria-label="{{ $item->mortalidad ?? 0 }}">
-                      <td>{{ $item->produccion->piscina->numero }}<a href="{{ url('producciones/'.$item->id_produccion) }}"><i class="fas fa-sign-in-alt fs-5"></i></a></td>
-                      <td>
+                      <td style="background-color: #d8e5f3">{{ $item->produccion->piscina->numero }}<a href="{{ url('producciones/'.$item->id_produccion) }}"><i class="fas fa-sign-in-alt fs-5"></i></a></td>
+                      <td style="background-color: #d8e5f3">
                         <button type="button" class="btn btn-link p-0" onclick="openModal('{{ $item->id_produccion }}')">
                           <i class="fas fa-chart-bar"></i>
                         </button>
                       </td>
-                      <td>{{ Carbon::parse($item->fecha)->weekOfYear }}</td>
-                      <td>{{ $item->balanceado->nombre }}</td>
-                      <td>{{ $item->produccion->piscina->area_ha }}</td>
-                      <td class="sortable">{{ $item->num_dia }}</td>
-                      <td>{{ $item->produccion->peso_transferencia }}</td>
-                      <td>{{ $item->produccion->densidad }}</td>
-                      <td class="{{ $clasePeso }}"> {{ $item->peso_real }} <i class="{{ $iconoPeso }}"></i></td>
+                      <td style="background-color: #d8e5f3">{{ Carbon::parse($item->fecha)->weekOfYear }}</td>
+                      <td style="background-color: #d8e5f3">{{ $item->balanceado->nombre }}</td>
+                      <td style="background-color: #fff7dd">{{ $item->produccion->piscina->area_ha }}</td>
+                      <td style="background-color: #fff7dd" class="sortable">{{ $item->num_dia }}</td>
+                      <td style="background-color: #fff7dd">{{ $item->produccion->peso_transferencia }}</td>
+                      <td style="background-color: #fff7dd">{{ $item->produccion->densidad }}</td>
+                      <td style="background-color: #ceffe287" class="{{ $clasePeso }}"> {{ $item->peso_real }} <i class="{{ $iconoPeso }}"></i></td>
                       {{-- <td>x</td> --}}
-                      <td>{{ $item->peso_real_anterior }}</td>
-                      <td class="{{ $item->inc3sem < $item->peso_real_anterior ? 'text-success' : 'text-danger' }}">
+                      <td style="background-color: #ceffe287">{{ $item->peso_real_anterior }}</td>
+                      <td style="background-color: #ceffe287" class="{{ $item->inc3sem < $item->peso_real_anterior ? 'text-success' : 'text-danger' }}">
                           {{ number_format($item->inc3sem, 2) }}
                           @if ($item->inc3sem < $item->peso_real_anterior)
                               <span>&uarr;</span> <!-- Flecha hacia arriba -->
@@ -202,35 +202,35 @@
                               <span>&darr;</span> <!-- Flecha hacia abajo -->
                           @endif
                       </td>
-                      <td>{{ number_format($item->alimento/$item->produccion->piscina->area_ha, 2) }}</td>
-                      <td>{{ $item->densidad_consumo }}</td>
+                      <td style="background-color: #ceffe287">{{ number_format($item->alimento/$item->produccion->piscina->area_ha, 2) }}</td>
+                      <td style="background-color: #ceffe287">{{ $item->densidad_consumo }}</td>
                       @if ($proyecto->alimento_dia != 0)
                         @php
                           $diferencia = (($item->alimento - $proyecto->alimento_dia) / $proyecto->alimento_dia) * 100;
                           $clase = $diferencia < 0 ? 'text-danger' : 'text-success';
                           $icono = $diferencia < 0 ? 'fa-arrow-up' : 'fa-check';
                         @endphp
-                        <td class="{{ $clase }}">
+                        <td style="background-color: #ceffe287" class="{{ $clase }}">
                             {{ number_format($diferencia, 2) }}%
                             <i class="fas {{ $icono }}"></i>
                         </td>
                       @else
-                        <td>N/A</td>
+                        <td style="background-color: #ceffe287">N/A</td>
                       @endif
-                      <td>{{ $item->densidad_actual }}</td>
-                      <td>{{ $item->densidad_oficina }}</td>
-                      <td>{{ $item->densidad_muestreo }}</td>
+                      <td style="background-color: #ffe3e3a6">{{ $item->densidad_actual }}</td>
+                      <td style="background-color: #ffe3e3a6">{{ $item->densidad_consumo }}</td>
+                      <td style="background-color: #ffe3e3a6">{{ $item->densidad_muestreo }}</td>
                       {{-- <td>{{ $proyecto->biomasa }}</td> --}}
                       <!-- aqui se resta con nuevo rpoy d -->
-                      <td>{{ $proyecto->densidad }}</td>
-                      <td>{{ $item->fca }}</td>
-                      <td>{{ $proyecto->fca }}</td>
-                      <td class="{{ $proyecto->densidad - $item->densidad_actual > 0 ? 'text-danger' : 'text-success' }}">{{ number_format($proyecto->densidad - $item->densidad_actual, 2) }}</td>
-                      <td>{{ $item->supervivencia }}%</td>
-                      <td>{{ $item->biomasa_actual }}</td>
-                      <td>{{ $item->alimento }}</td>
-                      <td>{{ $item->densidad_raleada }}</td>
-                      <td class="mortalidad-cell {{ $item->mortalidad > 8 ? 'text-danger' : 'text-success' }}" data-mortalidad="{{ $item->mortalidad }}">{{ $item->mortalidad > 8 ? 'Mortalidad' : 'Normal' }}</td>
+                      <td style="background-color: #ffe3e3a6">{{ $proyecto->densidad }}</td>
+                      <td style="background-color: #ffe3e3a6">{{ $item->fca }}</td>
+                      <td style="background-color: #ffe3e3a6">{{ $proyecto->fca }}</td>
+                      <td style="background-color: #ffe3e3a6" class="{{ $proyecto->densidad - $item->densidad_actual > 0 ? 'text-danger' : 'text-success' }}">{{ number_format($proyecto->densidad - $item->densidad_actual, 2) }}</td>
+                      <td style="background-color: #ffe3e3a6">{{ $item->supervivencia }}%</td>
+                      <td style="background-color: #ffe3e3a6">{{ $item->biomasa_actual }}</td>
+                      <td style="background-color: #ffe3e3a6">{{ $item->alimento }}</td>
+                      <td style="background-color: #ffe3e3a6">{{ $item->densidad_raleada }}</td>
+                      <td style="background-color: #ffe3e3a6" class="mortalidad-cell {{ $item->mortalidad > 8 ? 'text-danger' : 'text-success' }}" data-mortalidad="{{ $item->mortalidad }}">{{ $item->mortalidad > 8 ? 'Mortalidad' : 'Normal' }}</td>
                     </tr>
                   @endforeach
                 </tbody>
@@ -269,24 +269,20 @@
           height: 70vh; /* 70% de la altura de la ventana del usuario */
           margin: auto;
         }
-      
         .custom-modal .modal-content {
           height: 100%;
           display: flex;
           flex-direction: column;
         }
-      
         .custom-modal .modal-body {
           overflow-y: auto; /* Permite el scroll si el contenido es más largo que la altura del modal */
         }
-
-      .selected-row {
-          background-color: rgb(179, 179, 179);
-      }
-      .ocultar-fila {
-          display: none;
-      }
-      
+        .selected-row {
+            background-color: rgb(179, 179, 179) !important;
+        }
+        .ocultar-fila {
+            display: none;
+        }
       </style>
     </section>
 

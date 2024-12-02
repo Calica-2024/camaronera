@@ -74,28 +74,28 @@
                 <table class="table table-head-fixed text-nowrap table-bordered table-striped table-hover">
                     <thead>
                         <tr class="text-uppercase" style="font-size: 14px">
-                            <th class="fixed-column" style="width: 20px">Sem.</th>
-                            <th class="fixed-column" style="width: 2%">#Día</th>
-                            <th style="width: 20px">Fecha</th>
-                            <th style="width: 20px">Día</th>
-                            <th style="width: 20px">Peso <br> Proy.</th>
-                            <th style="width: 20px" class="bg-warning">Peso <br> (g)</th>
-                            <th style="width: 20px">Crecimiento</th>
-                            <th class="bg-warning" style="width: 20px">Alim.</th>
-                            <th style="width: 40px">Tipo <br> Alim.</th>
-                            <th class="bg-warning" style="width: 20px">Alim. <br> Calc.</th>
-                            <th style="width: 20px">% P.C.</th>
-                            <th style="width: 20px">Dens. <br> Cons.</th>
-                            <th style="width: 20px" class="bg-warning">Dens. <br> ATA.</th>
-                            <th style="width: 20px" class="bg-warning">Dens. <br> BIO.</th>
-                            <th style="width: 20px">% Sup.</th>
-                            <th style="width: 20px">Dens. <br> Ral.</th>
-                            <th style="width: 20px">BM <br> Ral.</th>
-                            <th style="width: 20px">BM <br> Actual</th>
-                            <th style="width: 20px">Recom <br> Alim.</th>
-                            <th style="width: 20px">Alim. <br> Acum.</th>
-                            <th style="width: 20px">FCA</th>
-                            <th class="fixed-column" style="width: 2%">Mtr.</th>
+                            <th style="background-color: #429dff" class="fixed-column" style="width: 20px">Sem.</th>
+                            <th style="background-color: #429dff" class="fixed-column" style="width: 2%">#Día</th>
+                            <th style="background-color: #429dff" style="width: 20px">Fecha</th>
+                            <th style="background-color: #429dff" style="width: 20px">Día</th>
+                            <th style="background-color: #429dff" style="width: 20px">Peso <br> Proy.</th>
+                            <th data-type="number" style="background-color: #ffdd79" style="width: 20px">Peso <br> (g)</th>
+                            <th style="background-color: #4fb17887" style="width: 20px">Crecimiento</th>
+                            <th data-type="number" style="background-color: #ffdd79" style="width: 20px">Alim.</th>
+                            <th style="background-color: #4fb17887" style="width: 40px">Tipo <br> Alim.</th>
+                            <th data-type="number" style="background-color: #ffdd79" style="width: 20px">Alim. <br> Calc.</th>
+                            <th style="background-color: #4fb17887" style="width: 20px">% P.C.</th>
+                            <th style="background-color: #4fb17887" style="width: 20px">Dens. <br> Cons.</th>
+                            <th data-type="number" style="background-color: #ffdd79" style="width: 20px">Dens. <br> ATA.</th>
+                            <th data-type="number" style="background-color: #ffdd79" style="width: 20px">Dens. <br> BIO.</th>
+                            <th style="background-color: #ff7878a6" style="width: 20px">% Sup.</th>
+                            <th style="background-color: #ff7878a6" style="width: 20px">Dens. <br> Ral.</th>
+                            <th style="background-color: #ff7878a6" style="width: 20px">BM <br> Ral.</th>
+                            <th style="background-color: #ff7878a6" style="width: 20px">BM <br> Actual</th>
+                            <th style="background-color: #ff7878a6" style="width: 20px">Recom <br> Alim.</th>
+                            <th style="background-color: #ff7878a6" style="width: 20px">Alim. <br> Acum.</th>
+                            <th style="background-color: #ff7878a6" style="width: 20px">FCA</th>
+                            <th style="background-color: #ff7878a6" class="fixed-column" style="width: 2%">Mtr.</th>
                             {{-- <th>ROI</th> --}}
                         </tr>
                     </thead>
@@ -135,8 +135,9 @@
                                     $isHoy = $item->fecha === now()->format('Y-m-d');
                                     $esDomingo = $item->dia === 'domingo';
                                 @endphp
-                                <tr class="{{ $isHidden ? 'hidden' : '' }}" data-week="{{ $startOfWeek }}" style="background-color: {{ $isHoy ? '#ffe9a6' : ($esDomingo ? '#c9e3ff' : 'transparent') }}">
-                                    <td>
+                                {{--style="background-color: {{ $isHoy ? '#ffe9a6' : ($esDomingo ? '#c9e3ff' : 'transparent') }}"--}}
+                                <tr class="{{ $isHidden ? 'hidden' : '' }}" data-week="{{ $startOfWeek }}">
+                                    <td style="background-color: #d8e5f3">
                                         {{ Carbon::parse($item->fecha)->weekOfYear }}
                                         @if ($isLastItem)
                                             <button class="btn btn-success btn-sm toggle-btn" data-week="{{ $startOfWeek }}" title="Mostrar/Ocultar">
@@ -145,27 +146,27 @@
                                         @endif
                                     </td>
                                     <!-- Las demás columnas -->
-                                    <td class="fixed-column"><a href="#" data-toggle="modal" data-target="#prodReal{{ $item->id }}"><i class="fas fa-edit"></i> {{ $item->num_dia }}</a></td>
-                                    <td>{{ Carbon::parse($item->fecha)->format('d/m/y') }}</td>
-                                    <td>{{ mb_substr($item->dia, 0, 3, 'UTF-8') }}</td>
-                                    <td>{{ $itemProy->peso_proyecto }}</td>
-                                    <td class="bg-warning">{{ $item->peso_real }}</td>
-                                    <td>{{ $item->peso_real_anterior }}</td>
-                                    <td class="bg-warning">{{ $item->alimento }}</td>
-                                    <td>{{ $item->balanceado->nombre }}</td>
-                                    <td class="bg-warning">{{ $item->alimento_calculo }}</td>
-                                    <td>{{ $item->peso_corporal }}%</td>
-                                    <td>{{ $item->densidad_consumo }}</td>
-                                    <td class="bg-warning">{{ $item->densidad_muestreo }}</td>
-                                    <td class="bg-warning">{{ $item->densidad_actual }}</td>
-                                    <td>{{ number_format($item->supervivencia, 1) }}%</td>
-                                    <td>{{ $item->densidad_raleada }}</td>
-                                    <td>{{ $item->biomasa_raleada }}</td>
-                                    <td>{{ $item->biomasa_actual }}</td>
-                                    <td>{{ $item->recomendacion_alimento }}</td>
-                                    <td>{{ $item->alimento_acumulado }}</td>
-                                    <td>{{ $item->fca }}</td>
-                                    <td><a href="#" data-toggle="modal" data-target="#telemetria{{ $item->id }}"></i> <i class="fas fa-temperature-low"></i></a></td>
+                                    <td style="background-color: #d8e5f3" class="fixed-column"><a href="#" data-toggle="modal" data-target="#prodReal{{ $item->id }}"><i class="fas fa-edit"></i> {{ $item->num_dia }}</a></td>
+                                    <td style="background-color: #d8e5f3">{{ Carbon::parse($item->fecha)->format('d/m/y') }}</td>
+                                    <td style="background-color: #d8e5f3">{{ mb_substr($item->dia, 0, 3, 'UTF-8') }}</td>
+                                    <td style="background-color: #d8e5f3">{{ $itemProy->peso_proyecto }}</td>
+                                    <td style="background-color: #fff7dd">{{ $item->peso_real }}</td>
+                                    <td style="background-color: #ceffe287">{{ $item->peso_real_anterior }}</td>
+                                    <td style="background-color: #fff7dd">{{ $item->alimento }}</td>
+                                    <td style="background-color: #ceffe287">{{ $item->balanceado->nombre }}</td>
+                                    <td style="background-color: #fff7dd">{{ $item->alimento_calculo }}</td>
+                                    <td style="background-color: #ceffe287">{{ $item->peso_corporal }}%</td>
+                                    <td style="background-color: #ceffe287">{{ $item->densidad_consumo }}</td>
+                                    <td style="background-color: #fff7dd">{{ $item->densidad_muestreo }}</td>
+                                    <td style="background-color: #fff7dd">{{ $item->densidad_actual }}</td>
+                                    <td style="background-color: #ffe3e3a6">{{ number_format($item->supervivencia, 1) }}%</td>
+                                    <td style="background-color: #ffe3e3a6">{{ $item->densidad_raleada }}</td>
+                                    <td style="background-color: #ffe3e3a6">{{ $item->biomasa_raleada }}</td>
+                                    <td style="background-color: #ffe3e3a6">{{ $item->biomasa_actual }}</td>
+                                    <td style="background-color: #ffe3e3a6">{{ $item->recomendacion_alimento }}</td>
+                                    <td style="background-color: #ffe3e3a6">{{ $item->alimento_acumulado }}</td>
+                                    <td style="background-color: #ffe3e3a6">{{ $item->fca }}</td>
+                                    <td style="background-color: #ffe3e3a6"><a href="#" data-toggle="modal" data-target="#telemetria{{ $item->id }}"></i> <i class="fas fa-temperature-low"></i></a></td>
                                 </tr>
                                 <!-- Modal -->
                                 <div class="modal fade" id="telemetria{{ $item->id }}" tabindex="-1" aria-labelledby="telemetria{{ $item->id }}Label" aria-hidden="true">
@@ -451,7 +452,7 @@
                             <th class="fixed-column">#Día</th>
                             <th>Fecha</th>
                             <th>Día</th>
-                            <th class="bg-warning">Peso (g)</th>
+                            <th style="background-color: #fff7dd">Peso (g)</th>
                             <th>Crec. L.</th>
                             <th>Sup %</th>
                             <th>Dens.</th>
@@ -473,7 +474,7 @@
                             <td class="fixed-column"><a href="#" data-toggle="modal" data-target="#regProy{{ $item->id }}"><i class="fas fa-edit"></i> {{ $item->num_dia }}</a></td>
                             <td>{{ Carbon::parse($item->fecha)->format('d/m/y') }}</td>
                             <td>{{ mb_substr($item->dia, 0, 3, 'UTF-8') }}</td>
-                            <td class="bg-warning">{{ $item->peso_proyecto }}</td>
+                            <td style="background-color: #fff7dd">{{ $item->peso_proyecto }}</td>
                             <td>{{ $item->crecimiento_lineal }}</td>
                             <td>{{ number_format($item->supervivencia_base, 1) }}%</td>
                             <td>{{ $item->densidad }}</td>

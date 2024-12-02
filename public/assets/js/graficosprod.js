@@ -44,11 +44,20 @@ var comparativeChart = new Chart(ctxPeso, {
     data: {
         labels: labels,
         datasets: [{
-            label: 'Producción (Peso)',
+            label: 'Peso',
             data: produccionPesoData,
             borderColor: 'rgba(75, 192, 192, 1)',
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
             borderWidth: 1,
-            fill: false
+            fill: true
+        },
+        {
+            label: 'Crecimiento',
+            data: produccionCrecimientoData,
+            borderColor: 'rgba(255, 99, 132, 1)',
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            borderWidth: 1,
+            fill: true
         }]
     },
     options: {
@@ -76,11 +85,20 @@ var growthChart = new Chart(ctxCrecimiento, {
     data: {
         labels: labels,
         datasets: [{
-            label: 'Producción (Crecimiento)',
+            label: 'Densidad',
+            data: produccionDensidadData,
+            borderColor: 'rgba(75, 192, 192, 1)',
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            borderWidth: 1,
+            fill: true
+        },
+        {
+            label: 'Crecimiento',
             data: produccionCrecimientoData,
             borderColor: 'rgba(255, 99, 132, 1)',
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
             borderWidth: 1,
-            fill: false
+            fill: true
         }]
     },
     options: {
@@ -94,7 +112,7 @@ var growthChart = new Chart(ctxCrecimiento, {
             y: {
                 title: {
                     display: true,
-                    text: 'Crecimiento'
+                    text: 'Densidad'
                 }
             }
         }
@@ -112,6 +130,14 @@ var densityChart = new Chart(ctxDensidad, {
             data: produccionDensidadData,
             borderColor: 'rgba(75, 192, 192, 1)',
             backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            borderWidth: 1,
+            fill: true
+        },
+        {
+            label: 'Producción (Peso)',
+            data: produccionPesoData,
+            borderColor: 'rgba(255, 99, 132, 1)',
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
             borderWidth: 1,
             fill: true
         }]

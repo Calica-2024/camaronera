@@ -96,6 +96,14 @@
                                     </p>
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a href="{{ url('/pescas') }}" class="nav-link {{ $modulo == 'Pescas' ? 'active' : '' }}">
+                                    <i class="nav-icon fas fa-check"></i>
+                                    <p>
+                                        Pescas
+                                    </p>
+                                </a>
+                            </li>
                             <li class="nav-item {{ $grupo == 'camaroneras' ? 'has-treeview menu-open' : '' }}">
                                 <a href="#" class="nav-link {{ $grupo == 'camaroneras' ? 'active' : '' }}">
                                     <i class="nav-icon fas fa-table"></i>

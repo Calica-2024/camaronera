@@ -82,6 +82,17 @@
                                         @endif
                                     </div>
                                     <div class="col-md-4 form-group">
+                                        <label for="peso_pesca">Peso Pesca</label>
+                                        <input type="text" name="peso_pesca" class="form-control @error('peso_pesca') is-invalid @enderror" id="peso_pesca" placeholder="Peso Pesca" maxlength="15" value="{{ $produccion->peso_pesca }}">
+                                        @if ($errors->has('peso_pesca'))
+                                            <div class="invalid-feedback" style="display: inline !important">
+                                                @foreach ($errors->get('peso_pesca') as $error)
+                                                    {{ $error }}<br>
+                                                @endforeach
+                                            </div>
+                                        @endif
+                                    </div>
+                                    <div class="col-md-4 form-group">
                                         <label for="costo_larva">Costo larva/juvenil ($/millar)</label>
                                         <input type="text" name="costo_larva" class="form-control @error('costo_larva') is-invalid @enderror" id="costo_larva" placeholder="Costo larva/juvenil ($/millar)" maxlength="15" value="{{ $produccion->costo_larva }}">
                                         @if ($errors->has('costo_larva'))

@@ -703,6 +703,10 @@ class ProduccionesController extends Controller
                 'regex:/^\d+(\.\d{1,2})?$/',
                 'min:0.01'
             ],
+            'peso_pesca' => [
+                'nullable',
+                'regex:/^\d+(\.\d{1,2})?$/'
+            ],
             'costo_larva' => [
                 'required',
                 'regex:/^\d+(\.\d{1,2})?$/',

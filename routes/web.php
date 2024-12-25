@@ -13,6 +13,7 @@ use App\Http\Controllers\TablaAlimentacionController;
 use App\Http\Controllers\ProyectoRealController;
 use App\Http\Controllers\TelemetriaController;
 use App\Http\Controllers\MovimientoBalanceadoController;
+use App\Http\Controllers\PescasController;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,6 +41,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index']);
     Route::get('/graficosProd/{id}', [DashboardController::class, 'metricasProd']);
     Route::get('/alimentoPiscinas/{id}', [DashboardController::class, 'alimentoPiscina']);
+
+    //pescas
+    Route::get('/pescas', [PescasController::class, 'index']);
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

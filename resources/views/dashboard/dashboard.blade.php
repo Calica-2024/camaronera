@@ -132,11 +132,13 @@
       </div>
       <div class="row">
         <div class="col-12">
+          {{--
           <div>
             <label>
               <input type="checkbox" id="filtroMortalidad"> Mostrar solo mortalidad mayor a 8
             </label>
           </div>
+          --}}
           <div class="card">
             <div class="card-body table-responsive p-0" id="miDiv">
               <table class="table table-head-fixed text-nowrap table-bordered" id="grid" >

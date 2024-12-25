@@ -17,6 +17,7 @@ class Produccion extends Model
         'densidad',
         'dias_ciclo',
         'peso_transferencia',
+        'peso_pesca',
         'costo_larva',
         'multiplo_redondeo',
         'supervivencia_30',

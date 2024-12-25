@@ -107,6 +107,7 @@
           <th data-type="number" style="background-color: #4fb17887">Alim<br>Acum <i class="fas"></i></th>
           <th data-type="number" style="background-color: #4fb17887">Alim<br>Prom <i class="fas"></i></th>
           <th data-type="number" style="background-color: #4fb17887">Peso<br>Cosecha <i class="fas"></i></th>
+          <th data-type="number" style="background-color: #4fb17887">Libras<br>Cosecha <i class="fas"></i></th>
           <th data-type="number" style="background-color: #4fb17887">Fecha<br>Cosecha <i class="fas"></i></th>
           <th data-type="string" style="background-color: #4fb17887">Increm <i class="fas"></i></th>
           <th data-type="number" style="background-color: #4fb17887">Inc. Prom.<br>3sem <i class="fas"></i></th>
@@ -135,11 +136,12 @@
             <td style="background-color: #ceffe287" class=""> {{ $item->alimento_acumulado }} Lbs</td>
             <td style="background-color: #ceffe287" class=""> {{ number_format(($item->alimento_acumulado / $item->num_dia), 2) }}</td>
             <td style="background-color: #ceffe287" class=""> {{ $item->peso_real }}</td>
+            <td style="background-color: #ceffe287" class=""> {{ $item->produccion->peso_pesca }}</td>
             <td style="background-color: #ceffe287">
               {{ date('d M Y', strtotime($item->fecha)) }}
             </td>
             {{-- <td>x</td> --}}
-            <td style="background-color: #ceffe287">{{ $item->peso_real_anterior }}</td>
+            <td style="background-color: #ceffe287">{{ $item->peso_real }}</td>
             <td style="background-color: #ceffe287" class="{{ $item->inc3sem < $item->peso_real_anterior ? 'text-success' : 'text-danger' }}">
                 {{ number_format($item->inc3sem, 2) }}
                 @if ($item->inc3sem < $item->peso_real_anterior)

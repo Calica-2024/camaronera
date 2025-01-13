@@ -77,27 +77,6 @@ class DashboardController extends Controller
                 $fecha = now()->toDateString();
             }
 
-            // Inicializar el arreglo para contar domingos por producción
-            $domingosPorProduccion = [];
-
-            // Contar domingos
-            foreach ($producciones as $idProduccion) {
-                // Obtener los 3 primeros domingos para esta producción
-                $domingos = ProyectoReal::where('id_produccion', $idProduccion)
-                    ->where('dia', 'domingo') // Filtrar por el campo 'dia'
-                    ->whereDate('fecha', '<=', $fecha) // Asegurarse que la fecha sea menor o igual a la indicada
-                    ->orderBy('fecha', 'desc') // Ordenar de forma descendente
-                    ->take(3) // Limitar a los 3 primeros
-                    ->get();
-            
-                // Guardar las fechas de los domingos encontrados
-                $inc3sem = 0;
-                if($domingos->count() > 0){
-                    $inc3sem = $domingos->sum('peso_real_anterior') / $domingos->count();
-                }
-                $domingosPorProduccion[$idProduccion] = $inc3sem;
-            }
-
             // Obtener los proyectos reales asociados a las producciones obtenidas y filtrarlos por la fecha
             $items = ProyectoReal::with('produccion.piscina')
                                     ->with('balanceado')
@@ -107,7 +86,14 @@ class DashboardController extends Controller
 
             // Añadir el peso promedio a cada item que coincide con id_produccion
             foreach ($items as $item) {
-                $item->inc3sem = $domingosPorProduccion[$item->id_produccion] ?? 0; // Agregar el promedio
+                $itemAnteriorData = $this->ultimoPeso($item->id_produccion, $item->num_dia);
+                $item->inc3sem = $this->incProm3Sem($item->id_produccion, $item->num_dia) ?? 0;
+                $item->peso_real = $item->peso_real ?? $itemAnteriorData['item'];
+                $item->peso_real_anterior = $item->peso_real_anterior ?? $itemAnteriorData['itemAnterior'];
+                $item->alimento = $item->alimento ?? $itemAnteriorData['alimento'];
+                $item->densidad_consumo = $item->densidad_consumo ?? $itemAnteriorData['densidad_consumo'];
+                $item->densidad_actual = $item->densidad_actual ?? $itemAnteriorData['densidad_actual'];
+                $item->densidad_muestreo = $item->densidad_muestreo ?? $itemAnteriorData['densidad_muestreo'];
             }
 
             $proyectoItems = ProyectoCultivo::whereIn('id_produccion', $producciones)
@@ -121,7 +107,33 @@ class DashboardController extends Controller
 
         return view('dashboard.dashboard', compact('grupo', 'modulo', 'camaronerasUser', 'items', 'itemAnteriores', 'proyectoItems', 'produccionesItems'));
     }
+
+    public function ultimoPeso($produccionId, $dia){
+        $item = ProyectoReal::where('id_produccion', $produccionId)
+                                ->whereBetween('num_dia', [0, $dia])
+                                ->whereNotNull('peso_real')
+                                ->orderBy('num_dia', 'DESC')
+                                ->first();
+        return [
+            'item' => $item ? $item->peso_real : null,
+            'itemAnterior' => $item ? $item->peso_real_anterior : null,
+            'alimento' => $item ? $item->alimento : null,
+            'densidad_consumo' => $item ? $item->densidad_consumo : null,
+            'densidad_actual' => $item ? $item->densidad_actual : null,
+            'densidad_muestreo' => $item ? $item->densidad_muestreo : null,
+        ];
+    }
     
+    public function incProm3Sem($produccionId, $dia){
+        $promedioPeso3Sem = ProyectoReal::where('id_produccion', $produccionId)
+            ->where('dia', 'domingo')
+            ->whereBetween('num_dia', [0, $dia])
+            ->orderBy('num_dia', 'DESC')
+            ->take(3)
+            ->avg('peso_real_anterior');
+        return $promedioPeso3Sem;
+    }
+
     public function resumen(Request $request)
     {
         // Decodificar los arrays JSON recibidos

@@ -55,7 +55,7 @@
   </section>
 
   <div class="table-responsive">
-    <table class="table table-head-fixed text-nowrap table-bordered" id="grid" >
+    <table class="table table-head-fixed text-nowrap table-bordered" >
       <thead>
           <tr>
             <th>Peso Siembra Prom</th>
@@ -161,4 +161,49 @@
       </tbody>
     </table>
   </div>
+  <script>
+    const grid = document.getElementById('grid');
+
+    grid.addEventListener('click', function(e) {
+      if (e.target.tagName !== 'TH') return;
+
+      const th = e.target;
+      // Si TH, entonces ordena
+      sortGrid(th.cellIndex, th.dataset.type, th);
+    });
+
+    function sortGrid(colNum, type, th) {
+      const tbody = grid.querySelector('tbody');
+      const rowsArray = Array.from(tbody.rows);
+      const isAscending = th.dataset.order === 'asc' || !th.dataset.order; // Determina si el orden es ascendente o descendente
+      th.dataset.order = isAscending ? 'desc' : 'asc'; // Alterna la dirección de ordenamiento
+
+      // Comparador basado en el tipo de datos
+      let compare;
+      switch (type) {
+        case 'number':
+          compare = (rowA, rowB) => (parseFloat(rowA.cells[colNum].innerHTML) - parseFloat(rowB.cells[colNum].innerHTML)) * (isAscending ? 1 : -1);
+          break;
+        case 'string':
+          compare = (rowA, rowB) => rowA.cells[colNum].innerHTML.localeCompare(rowB.cells[colNum].innerHTML) * (isAscending ? 1 : -1);
+          break;
+      }
+
+      // Ordenar las filas
+      rowsArray.sort(compare);
+
+      // Reinsertar las filas ordenadas en el tbody
+      tbody.append(...rowsArray);
+
+      // Quitar iconos de todas las cabeceras
+      grid.querySelectorAll('th i').forEach(icon => {
+        icon.className = 'fas';
+        icon.classList.remove('text-primary');
+      });
+
+      // Agregar el icono de orden en la cabecera actual
+      const icon = th.querySelector('i');
+      icon.className = isAscending ? 'fas fa-arrow-up text-primary' : 'fas fa-arrow-down text-primary';
+    }
+  </script>
 @endsection

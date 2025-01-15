@@ -65,6 +65,18 @@ class PescasController extends Controller
                                         $query->where('id_piscina', $request->piscina);
                                     })
                                     ->get();
+        $producciones = $producciones->map(function ($produccion) {
+            // Calcular la fecha de fin sumando los días de ciclo
+            $produccion->fecha_fin = \Carbon\Carbon::parse($produccion->fecha)
+                ->addDays($produccion->dias_ciclo);
+        
+            return $produccion;
+        });
+        
+        $producciones = $producciones->filter(function ($produccion) {
+            // Comprobar si la fecha de finalización es mayor que la fecha actual
+            return $produccion->fecha_fin->isPast(); // Si la fecha de finalización ya pasó
+        });
 
         foreach ($producciones as $produccion) {
             $ultimoProyecto = ProyectoReal::whereYear('fecha', $request->anio)

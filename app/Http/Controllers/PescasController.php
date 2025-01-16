@@ -95,6 +95,20 @@ class PescasController extends Controller
         }
         $proyectoItems = collect($proyectoItems);
 
+        foreach($items as $item){
+            $item->inc3sem = $this->incProm3Sem($item->id_produccion, $item->num_dia) ?? 0;
+        }
+
         return view('pescas.index', compact('grupo', 'modulo', 'camaroneras', 'piscinas', 'meses', 'anios', 'items', 'proyectoItems', 'request'));
+    }
+    
+    public function incProm3Sem($produccionId, $dia){
+        $promedioPeso3Sem = ProyectoReal::where('id_produccion', $produccionId)
+            ->where('dia', 'domingo')
+            ->whereBetween('num_dia', [0, $dia])
+            ->orderBy('num_dia', 'DESC')
+            ->take(3)
+            ->avg('peso_real_anterior');
+        return $promedioPeso3Sem;
     }
 }

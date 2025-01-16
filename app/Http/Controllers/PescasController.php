@@ -84,7 +84,7 @@ class PescasController extends Controller
                                             ->where('id_produccion', $produccion->id)
                                             ->orderBy('num_dia', 'desc')
                                             ->first();
-            $ultimoProyecto->raleada = $ultimoProyecto->sum('biomasa_raleada');
+            $ultimoProyecto->raleada = $ultimoProyecto->biomasa_raleada;
             $ultimoProyectoCul = ProyectoCultivo::whereYear('fecha', $request->anio)
                                             ->whereMonth('fecha', $request->mes)
                                             ->where('id_produccion', $produccion->id)
